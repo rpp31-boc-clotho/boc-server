@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/rpp31-boc-clotho/boc-server#readme",
   "devDependencies": {
+    "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "jest": "^27.4.7",
     "mongoose": "^6.2.0",
@@ -26,7 +27,6 @@
     "supertest": "^6.2.2"
   },
   "dependencies": {
-    "@shelf/jest-mongodb": "^2.2.0",
-    "dotenv": "^16.0.0"
+    "@shelf/jest-mongodb": "^2.2.0"
   }
 }

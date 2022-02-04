@@ -1,0 +1,23 @@
+version: 2.1
+jobs:
+  run_tests:
+    docker:
+      - image: circleci/node:17.1
+    steps:
+      - checkout
+      - run:
+          name: Install npm dependencies
+          command: |
+            npm install --save
+      - run:
+          name: Run unit tests
+          command: |
+            npm test
+      - store_test_results:
+          path: test-results
+      - store_artificts:
+          path: test-results
+workflows:
+  build_tests:
+    jobs:
+      - run_tests
