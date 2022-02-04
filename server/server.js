@@ -17,5 +17,3 @@ module.exports = {
   app: app,
   server: server
 };
-
-//my note
