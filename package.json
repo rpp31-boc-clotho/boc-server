@@ -17,8 +17,9 @@
     "url": "https://github.com/rpp31-boc-clotho/boc-server/issues"
   },
   "homepage": "https://github.com/rpp31-boc-clotho/boc-server#readme",
-  "dependencies": {
+  "devDependencies": {
     "express": "^4.17.2",
+    "jest": "^27.4.7",
     "mongoose": "^6.2.0",
     "nodemon": "^2.0.15"
   }
