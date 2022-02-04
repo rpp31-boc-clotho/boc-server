@@ -14,7 +14,6 @@ const server = app.listen(port, () => {
 })
 
 module.exports = {
-  app: app,
   server: server
 };
 
