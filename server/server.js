@@ -1,11 +1,19 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const port = 3000
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+const router = require('./routes');
 
-app.listen(port, () => {
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/', router);
+
+const server = app.listen(port, () => {
   console.log(`server listening on port ${port}`)
 })
+
+module.exports = {
+  app: app,
+  server: server
+};
