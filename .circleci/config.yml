@@ -15,9 +15,7 @@ jobs:
             npm test
       - store_test_results:
           path: test-results
-      - store_artificts:
-          path: test-results
 workflows:
-  build_tests:
+  build_test:
     jobs:
       - run_tests
