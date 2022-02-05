@@ -1,0 +1,10 @@
+version: '3.3'
+
+services:
+  web:
+    container_name: app_container
+    build: .
+    ports:
+    - 3000:3000
+    environment:
+    - EXTERNAL_PORT=3000
