@@ -9,7 +9,7 @@ module.exports = {
 
     try {
       const { data } = await axios.get(URL);
-      console.log(data);
+      return data;
     } catch (error) {
       console.log(error);
     }
@@ -19,7 +19,7 @@ module.exports = {
 
     try {
       const { data } = await axios.get(URL);
-      console.log(data);
+      return data;
     } catch (error) {
       console.log(error);
     }
@@ -29,7 +29,7 @@ module.exports = {
 
     try {
       const { data } = await axios.get(URL);
-      console.log(data);
+      return data;
     } catch (error) {
       console.log(error);
     }
