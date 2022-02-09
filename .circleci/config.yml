@@ -1,8 +1,26 @@
 version: 2.1
 jobs:
-  run_tests:
+  # run_tests:
+  #   docker:
+  #     - image: circleci/node:17.1
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Install npm dependencies
+  #         command: |
+  #           npm install --save
+  #     - run:
+  #         name: Run unit tests
+  #         command: |
+  #           npm test
+  #     - store_test_results:
+  #         path: test-results
+  build_and_deploy:
     docker:
-      - image: circleci/node:17.1
+      - image: cimg/go:1.17
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
       - run:
@@ -15,15 +33,6 @@ jobs:
             npm test
       - store_test_results:
           path: test-results
-  build:
-    docker:
-      - image: cimg/go:1.17
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-    steps:
-      - checkout
-      # ... steps for building/testing app ...
 
       - setup_remote_docker:
           version: 20.10.11
@@ -38,4 +47,4 @@ jobs:
 workflows:
   build_test:
     jobs:
-      - run_tests
+      - build_and_deploy
