@@ -17,7 +17,7 @@ jobs:
   #         path: test-results
   build_and_deploy:
     docker:
-      - image: cimg/go:1.17
+      - image: circleci/node:17.1
         auth:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
