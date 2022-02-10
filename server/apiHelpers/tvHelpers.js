@@ -21,7 +21,14 @@ module.exports = {
 
     try {
       const { data } = await axios.get(URL);
-      console.log(data);
+
+      let TVShowProviders = {
+        TVShowId: data.id,
+        results: data.results.US
+      };
+
+      return TVShowProviders;
+
     } catch (error) {
       console.log(error);
     }

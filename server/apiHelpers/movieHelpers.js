@@ -20,13 +20,14 @@ module.exports = {
 
     try {
       const { data } = await axios.get(URL);
-      // console.log(data.results.US);
+
       let movieProviders = {
         movieId: data.id,
         results: data.results.US
-      }
+      };
 
       return movieProviders;
+
     } catch (error) {
       console.log(error);
     }
@@ -36,7 +37,7 @@ module.exports = {
 
     try {
       const { data } = await axios.get(URL);
-      console.log(data);
+      return data;
     } catch (error) {
       console.log(error);
     }
@@ -69,5 +70,3 @@ module.exports = {
     }
   }
 };
-
-module.exports.getMovieProvidersAPI(550);

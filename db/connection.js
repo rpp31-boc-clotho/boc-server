@@ -50,7 +50,7 @@ const TVShow = mongoose.model('TVShow', TvShowSchema);
 
 const ProvidersSchema = new mongoose.Schema({
   movieId: { type: Number, index: true },
-  providers: Array
+  results: Array
 })
 
 const Providers = mongoose.model('Providers', ProvidersSchema)
