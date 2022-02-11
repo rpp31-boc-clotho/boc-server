@@ -1,49 +1,104 @@
 version: 2.1
 jobs:
-  # run_tests:
-  #   docker:
-  #     - image: circleci/node:17.1
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Install npm dependencies
-  #         command: |
-  #           npm install --save
-  #     - run:
-  #         name: Run unit tests
-  #         command: |
-  #           npm test
-  #     - store_test_results:
-  #         path: test-results
-  build_and_deploy:
-    docker:
-      - image: circleci/node:17.1
-        auth:
-          username: $DOCKERHUB_USER
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+  build:
+    machine:
+      image: ubuntu-2004:202010-01
     steps:
       - checkout
       - run:
-          name: Install npm dependencies
+          name: Installing AWS CLI
           command: |
-            npm install --save
+            sudo apt-get update
+            sudo apt install python3-pip
+            sudo pip3 install awsebcli --upgrade
+      - run: cd ./server && npm install && npm run dev-server
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  test:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - attach_workspace:
+          at: .
+      - checkout
       - run:
           name: Run unit tests
           command: |
-            npm test
+            cd ./server && npm test
       - store_test_results:
           path: test-results
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 
-      - setup_remote_docker:
-          version: 20.10.11
-          docker_layer_caching: true
+  deploy:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - attach_workspace:
+          at: .
+      - checkout
+      - run: aws s3 sync ./app/build s3://boc-backend
 
-      # build and push Docker image
-      - run: |
-          docker build -t juanacosta00/boc-api:$TAG .
-          echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USER --password-stdin
-          docker push juanacosta00/boc-api:$TAG
 workflows:
-  build_test:
+  build_test_deploy:
     jobs:
-      - build_and_deploy
+      - build
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            -test
+
+#   # run_tests:
+#   #   docker:
+#   #     - image: circleci/node:17.1
+#   #   steps:
+#   #     - checkout
+#   #     - run:
+#   #         name: Install npm dependencies
+#   #         command: |
+#   #           npm install --save
+#   #     - run:
+#   #         name: Run unit tests
+#   #         command: |
+#   #           npm test
+#   #     - store_test_results:
+#   #         path: test-results
+#   build_and_deploy:
+#     docker:
+#       - image: circleci/node:17.1
+#         auth:
+#           username: $DOCKERHUB_USER
+#           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+#     steps:
+#       - checkout
+#       - run:
+#           name: Install npm dependencies
+#           command: |
+#             npm install --save
+      # - run:
+      #     name: Run unit tests
+      #     command: |
+      #       npm test
+      # - store_test_results:
+      #     path: test-results
+
+#       - setup_remote_docker:
+#           version: 20.10.11
+#           docker_layer_caching: true
+
+#       # build and push Docker image
+#       - run: |
+#           docker build -t juanacosta00/boc-api:$TAG .
+#           echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USER --password-stdin
+#           docker push juanacosta00/boc-api:$TAG
+# workflows:
+#   build_test:
+#     jobs:
+#       - build_and_deploy
