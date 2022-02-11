@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 require('dotenv').config({ path:__dirname+'/./../.env' })
-console.log(process.env)
 
 main().catch(err => console.log(err));
 
