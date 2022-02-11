@@ -15,7 +15,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - . 
+            - .
 
   test:
     machine:
@@ -42,7 +42,7 @@ jobs:
       - attach_workspace:
           at: .
       - checkout
-      - run: aws s3 sync ./app/build s3://boc-backend
+      - run: aws s3 sync . s3://boc-backend
 
 workflows:
   build_test_deploy:
