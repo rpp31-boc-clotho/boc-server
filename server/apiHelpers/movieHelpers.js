@@ -1,8 +1,6 @@
 require('dotenv').config({ path:__dirname+'/./../../.env' })
 
 const axios = require('axios');
-// const API_KEY = process.env.API_KEY;
-
 
 module.exports = {
   getMovieAPI: async (movie) => {
@@ -32,8 +30,8 @@ module.exports = {
       console.log(error);
     }
   },
-  getMovieRecommendations: async(movieId) => {
-    const URL = `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${process.env.API_KEY}&language=en-US&page=1`;
+  getMovieRecommendationsAPI: async(movieId) => {
+    const URL = `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${process.env.apikey}&language=en-US&page=1`;
 
     try {
       const { data } = await axios.get(URL);
@@ -43,7 +41,7 @@ module.exports = {
     }
   },
   getPopularMoviesAPI: async() => {
-    const URL = `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.API_KEY}&language=en-US&page=1`;
+    const URL = `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.apikey}&language=en-US&page=1`;
 
     try {
       const { data } = await axios.get(URL);
@@ -63,6 +61,7 @@ module.exports = {
           }
         }).filter(movie => movie !== undefined);
 
+      console.log(topTenMovies);
       return topTenMovies;
 
     } catch (error) {
