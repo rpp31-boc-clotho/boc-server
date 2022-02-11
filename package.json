@@ -6,8 +6,7 @@
   "scripts": {
     "test": "jest",
     "dev-server": "nodemon ./server/server.js -w",
-    "start": "react-scripts start",
-    "build": "react-scripts build"
+    "start": "node ./server/server.js"
   },
   "repository": {
     "type": "git",
@@ -30,7 +29,6 @@
   },
   "dependencies": {
     "@shelf/jest-mongodb": "^2.2.0",
-    "axios": "^0.25.0",
-    "react-scripts": "^5.0.0"
+    "axios": "^0.25.0"
   }
 }
