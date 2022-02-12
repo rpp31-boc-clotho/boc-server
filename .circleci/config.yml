@@ -30,8 +30,8 @@ jobs:
             aws-secret-access-key: AWS_DEFAULT_REGION
         - aws-ecs/update-service:
             cluster-name: '${MY_APP_PREFIX}-cluster'
-            container-image-name-updates: 'container=$bocserver-service,tag=latest'
-            family: 'boc-docker-service'
+            container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=stable'
+            family: '${MY_APP_PREFIX}-service'
   # build_and_deploy:
   #   docker:
   #     - image: circleci/node:17.1
