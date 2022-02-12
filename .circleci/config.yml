@@ -30,8 +30,8 @@ jobs:
             aws-secret-access-key: AWS_SECRET_ACCESS_KEY
         - aws-ecs/update-service:
             cluster-name: '${MY_APP_PREFIX}-cluster'
-            container-image-name-updates: 'container=bocserver-service,tag=latest'
-            family: 'boc-server-service'
+            container-image-name-updates: 'image-and-tag=bocserver:latest'
+            family: 'boc-server'
   # build_and_deploy:
   #   docker:
   #     - image: circleci/node:17.1
