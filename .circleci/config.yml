@@ -61,7 +61,13 @@ jobs:
   #         echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USER --password-stdin
   #         docker push juanacosta00/boc-api:$TAG
 workflows:
-  build_test:
+  build_test_deploy:
     jobs:
       - run_tests
-      - update-tag
+      - update-tag:
+          requires:
+            - run_tests
+          filters:
+            branches:
+              only:
+                - master
