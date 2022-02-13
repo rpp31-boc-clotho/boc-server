@@ -79,6 +79,7 @@ workflows:
               only:
                 - master
       - aws-ecs/deploy-service-update:
+          aws-region: AWS_REGION
           cluster-name: 'arn:aws:ecs:us-east-2:884479076076:cluster/boc-service'
           container-image-name-updates: 'container=boc-dockerfile, image-and-tag=bocserver:latest'
           service-name: 'boc-server'
