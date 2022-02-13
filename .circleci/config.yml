@@ -71,6 +71,8 @@ workflows:
           tag: "latest"
           dockerfile: Dockerfile
           path: .
+          requires:
+            - run_tests
           filters:
             branches:
               only:
