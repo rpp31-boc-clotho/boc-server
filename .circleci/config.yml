@@ -22,46 +22,6 @@ jobs:
       - store_test_results:
           path: test-results
       
-  # update-tag:
-  #     docker:
-  #       - image: 'circleci/node:17.1'
-  #     steps:
-  #       - aws-cli/setup:
-  #           aws-access-key-id: AWS_SECRET_ACCESS_KEY_ID
-  #           aws-region: AWS_DEFAULT_REGION
-  #           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-  #       - aws-ecs/update-service:
-  #           cluster-name: '${MY_APP_PREFIX}-cluster'
-  #           container-image-name-updates: 'image-and-tag=bocserver:latest'
-  #           family: 'boc-server'
-  # build_and_deploy:
-  #   docker:
-  #     - image: circleci/node:17.1
-  #       auth:
-  #         username: $DOCKERHUB_USER
-  #         password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Install npm dependencies
-  #         command: |
-  #           npm install --save
-  #     - run:
-  #         name: Run unit tests
-  #         command: |
-  #           npm test
-  #     - store_test_results:
-  #         path: test-results
-
-  #     - setup_remote_docker:
-  #         version: 20.10.11
-  #         docker_layer_caching: true
-
-  #     # build and push Docker image
-  #     - run: |
-  #         docker build -t juanacosta00/boc-api:$TAG .
-  #         echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USER --password-stdin
-  #         docker push juanacosta00/boc-api:$TAG
 workflows:
   build_test_deploy:
     jobs:
@@ -81,7 +41,6 @@ workflows:
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
-          aws-region: AWS_REGION
           family: '${MY_APP_PREFIX}-service'
           cluster-name: '${MY_APP_PREFIX}-cluster'
           container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=latest'
