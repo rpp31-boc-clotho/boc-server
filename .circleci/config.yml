@@ -73,16 +73,17 @@ workflows:
           filters:
             branches:
               only:
-                - master
-          repo: bocserver
-          tag: "latest"
+                - master    
           dockerfile: Dockerfile
-          path: .
+          path: .  
+          repo: '${MY_APP_PREFIX}'
+          tag: "latest"
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
-          cluster-name: 'boc-service-cluster'
-          container-image-name-updates: 'container=boc-dockerfile, image-and-tag=bocserver:latest'
-          service-name: 'boc-server'
-          family: 'boc-docker-service'
+          family: '${MY_APP_PREFIX}-service'
+          cluster-name: '${MY_APP_PREFIX}-cluster'
+          container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=latest'
+          
+          #884479076076.dkr.ecr.us-east-2.amazonaws.com/bocserver:latest
