@@ -68,21 +68,21 @@ workflows:
       - run_tests
       #Envs: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_ECR_ACCOUNT_URL
       - aws-ecr/build-and-push-image:
-          repo: bocserver
-          tag: "latest"
-          dockerfile: Dockerfile
-          path: .
           requires:
             - run_tests
           filters:
             branches:
               only:
                 - master
+          repo: bocserver
+          tag: "latest"
+          dockerfile: Dockerfile
+          path: .
       - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
           cluster-name: 'boc-service-cluster'
           container-image-name-updates: 'container=boc-dockerfile, image-and-tag=bocserver:latest'
           service-name: 'boc-server'
           family: 'boc-docker-service'
-          requires:
-            - aws-ecr/build-and-push-image
