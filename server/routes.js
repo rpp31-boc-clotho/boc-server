@@ -5,7 +5,7 @@ const controllers = require('./controllers.js');
 
 
 router.get('/', async (req, res) => {
-  res.send('Deployed with CI/CD')
+  res.send('Deployed with ECR and ECS')
 });
 
 router.get('/homepage', controllers.getHomePageInfo);
