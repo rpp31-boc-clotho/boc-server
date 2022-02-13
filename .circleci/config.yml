@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@1.3
   aws-ecs: circleci/aws-ecs@2.0
+  aws-ecr: circleci/aws-ecr@6.15.0
   
 jobs:
   run_tests:
@@ -20,18 +21,19 @@ jobs:
             npm test
       - store_test_results:
           path: test-results
-  update-tag:
-      docker:
-        - image: 'circleci/node:17.1'
-      steps:
-        - aws-cli/setup:
-            aws-access-key-id: AWS_SECRET_ACCESS_KEY_ID
-            aws-region: AWS_DEFAULT_REGION
-            aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-        - aws-ecs/update-service:
-            cluster-name: '${MY_APP_PREFIX}-cluster'
-            container-image-name-updates: 'image-and-tag=bocserver:latest'
-            family: 'boc-server'
+      
+  # update-tag:
+  #     docker:
+  #       - image: 'circleci/node:17.1'
+  #     steps:
+  #       - aws-cli/setup:
+  #           aws-access-key-id: AWS_SECRET_ACCESS_KEY_ID
+  #           aws-region: AWS_DEFAULT_REGION
+  #           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+  #       - aws-ecs/update-service:
+  #           cluster-name: '${MY_APP_PREFIX}-cluster'
+  #           container-image-name-updates: 'image-and-tag=bocserver:latest'
+  #           family: 'boc-server'
   # build_and_deploy:
   #   docker:
   #     - image: circleci/node:17.1
@@ -64,9 +66,11 @@ workflows:
   build_test_deploy:
     jobs:
       - run_tests
-      - update-tag:
-          requires:
-            - run_tests
+      - aws-ecr/build-and-push-image:
+          repo: bocserver
+          tag: "latest, v0.1.${CIRCLE_BUILD_NUM}"
+          dockerfile: Dockerfile
+          path: .
           filters:
             branches:
               only:
