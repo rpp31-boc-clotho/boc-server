@@ -66,6 +66,7 @@ workflows:
   build_test_deploy:
     jobs:
       - run_tests
+      #Envs: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_ECR_ACCOUNT_URL
       - aws-ecr/build-and-push-image:
           repo: bocserver
           tag: "latest"
