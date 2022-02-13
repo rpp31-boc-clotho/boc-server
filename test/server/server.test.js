@@ -20,7 +20,7 @@ describe("StreamFinder Routes", () => {
     const res = await request(app).get('/');
     
     expect(res.statusCode).toEqual(200);
-    expect(res.text).toEqual('Hello World!');
+    expect(res.text).toEqual('Deployed with CI/CD');
   });
 
 });
