@@ -81,6 +81,7 @@ workflows:
       - aws-ecs/deploy-service-update:
           cluster-name: 'arn:aws:ecs:us-east-2:884479076076:cluster/boc-service'
           container-image-name-updates: 'container=boc-dockerfile,tag=latest'
+          service-name: 'boc-server'
           family: 'boc-docker-service'
           requires:
             - aws-ecr/build-and-push-image
