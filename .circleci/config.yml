@@ -81,8 +81,8 @@ workflows:
       - aws-ecs/deploy-service-update:
           aws-region: AWS_REGION
           cluster-name: 'boc-service-cluster'
-          container-image-name-updates: 'container=boc-dockerfile-service, image-and-tag=bocserver:latest'
+          container-image-name-updates: 'container=boc-dockerfile, image-and-tag=bocserver:latest'
           service-name: 'boc-server'
-          family: 'boc-docker-service-service'
+          family: 'boc-docker-service'
           requires:
             - aws-ecr/build-and-push-image
