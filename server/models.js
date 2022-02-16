@@ -1,4 +1,4 @@
-let { User, Review, Movie } = require('../db/connection');
+const { User, Review, Movie } = require('../db/connection');
 const {
   getMovieAPI,
   getMovieProvidersAPI,
@@ -55,7 +55,10 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
-
+  },
+  
+  getUser: async (username) => {
+    return await User.find({username: username});
   }
 }
 

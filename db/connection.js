@@ -10,9 +10,39 @@ async function main() {
 
 const UserSchema = new mongoose.Schema({
   username: { type: String, index: true },
-  subscriptions: Array,
-  history: Array
+  subscriptions: 
+    {type: Object, default: {
+      'Apple iTunes': false,
+      'Apple TV Plus': false,
+      'Amazon Prime Video': false,
+      'Disney Plus': false,
+      'Google Play Movies': false,
+      'HBO Max': false,
+      'Hulu': false,
+      'Netflix': false,
+      'Paramount Plus': false,
+      'Peacock': false,
+      'YouTube': false
+  }},
+  watchHistory: Array,
+  createdDate: { type: Date, default: Date.now }
 });
+
+/*
+Netflix
+Amazon Prime Video
+Disney Plus
+Google Play Movies
+Apple iTunes
+Hulu
+Paramount Plus
+HBO Max
+Peacock
+Apple TV Plus
+YouTube
+*/
+
+
 
 const User = mongoose.model('User', UserSchema);
 
