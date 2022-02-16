@@ -5,14 +5,15 @@ const axios = require('axios');
 const transformMovieList = (movieList) => {
  let list = movieList
     .map((movie, i) => {
-      if (i <= 9) {
+      if (i < 20) {
         return {
           id: movie.id,
-          mediaType: 'Movie',
+          mediaType: 'movie',
           title: movie.title,
           rating: movie.vote_average,
           ratingCount: movie.vote_count,
           summary: movie.overview,
+          release_date: movie.release_date,
           imgUrl: `https://www.themoviedb.org/t/p/w1280${movie.poster_path}`
         }
       }
@@ -65,7 +66,7 @@ module.exports = {
       console.log(error);
     }
   },
-  getPopularMoviesAPI: async() => {
+  getPopularMoviesAPI: async () => {
     const URL = `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.apikey}&language=en-US&page=1`;
 
     try {
@@ -77,7 +78,18 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
+  },
+  getMovieGenre: async (movieId) => {
+    const URL = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.apikey}&language=en-US`;
+
+    try {
+      const { data } = await axios.get(URL);
+      const genres = data.genres.map(genre => genre.name);
+      return genres;
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 
-module.exports.getMovieRecommendationsAPI(568124);
+module.exports.getMovieGenre(634649);

@@ -25,7 +25,6 @@ module.exports = {
     await Promise.all(movies.map(async (movie) => {
       // transform movie data
       movie.popular = true;
-      await setMovieRecommendations(movie);
 
       let newMovie = new Movie(movie);
 
@@ -60,8 +59,8 @@ module.exports = {
   }
 }
 
-// const deleteDB = async () => {
-//   await Movie.deleteMany();
-// }
+const deleteDB = async () => {
+  await Movie.deleteMany();
+}
 
-// deleteDB();
+deleteDB();

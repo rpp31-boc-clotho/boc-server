@@ -6,7 +6,7 @@ const {
 module.exports = {
   getHomePageInfo: async (req, res) => {
     const data = await getPopularMoviesFromDB();
-    res.status(200).send(data);
+    res.status(200).send({ movies: data, tvShows: [] });
   },
   getLoggedInInfo: (req, res) => {
 
