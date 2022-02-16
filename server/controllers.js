@@ -5,7 +5,7 @@ const {
 } = require('./models');
 
 module.exports = {
-  
+
   getHomePageInfo: async (req, res) => {
     const data = await getPopularMoviesFromDB();
     res.status(200).send(data);
@@ -16,7 +16,7 @@ module.exports = {
   },
 
   getUserDetails: (req, res) => {
-    console.log(req.body.username);
+    console.log('req body', req.body.username);
     let username = req.body.username;
 
     getUser(username)
@@ -34,13 +34,10 @@ module.exports = {
 
   },
 
-  getUserDetails: (req, res) => {
-
-  },
-
   getSearchedMedia: async (req, res) => {
     const { mediaString, mediaType } = req.query;
     const data = await getMovieFromDB(mediaString, mediaType);
     res.status(200).send(data);
   }
+
 }

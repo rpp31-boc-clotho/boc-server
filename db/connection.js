@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
       'Paramount Plus': false,
       'Peacock': false,
       'YouTube': false
-    }},
+  }},
   watchHistory: Array,
   createdDate: { type: Date, default: Date.now }
 });

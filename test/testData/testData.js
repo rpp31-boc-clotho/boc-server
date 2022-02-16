@@ -454,6 +454,28 @@ const movie = {
   "__v": 0
 }
 
+const user = [{
+    "_id": "620c6c024c1770d574948b43",
+    "username": "chris.lazzarini@gmail.com",
+    "subscriptions": {
+        "Apple iTunes": false,
+        "Apple TV Plus": false,
+        "Amazon Prime Video": false,
+        "Disney Plus": false,
+        "Google Play Movies": false,
+        "HBO Max": false,
+        "Hulu": false,
+        "Netflix": false,
+        "Paramount Plus": false,
+        "Peacock": false,
+        "YouTube": false
+    },
+    "watchHistory": [],
+    "userId": 1,
+    "createdDate": "2022-02-16T05:58:19.801Z"
+}]
+
 module.exports = {
-  movie
+  movie,
+  user
 }
