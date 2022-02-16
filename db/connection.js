@@ -26,23 +26,25 @@ const ReviewSchema = new mongoose.Schema({
 const Review = mongoose.model('Review', ReviewSchema);
 
 const MovieSchema = new mongoose.Schema({
-  id: {type: Number, index: true},
+  id: { type: Number, index: true },
   title: String,
   mediaType: String,
   recommended: Array,
   summary: String,
-  imgUrl: String
+  imgUrl: String,
+  popular: Boolean
 });
 
 const Movie = mongoose.model('Movie', MovieSchema);
 
 const TvShowSchema = new mongoose.Schema({
-  id: {type: Number, index: true},
+  id: { type: Number, index: true },
   title: String,
   mediaType: String,
   recommended: Array,
   summary: String,
-  imgUrl: String
+  imgUrl: String,
+  popular: Boolean
 });
 
 const TVShow = mongoose.model('TVShow', TvShowSchema);

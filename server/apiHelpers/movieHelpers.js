@@ -2,13 +2,35 @@ require('dotenv').config({ path:__dirname+'/./../../.env' })
 
 const axios = require('axios');
 
+const transformMovieList = (movieList) => {
+ let list = movieList
+    .map((movie, i) => {
+      if (i <= 9) {
+        return {
+          id: movie.id,
+          mediaType: 'Movie',
+          title: movie.title,
+          rating: movie.vote_average,
+          ratingCount: movie.vote_count,
+          summary: movie.overview,
+          imgUrl: `https://www.themoviedb.org/t/p/w1280${movie.poster_path}`
+        }
+      }
+    }).filter(movie => movie !== undefined);
+
+  return list;
+}
+
 module.exports = {
   getMovieAPI: async (movie) => {
     const URL = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.apikey}&language=en-US&query=${movie}&page=1&include_adult=false`;
 
     try {
       const { data } = await axios.get(URL);
-      return data;
+
+      let movies = transformMovieList(data.results);
+      return movies;
+
     } catch (error) {
       console.log(error);
     }
@@ -35,7 +57,10 @@ module.exports = {
 
     try {
       const { data } = await axios.get(URL);
-      return data;
+
+      let recommendations = transformMovieList(data.results);
+      return recommendations;
+
     } catch (error) {
       console.log(error);
     }
@@ -46,22 +71,7 @@ module.exports = {
     try {
       const { data } = await axios.get(URL);
 
-      let topTenMovies = data.results
-        .map((movie, i) => {
-          if (i <= 9) {
-            return {
-              id: movie.id,
-              mediaType: 'Movie',
-              title: movie.title,
-              rating: movie.vote_average,
-              ratingCount: movie.vote_count,
-              summary: movie.overview,
-              imgUrl: `https://www.themoviedb.org/t/p/w1280${movie.poster_path}`
-            }
-          }
-        }).filter(movie => movie !== undefined);
-
-      console.log(topTenMovies);
+      let topTenMovies = transformMovieList(data.results);
       return topTenMovies;
 
     } catch (error) {
@@ -69,3 +79,5 @@ module.exports = {
     }
   }
 };
+
+module.exports.getMovieRecommendationsAPI(568124);
