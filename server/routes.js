@@ -9,12 +9,15 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/homepage', controllers.getHomePageInfo);
+
 // recommendations & watch list
 router.get('/homepage/loggedIn', controllers.getLoggedInInfo);
 
+// movie page
+router.get('/homepage/movie/:id', controllers.getMovieDetails);
 
-// // movie page
-// router.get('/homepage/movie/:id', controllers.getMovieDetails);
+// tv page
+router.get('/homepage/tv/:id', controllers.getTVShowDetails);
 
 // // tv page
 // router.get('/homepage/tv/:id', controllers.getTvDetails);
@@ -25,6 +28,7 @@ router.get('/homepage/user', controllers.getUserDetails);
 // router.get('homepage/search/tv/:searchString, controllers.searchMedia);
 
 // router.get('homepage/search/movie/:searchString, controllers.searchMedia);
+router.get('/homepage/search/media', controllers.getSearchedMedia);
 
 
 module.exports = router;
