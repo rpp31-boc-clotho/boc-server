@@ -1,14 +1,18 @@
 const {
   getPopularMoviesFromDB,
-  getMovieFromDB,
+  getMediaFromDB,
   getUser
 } = require('./models');
 
 module.exports = {
 
   getHomePageInfo: async (req, res) => {
-    const data = await getPopularMoviesFromDB();
-    res.status(200).send({ movies: data, tvShows: [] });
+    try {
+      const data = await getPopularMoviesFromDB();
+      res.status(200).send({ movies: data, tvShows: [] });
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   getLoggedInInfo: (req, res) => {
@@ -35,9 +39,16 @@ module.exports = {
   },
 
   getSearchedMedia: async (req, res) => {
-    const { mediaString, mediaType } = req.query;
-    const data = await getMovieFromDB(mediaString, mediaType);
-    res.status(200).send(data);
+    const { media } = req.query;
+    const { mediaType } = req.params;
+
+    try {
+      const data = await getMediaFromDB(media, mediaType);
+
+      res.status(200).send(data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 }

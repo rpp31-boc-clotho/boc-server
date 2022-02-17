@@ -1,14 +1,23 @@
-const { User, Review, Movie } = require('../db/connection');
+const moment = require('moment');
+moment().format();
+
+const { db, User, Review, Movie } = require('../db/connection');
 const {
-  getMovieAPI,
+  getMediaAPI,
   getMovieProvidersAPI,
   getMovieRecommendationsAPI,
-  getPopularMoviesAPI
+  getPopularMoviesAPI,
+  getGenresAPI
 } = require('./apiHelpers/movieHelpers');
 
 const setMovieRecommendations = async (movie) => {
   const results = await getMovieRecommendationsAPI(movie.id);
   movie.recommended = results;
+}
+
+const setMediaGenres = async (media, mediaType) => {
+  const genres = await getGenresAPI(media.id, mediaType);
+  media.genres = genres;
 }
 
 module.exports = {
@@ -19,12 +28,19 @@ module.exports = {
       return popularMovies;
     }
 
-    // if popular movies not found in DB, retrieve from API
+    // if movies are not in DB, retrieve from API & save to DB
     const movies = await getPopularMoviesAPI();
 
+    await db.db.command({
+      collMod: 'movies',
+      index: {keyPattern: {createdAt: 1}, expireAfterSeconds: moment().endOf('day').diff(moment(), 'seconds')}
+    });
+
     await Promise.all(movies.map(async (movie) => {
-      // transform movie data
       movie.popular = true;
+      movie.createdAt = new Date();
+
+      await setMediaGenres(movie, 'movie');
 
       let newMovie = new Movie(movie);
 
@@ -37,33 +53,45 @@ module.exports = {
 
     return movies;
   },
-  getMovieFromDB: async (movie) => {
-    const movieData = await getMovieAPI(movie);
+  getMediaFromDB: async (media, mediaType) => {
+    // const mediaData = await Movie.find();
 
-    if (movieData.length) {
-      return movieData;
-    }
+    // if (mediaData.length) {
+    //   return mediaData;
+    // }
 
-    // if movie not found in DB, retrieve from API
-    const movieDetails = await getMovieAPI(movie);
-    await setMovieRecommendations(movie);
+    //if movie not found in DB, retrieve from API
+    const mediaList = await getMediaAPI(media, mediaType);
 
-    let newMovie = new Movie(movieDetails);
+    await Promise.all(mediaList.map(async (media) => {
+      // check if movie is already in DB, before saving
+      let movieFound = await Movie.find({ id: media.id });
 
-    try {
-      await newMovie.save();
-    } catch (error) {
-      console.log(error);
-    }
+      if (!movieFound.length) {
+        let newMedia = new Movie(media);
+
+        try {
+          await newMedia.save();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      await setMediaGenres(media, mediaType);
+    }));
+
+    return mediaList;
   },
-  
+
   getUser: async (username) => {
     return await User.find({username: username});
   }
 }
 
-const deleteDB = async () => {
-  await Movie.deleteMany();
-}
+// const deleteDB = async () => {
+//   await Movie.deleteMany();
+// }
 
-deleteDB();
+// deleteDB();
+
+

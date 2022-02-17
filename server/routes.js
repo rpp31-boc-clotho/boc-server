@@ -19,16 +19,10 @@ router.get('/homepage/movie/:id', controllers.getMovieDetails);
 // tv page
 router.get('/homepage/tv/:id', controllers.getTVShowDetails);
 
-// // tv page
-// router.get('/homepage/tv/:id', controllers.getTvDetails);
-
 //user page
 router.get('/homepage/user', controllers.getUserDetails);
 
-// router.get('homepage/search/tv/:searchString, controllers.searchMedia);
-
-// router.get('homepage/search/movie/:searchString, controllers.searchMedia);
-router.get('/homepage/search/media', controllers.getSearchedMedia);
+router.get('/homepage/search/:mediaType', controllers.getSearchedMedia);
 
 
 module.exports = router;
