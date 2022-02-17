@@ -63,9 +63,14 @@ module.exports = {
   },
 
   postUser: async (username) => {
-    let user = new User({username: username})
+    let checkCurrentUser = await User.find({username: username});
 
-    return await user.save();
+    if (checkCurrentUser) {
+      return 'User Already Exists';
+    } else {
+      let user = new User({username: username});
+      return await user.save();
+    }
   }
 }
 

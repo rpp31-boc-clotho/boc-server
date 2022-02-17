@@ -63,6 +63,17 @@ describe("StreamFinder Routes", () => {
     })
   })
 
+  test('returns "User Already Exists" with 200 status', async () => {
+    request(app)
+    .post('/homepage/user/create')
+    .field('username', 'chris.lazzarini@gmail.com')
+    .expect(response => {
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual('User Already Exists')
+        done()
+    })
+  })
+
   test('returns user when visiting a profile page with 200 status', async () => {
     request(app)
     .get('/homepage/user')
@@ -73,6 +84,7 @@ describe("StreamFinder Routes", () => {
         done()
     })
   })
+
 });
 
 

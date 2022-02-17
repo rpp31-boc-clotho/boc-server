@@ -42,12 +42,15 @@ module.exports = {
   },
 
   postUserProfile: async (req, res) => {
-    console.log('username', req.body.username)
     let username = req.body.username;
 
     postUser(username)
     .then((data) => {
-      res.status(201).json(data);
+      if (data === 'User Already Exists') {
+        res.status(200).json(data);
+      } else {
+        res.status(201).json(data);
+      }
     })
     .catch((err) => {console.log(err)})
 
