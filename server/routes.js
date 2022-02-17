@@ -25,6 +25,9 @@ router.get('/homepage/tv/:id', controllers.getTVShowDetails);
 //user page
 router.get('/homepage/user', controllers.getUserDetails);
 
+//create user
+router.post('/homepage/user/create', controllers.postUserProfile);
+
 // router.get('homepage/search/tv/:searchString, controllers.searchMedia);
 
 // router.get('homepage/search/movie/:searchString, controllers.searchMedia);

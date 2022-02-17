@@ -60,6 +60,12 @@ module.exports = {
   
   getUser: async (username) => {
     return await User.find({username: username});
+  },
+
+  postUser: async (username) => {
+    let user = new User({username: username})
+
+    return await user.save();
   }
 }
 

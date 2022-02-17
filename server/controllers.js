@@ -1,7 +1,8 @@
 const {
   getPopularMoviesFromDB,
   getMovieFromDB,
-  getUser
+  getUser,
+  postUser
 } = require('./models');
 
 module.exports = {
@@ -38,6 +39,19 @@ module.exports = {
     const { mediaString, mediaType } = req.query;
     const data = await getMovieFromDB(mediaString, mediaType);
     res.status(200).send(data);
+  },
+
+  postUserProfile: async (req, res) => {
+    console.log('username', req.body.username)
+    let username = req.body.username;
+
+    postUser(username)
+    .then((data) => {
+      res.status(201).json(data);
+    })
+    .catch((err) => {console.log(err)})
+
+
   }
 
 }
