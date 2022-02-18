@@ -20,8 +20,9 @@ describe("StreamFinder Routes", () => {
   test('responds to /homepage with a status code of 200 and correct data shape', async () => {
     const res = await request(app).get('/homepage');
 
-    expect(res.statusCode).toEqual(200);
-    // expect(JSON.parse(res.text)[0]).toMatchObject(movie);
+    let { movies } = JSON.parse(res.text);
+    expect(res.statusCode).toBe(200);
+    expect(movies[0]).toMatchObject(movie);
   })
 
   test('posts new user', async () => {
@@ -86,7 +87,6 @@ describe("StreamFinder Routes", () => {
   })
 
 });
-
 
 // supertest(app)
 //   .get("/form-data")

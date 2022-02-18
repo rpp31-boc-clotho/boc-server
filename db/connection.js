@@ -1,16 +1,18 @@
 const mongoose = require('mongoose');
+
 require('dotenv').config({ path:__dirname+'/./../.env' })
 
 main().catch(err => console.log(err));
 
 async function main() {
   await mongoose.connect(`mongodb://${process.env.auth}@${process.env.mongoIp}/streamFinder?authSource=admin`);
-
 }
+
+let db = mongoose.connection;
 
 const UserSchema = new mongoose.Schema({
   username: { type: String, index: true },
-  subscriptions: 
+  subscriptions:
     {type: Object, default: {
       'Apple iTunes': false,
       'Apple TV Plus': false,
@@ -43,7 +45,6 @@ YouTube
 */
 
 
-
 const User = mongoose.model('User', UserSchema);
 
 const ReviewSchema = new mongoose.Schema({
@@ -57,12 +58,16 @@ const Review = mongoose.model('Review', ReviewSchema);
 
 const MovieSchema = new mongoose.Schema({
   id: { type: Number, index: true },
-  title: String,
   mediaType: String,
-  recommended: Array,
+  title: String,
+  rating: Number,
+  ratingCount: Number,
   summary: String,
+  release_date: String,
   imgUrl: String,
-  popular: Boolean
+  genres: Array,
+  popular: Boolean,
+  createdAt: { type: Date, expires: 30}
 });
 
 const Movie = mongoose.model('Movie', MovieSchema);
@@ -87,5 +92,6 @@ const ProvidersSchema = new mongoose.Schema({
 const Providers = mongoose.model('Providers', ProvidersSchema)
 
 module.exports = {
-  User, Review, Movie
+  db, User, Review, Movie
 };
+
