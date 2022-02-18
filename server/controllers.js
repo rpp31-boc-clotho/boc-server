@@ -2,7 +2,6 @@ const {
   getPopularMoviesFromDB,
   getMediaFromDB,
   getUser,
-  getUser,
   postUser
 } = require('./models');
 
