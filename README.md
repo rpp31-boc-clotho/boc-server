@@ -387,7 +387,7 @@ This service provides data for the front end of our service, below is a list of 
 
 * **Data Params**
 
-  `username=String`
+   None
 
 * **Success Response:**
 
@@ -408,8 +408,9 @@ This service provides data for the front end of our service, below is a list of 
 
   ```javascript
     $.ajax({
-      url: "/users/1",
+      url: "/user",
       dataType: "json",
+      data: {username: "email"},
       type : "GET",
       success : function(r) {
         console.log(r);
@@ -443,11 +444,11 @@ This service provides data for the front end of our service, below is a list of 
 
 * **Data Params**
 
-  `username=String`
+   None
 
 * **Success Response:**
 
-  * **Code:** 200 <br />
+  * **Code:** 201 <br />
     **Content:** `TBD`
 
 * **Error Response:**
@@ -464,9 +465,10 @@ This service provides data for the front end of our service, below is a list of 
 
   ```javascript
     $.ajax({
-      url: "/users/1",
+      url: "/homepage/user/create",
       dataType: "json",
-      type : "GET",
+      data: {username: 'email'},
+      type : "POST",
       success : function(r) {
         console.log(r);
       }
