@@ -1,7 +1,9 @@
 const {
   getPopularMoviesFromDB,
   getMediaFromDB,
-  getUser
+  getUser,
+  getUser,
+  postUser
 } = require('./models');
 
 module.exports = {
@@ -49,6 +51,22 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  postUserProfile: async (req, res) => {
+    let username = req.body.username;
+
+    postUser(username)
+    .then((data) => {
+      if (data === 'User Already Exists') {
+        res.status(200).json(data);
+      } else {
+        res.status(201).json(data);
+      }
+    })
+    .catch((err) => {console.log(err)})
+
+
   }
 
 }

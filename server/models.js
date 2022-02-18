@@ -55,7 +55,6 @@ module.exports = {
     return movies;
   },
   getMediaFromDB: async (media, mediaType) => {
-    let filter = new RegExp("/.*" + media + ".*/i");
     console.log(filter);
     const mediaData = await Movie.find({ "title" : filter });
 
@@ -89,6 +88,17 @@ module.exports = {
 
   getUser: async (username) => {
     return await User.find({username: username});
+  },
+
+  postUser: async (username) => {
+    let checkCurrentUser = await User.find({username: username});
+
+    if (checkCurrentUser) {
+      return 'User Already Exists';
+    } else {
+      let user = new User({username: username});
+      return await user.save();
+    }
   }
 }
 

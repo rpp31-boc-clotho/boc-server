@@ -24,5 +24,9 @@ router.get('/homepage/user', controllers.getUserDetails);
 
 router.get('/homepage/search/:mediaType', controllers.getSearchedMedia);
 
+//create user
+router.post('/homepage/user/create', controllers.postUserProfile);
+
+
 
 module.exports = router;
