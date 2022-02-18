@@ -308,65 +308,8 @@ This service provides data for the front end of our service, below is a list of 
 </details>
 
 ---
-
 <details>
-  <summary>GET /homepage/:username</summary>
-
- **Get User**
-----
-  Returns json data about a single user.
-
-* **URL**
-
-  /homepage/:username
-
-* **Method:**
-
-  `GET`
-
-*  **URL Params**
-
-   **Required:**
-
-   `id=[integer]`
-
-* **Data Params**
-
-  None
-
-* **Success Response:**
-
-  * **Code:** 200 <br />
-    **Content:** `TBD`
-
-* **Error Response:**
-
-  * **Code:** 404 NOT FOUND <br />
-    **Content:** `{ error : "User doesn't exist" }`
-
-  OR
-
-  * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** `{ error : "You are unauthorized to make this request." }`
-
-* **Sample Call:**
-
-  ```javascript
-    $.ajax({
-      url: "/users/1",
-      dataType: "json",
-      type : "GET",
-      success : function(r) {
-        console.log(r);
-      }
-    });
-  ```
-</details>
-
----
-
-<details>
-  <summary>GET /homepage/search/media</summary>
+  <summary>GET /homepage/search/:mediaType</summary>
 
  **Get Media**
 ----
@@ -374,7 +317,7 @@ This service provides data for the front end of our service, below is a list of 
 
 * **URL**
 
-  /homepage/search/media<
+  /homepage/search/:mediaType
 
 * **Method:**
 
@@ -384,7 +327,7 @@ This service provides data for the front end of our service, below is a list of 
 
    **Required:**
 
-   `TBD`
+   `meadiaType=Movie/Tv/Both`
 
 * **Data Params**
 
@@ -418,3 +361,117 @@ This service provides data for the front end of our service, below is a list of 
     });
   ```
 </details>
+
+---
+
+<details>
+  <summary>GET /homepage/user</summary>
+
+ **Get User**
+----
+  Returns json data about a single user.
+
+* **URL**
+
+  /homepage/user
+
+* **Method:**
+
+  `GET`
+
+*  **URL Params**
+
+   **Required:**
+
+   None
+
+* **Data Params**
+
+  `username=String`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `TBD`
+
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "User doesn't exist" }`
+
+  OR
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ error : "You are unauthorized to make this request." }`
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/users/1",
+      dataType: "json",
+      type : "GET",
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+</details>
+
+---
+
+<details>
+  <summary>POST /homepage/user/create</summary>
+
+ **Get User**
+----
+ Posts User to database, then returns json data about user.
+
+* **URL**
+
+  /homepage/user/create
+
+* **Method:**
+
+  `POST`
+
+*  **URL Params**
+
+   **Required:**
+
+   None
+
+* **Data Params**
+
+  `username=String`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `TBD`
+
+* **Error Response:**
+
+  * **Code:** 404 NOT FOUND <br />
+    **Content:** `{ error : "User doesn't exist" }`
+
+  OR
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ error : "You are unauthorized to make this request." }`
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/users/1",
+      dataType: "json",
+      type : "GET",
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+</details>
+
+---
