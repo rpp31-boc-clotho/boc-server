@@ -31,6 +31,7 @@ module.exports = {
     // if movies are not in DB, retrieve from API & save to DB
     const movies = await getPopularMoviesAPI();
 
+    // reset the expiration time to the ttl index on createdAt
     await db.db.command({
       collMod: 'movies',
       index: {keyPattern: {createdAt: 1}, expireAfterSeconds: moment().endOf('day').diff(moment(), 'seconds')}
@@ -54,11 +55,14 @@ module.exports = {
     return movies;
   },
   getMediaFromDB: async (media, mediaType) => {
-    // const mediaData = await Movie.find();
+    let filter = new RegExp("/.*" + media + ".*/i");
+    console.log(filter);
+    const mediaData = await Movie.find({ "title" : filter });
 
-    // if (mediaData.length) {
-    //   return mediaData;
-    // }
+    if (mediaData.length) {
+      console.log('FOUND IN DB');
+      return mediaData;
+    }
 
     //if movie not found in DB, retrieve from API
     const mediaList = await getMediaAPI(media, mediaType);
