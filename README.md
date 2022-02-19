@@ -387,7 +387,7 @@ This service provides data for the front end of our service, below is a list of 
 
 * **Data Params**
 
-   None
+  None
 
 * **Success Response:**
 

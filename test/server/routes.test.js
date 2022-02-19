@@ -64,6 +64,68 @@ describe("StreamFinder Routes", () => {
     })
   })
 
+  test('update existing user', async () => {
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    let randomNumber = getRandomArbitrary(0, 999999999999)
+
+    let randomUser = {
+        "username": `test+${randomNumber}@gmail.com`,
+        "subscriptions": {
+            "Apple iTunes": false,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": false,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": false,
+            "YouTube": false
+        },
+        "watchHistory": [],
+        "_id": "620ddd4f026e8281fd8ab6b5",
+        "createdDate": "2022-02-17T05:29:51.583Z",
+        "__v": 0
+    }
+
+    let subscriptionUpdate = {
+        "Apple iTunes": false,
+        "Apple TV Plus": false,
+        "Amazon Prime Video": false,
+        "Disney Plus": false,
+        "Google Play Movies": false,
+        "HBO Max": true,
+        "Hulu": false,
+        "Netflix": false,
+        "Paramount Plus": false,
+        "Peacock": false,
+        "YouTube": false
+    }
+
+    let randomUserUpdated = {
+        "username": `test+${randomNumber}@gmail.com`,
+        "subscriptions": subscriptionUpdate,
+        "watchHistory": [],
+        "_id": "620ddd4f026e8281fd8ab6b5",
+        "createdDate": "2022-02-17T05:29:51.583Z",
+        "__v": 0
+    }
+
+    request(app)
+    .post('/homepage/user/create/update')
+    .field('username', `test+${randomNumber}@gmail.com`)
+    .field('subscriptions', subscriptionUpdate)
+    .expect(response => {
+        expect(response.status).toBe(201)
+        expect(response.body).toEqual(randomUser)
+        done()
+    })
+  })
+
   test('returns "User Already Exists" with 200 status', async () => {
     request(app)
     .post('/homepage/user/create')

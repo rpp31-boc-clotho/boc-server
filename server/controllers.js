@@ -2,7 +2,8 @@ const {
   getPopularMoviesFromDB,
   getMediaFromDB,
   getUser,
-  postUser
+  postUser,
+  updateUser
 } = require('./models');
 
 module.exports = {
@@ -64,8 +65,27 @@ module.exports = {
       }
     })
     .catch((err) => {console.log(err)})
+  },
 
+  updateUserProfile: async (req, res) => {
+    let username = req.body.username;
+    let subscriptions = req.body.subscriptions;
+
+    for (let subscription in subscriptions) {
+      if (subscriptions[subscription] === "true") {
+        subscriptions[subscription] = true;
+      } else {
+        subscriptions[subscription] = false;
+      }
+    }
+
+    updateUser(username, subscriptions)
+    .then((data) => {
+      res.status(201).json(data);
+    })
+    .catch((err) => {console.log(err)})
 
   }
+
 
 }

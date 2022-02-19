@@ -100,7 +100,23 @@ module.exports = {
       let user = new User({username: username});
       return await user.save();
     }
-  }
+  },
+
+  updateUser: async (username, subscriptions) => {
+    User.bulkWrite([
+      {
+        updateOne: {
+          filter: { username: username },
+          // If you were using the MongoDB driver directly, you'd need to do
+          // `update: { $set: { title: ... } }` but mongoose adds $set for
+          // you.
+          update: { $set: { subscriptions: subscriptions } }
+        }
+      }
+    ])
+
+    return await User.find({username: username})
+  },
 }
 
 // const deleteDB = async () => {
