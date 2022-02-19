@@ -55,11 +55,21 @@ module.exports = {
     return movies;
   },
   getMediaFromDB: async (media, mediaType) => {
-    console.log(filter);
-    const mediaData = await Movie.find({ "title" : filter });
+    // media = media.replace(/-/g, '');
+    // let regex = new RegExp(media, 'i');
+    // const mediaData = await Movie.find({ "title" : regex });
+    console.log(media, mediaType);
 
-    if (mediaData.length) {
-      console.log('FOUND IN DB');
+    const mediaData = await Movie
+      .find(
+        { $text: { $search: media } },
+        { score: { $meta: 'textScore' } }
+      ).sort(
+        { score: { $meta: 'textScore' } }
+      );
+
+    if (mediaData.length > 1) {
+      console.log('found in DB');
       return mediaData;
     }
 
@@ -71,6 +81,8 @@ module.exports = {
       let movieFound = await Movie.find({ id: media.id });
 
       if (!movieFound.length) {
+        await setMediaGenres(media, mediaType);
+
         let newMedia = new Movie(media);
 
         try {
@@ -80,7 +92,6 @@ module.exports = {
         }
       }
 
-      await setMediaGenres(media, mediaType);
     }));
 
     return mediaList;

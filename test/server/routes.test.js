@@ -20,9 +20,23 @@ describe("StreamFinder Routes", () => {
   test('responds to /homepage with a status code of 200 and correct data shape', async () => {
     const res = await request(app).get('/homepage');
 
-    let { movies } = JSON.parse(res.text);
     expect(res.statusCode).toBe(200);
-    expect(movies[0]).toMatchObject(movie);
+
+    let { movies } = JSON.parse(res.text);
+    expect(movies).toHaveLength(20);
+    // expect(movies[0]).toContain('popular');
+  })
+
+  test('responds to /homepage/search:mediaType with 200 status and a list of searched movies', async () => {
+    let searchInfo = {
+      mediaType: 'movie',
+      search: 'jurrasic park'
+    };
+
+    const res = await request(app).get(`/homepage/search/${searchInfo.mediaType}?media=${searchInfo.search}`);
+
+    expect(res.statusCode).toBe(200);
+    // console.log('JURASSIC PARK MOVIES!!', JSON.parse(res.text));
   })
 
   test('posts new user', async () => {
