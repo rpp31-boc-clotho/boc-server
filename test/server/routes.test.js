@@ -23,6 +23,20 @@ describe("StreamFinder Routes", () => {
 
     expect(res.statusCode).toBe(200);
     expect(homepageResponse.movies[0]).toMatchObject(movie);
+    expect(movies).toHaveLength(20);
+    // expect(movies[0]).toContain('popular');
+  })
+
+  test('responds to /homepage/search:mediaType with 200 status and a list of searched movies', async () => {
+    let searchInfo = {
+      mediaType: 'movie',
+      search: 'jurrasic park'
+    };
+
+    const res = await request(app).get(`/homepage/search/${searchInfo.mediaType}?media=${searchInfo.search}`);
+
+    expect(res.statusCode).toBe(200);
+    // console.log('JURASSIC PARK MOVIES!!', JSON.parse(res.text));
   })
 
   test('posts new user', async () => {

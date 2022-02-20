@@ -59,16 +59,17 @@ const Review = mongoose.model('Review', ReviewSchema);
 const MovieSchema = new mongoose.Schema({
   id: { type: Number, index: true },
   mediaType: String,
-  title: String,
+  title: { type: String, text: true },
   rating: Number,
   ratingCount: Number,
-  summary: String,
+  summary: { type: String, text: true },
   release_date: String,
   imgUrl: String,
   genres: Array,
   popular: Boolean,
   createdAt: { type: Date, expires: 30}
 });
+
 
 const Movie = mongoose.model('Movie', MovieSchema);
 
