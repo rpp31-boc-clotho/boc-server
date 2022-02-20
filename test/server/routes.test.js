@@ -23,7 +23,7 @@ describe("StreamFinder Routes", () => {
 
     expect(res.statusCode).toBe(200);
     expect(homepageResponse.movies[0]).toMatchObject(movie);
-    expect(movies).toHaveLength(20);
+    expect(homepageResponse.movies).toHaveLength(20);
     // expect(movies[0]).toContain('popular');
   })
 
