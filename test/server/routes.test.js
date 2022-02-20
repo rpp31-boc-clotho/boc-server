@@ -19,12 +19,10 @@ describe("StreamFinder Routes", () => {
   });
 
   test('responds to /homepage with a status code of 200 and correct data shape', async () => {
-    const res = await request(baseUrl).get('/homepage');
+    const res = await request(app).get('/homepage');
 
     expect(res.statusCode).toBe(200);
-    expect(homepageResponse.movies[0]).toMatchObject(movie);
-    expect(homepageResponse.movies).toHaveLength(20);
-    // expect(movies[0]).toContain('popular');
+    expect(res.body.movies).toHaveLength(20);
   })
 
   test('responds to /homepage/search:mediaType with 200 status and a list of searched movies', async () => {
@@ -68,7 +66,7 @@ describe("StreamFinder Routes", () => {
     }
 
 
-    request(baseUrl)
+    request(app)
     .post('/homepage/user/create')
     .field('username', `test+${randomNumber}@gmail.com`)
     .expect(response => {
@@ -129,7 +127,7 @@ describe("StreamFinder Routes", () => {
         "__v": 0
     }
 
-    request(baseUrl)
+    request(app)
     .post('/homepage/user/create/update')
     .field('username', `test+${randomNumber}@gmail.com`)
     .field('subscriptions', `${subscriptionUpdate}`)
@@ -170,7 +168,7 @@ describe("StreamFinder Routes", () => {
 
     let subscriptionUpdate = {}
 
-    request(baseUrl)
+    request(app)
     .post('/homepage/user/create/update')
     .field('username', `test+${randomNumber}@gmail.com`)
     .field('subscriptions', `${subscriptionUpdate}`)

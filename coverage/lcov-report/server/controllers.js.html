@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.47% </span>
+                <span class="strong">28.57% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/23</span>
+                <span class='fraction'>10/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.18% </span>
+                <span class="strong">14.28% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/11</span>
+                <span class='fraction'>2/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.47% </span>
+                <span class="strong">28.57% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/23</span>
+                <span class='fraction'>10/35</span>
             </div>
         
             
@@ -133,7 +133,34 @@
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -199,6 +226,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -207,7 +259,8 @@
   getPopularMoviesFromDB,
   getMediaFromDB,
   getUser,
-  postUser
+  postUser,
+  updateUser
 } = require('./models');
 &nbsp;
 module.exports = {
@@ -269,9 +322,34 @@ module.exports = {
       }
     })
     .catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {<span class="cstat-no" title="statement not covered" >console.log(err)}</span>)
+  },
 &nbsp;
+  updateUserProfile: <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
+    let username = <span class="cstat-no" title="statement not covered" >req.body.username;</span>
+    let subscriptions = <span class="cstat-no" title="statement not covered" >req.body.subscriptions;</span>
+<span class="cstat-no" title="statement not covered" >    if (subscriptions === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >      res.status(400).json('Data Improperly Formatted')</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    for (let subscription in subscriptions) {</span>
+<span class="cstat-no" title="statement not covered" >      if (subscriptions[subscription] === "true") {</span>
+<span class="cstat-no" title="statement not covered" >        subscriptions[subscription] = true;</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        subscriptions[subscription] = false;</span>
+      }
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    updateUser(username, subscriptions)</span>
+    .then(<span class="fstat-no" title="function not covered" >(d</span>ata) =&gt; {
+<span class="cstat-no" title="statement not covered" >      res.status(201).json(data);</span>
+    })
+    .catch(<span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; {
+<span class="cstat-no" title="statement not covered" >      console.log(err)</span>
+<span class="cstat-no" title="statement not covered" >      res.status(400).json('Data Improperly Formatted')</span>
+    })
 &nbsp;
   }
+&nbsp;
 &nbsp;
 }</pre></td></tr></table></pre>
 
@@ -280,7 +358,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Sat Feb 19 2022 13:03:28 GMT-0800 (Pacific Standard Time)
+                at Sat Feb 19 2022 17:23:49 GMT-0700 (Mountain Standard Time)
             </div>
         <script src="../prettify.js"></script>
         <script>
