@@ -27,6 +27,9 @@ router.get('/homepage/search/:mediaType', controllers.getSearchedMedia);
 //create user
 router.post('/homepage/user/create', controllers.postUserProfile);
 
+//update user profile
+router.post('/homepage/user/update', controllers.updateUserProfile);
+
 
 
 module.exports = router;
