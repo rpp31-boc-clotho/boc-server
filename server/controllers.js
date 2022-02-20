@@ -70,6 +70,9 @@ module.exports = {
   updateUserProfile: async (req, res) => {
     let username = req.body.username;
     let subscriptions = req.body.subscriptions;
+    if (subscriptions === undefined) {
+      res.status(400).json('Data Improperly Formatted')
+    }
 
     for (let subscription in subscriptions) {
       if (subscriptions[subscription] === "true") {
@@ -83,7 +86,10 @@ module.exports = {
     .then((data) => {
       res.status(201).json(data);
     })
-    .catch((err) => {console.log(err)})
+    .catch((err) => {
+      console.log(err)
+      res.status(400).json('Data Improperly Formatted')
+    })
 
   }
 
