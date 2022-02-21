@@ -25,10 +25,13 @@ router.get('/homepage/user', controllers.getUserDetails);
 router.get('/homepage/search/:mediaType', controllers.getSearchedMedia);
 
 //create user
-router.post('/homepage/user/create', controllers.postUserProfile);
+router.post('/homepage/user/create', controllers.postNewUserProfile);
 
-//update user profile
-router.post('/homepage/user/update', controllers.updateUserProfile);
+//update user profile subscriptions
+router.post('/homepage/user/update', controllers.updateUserSubscriptions);
+
+//update user profile subscriptions
+router.post('/homepage/user/watched', controllers.updateUserWatchedList);
 
 
 
