@@ -1,6 +1,7 @@
 const moment = require('moment');
 moment().format();
 
+const cron = require('node-cron');
 const { db, User, Review, Movie } = require('../db/connection');
 const {
   getMediaAPI,
@@ -9,6 +10,22 @@ const {
   getPopularMoviesAPI,
   getGenresAPI
 } = require('./apiHelpers/movieHelpers');
+
+cron.schedule("0 0 * * * *", async () => {
+  const popularMovies = await Movie.find({ popular: true });
+
+  await Promise.all(popularMovies.map(async (movie) => {
+    let query = { 'id': movie.id };
+    let update = { 'popular': false };
+
+    try {
+      await Movie.findOneAndUpdate(query, update)
+    } catch (error) {
+      console.log(error);
+    }
+  }));
+});
+
 
 const setMovieRecommendations = async (movie) => {
   const results = await getMovieRecommendationsAPI(movie.id);
@@ -32,21 +49,37 @@ module.exports = {
     const movies = await getPopularMoviesAPI();
 
     // reset the expiration time to the ttl index on createdAt
+    /*
     await db.db.command({
       collMod: 'movies',
       index: {keyPattern: {createdAt: 1}, expireAfterSeconds: moment().endOf('day').diff(moment(), 'seconds')}
     });
+    */
 
     await Promise.all(movies.map(async (movie) => {
-      movie.popular = true;
-      movie.createdAt = new Date();
+      // movie.popular = true;
+      // movie.createdAt = new Date();
 
       await setMediaGenres(movie, 'movie');
 
-      let newMovie = new Movie(movie);
+      let filter = { 'id': movie.id };
+      let update = {
+        mediaType: movie.mediaType,
+        title: movie.title,
+        rating: movie.rating,
+        ratingCount: movie.ratingCount,
+        summary: movie.summary,
+        release_date: movie.release_date,
+        imgUrl: movie.imgUrl,
+        genres: movie.genres,
+        popular: true
+      };
+      let options = { new: true, upsert: true };
+
+      // // let newMovie = new Movie(movie);
 
       try {
-        await newMovie.save();
+        await Movie.findOneAndUpdate(filter, update, options);
       } catch (error) {
         console.log(error);
       }
@@ -54,6 +87,7 @@ module.exports = {
 
     return movies;
   },
+
   getMediaFromDB: async (media, mediaType) => {
     // media = media.replace(/-/g, '');
     // let regex = new RegExp(media, 'i');
@@ -68,7 +102,7 @@ module.exports = {
         { score: { $meta: 'textScore' } }
       );
 
-    if (mediaData.length > 1) {
+    if (mediaData.length > 5) {
       console.log('found in DB');
       return mediaData;
     }
@@ -95,6 +129,11 @@ module.exports = {
     }));
 
     return mediaList;
+  },
+
+  getMediaDetailsFromDB: async (mediaId, mediaType) => {
+    const mediaDetais = await Movie.find({ id: mediaId });
+
   },
 
   getUser: async (username) => {
