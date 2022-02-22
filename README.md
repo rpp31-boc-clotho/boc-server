@@ -387,12 +387,38 @@ This service provides data for the front end of our service, below is a list of 
 
 * **Data Params**
 
-  None
+  ```
+  {username: 'email'}
+  ```
 
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `TBD`
+    **Content:** 
+  ```
+  [
+    {
+        "_id": "620c6c024c1770d574948b43",
+        "username": "email@gmail.com",
+        "subscriptions": {
+            "Apple iTunes": false,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": false,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": false,
+            "YouTube": false
+        },
+        "watchHistory": [],
+        "userId": 1,
+        "createdDate": "2022-02-21T17:33:51.036Z"
+    }
+  ]
+  ```
 
 * **Error Response:**
 
@@ -424,7 +450,7 @@ This service provides data for the front end of our service, below is a list of 
 <details>
   <summary>POST /homepage/user/create</summary>
 
- **Get User**
+ **Post User**
 ----
  Posts User to database, then returns json data about user.
 
@@ -444,12 +470,36 @@ This service provides data for the front end of our service, below is a list of 
 
 * **Data Params**
 
-   None
+   ```
+   {username: 'email'}
+   ```
 
 * **Success Response:**
 
   * **Code:** 201 <br />
-    **Content:** `TBD`
+    **Content:** 
+    ```
+    {
+      "username": "email12345@gmail.com",
+      "subscriptions": {
+          "Apple iTunes": false,
+          "Apple TV Plus": false,
+          "Amazon Prime Video": false,
+          "Disney Plus": false,
+          "Google Play Movies": false,
+          "HBO Max": false,
+          "Hulu": false,
+          "Netflix": false,
+          "Paramount Plus": false,
+          "Peacock": false,
+          "YouTube": false
+      },
+      "watchHistory": [],
+      "_id": "6213cd71ea39e2718ce3a6e5",
+      "createdDate": "2022-02-21T17:35:45.159Z",
+      "__v": 0
+    }
+    ```
 
 * **Error Response:**
 
@@ -468,6 +518,206 @@ This service provides data for the front end of our service, below is a list of 
       url: "/homepage/user/create",
       dataType: "json",
       data: {username: 'email'},
+      type : "POST",
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+</details>
+
+---
+
+<details>
+  <summary>POST /homepage/user/update</summary>
+
+ **Post User**
+----
+ Update user subscriptions
+
+* **URL**
+
+  /homepage/user/update
+
+* **Method:**
+
+  `POST`
+
+*  **URL Params**
+
+   **Required:**
+
+   None
+
+* **Data Params**
+
+    ```
+    {
+      username: 'email',
+      subscriptions: {
+        'Apple iTunes': 'boolean string',
+        'Apple TV Plus': 'boolean string',
+        'Amazon Prime Video': 'boolean string',
+        'Disney Plus': 'boolean string',
+        'Google Play Movies': 'boolean string',
+        'HBO Max': 'boolean string',
+        'Hulu': 'boolean string',
+        'Netflix': 'boolean string',
+        'Paramount Plus': 'boolean string',
+        'Peacock': 'boolean string',
+        'Youtube': 'boolean string'
+      }
+    }
+    ```
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:** 
+    ```
+    [
+      {
+        "_id": "620f13c27139767b49438b7d",
+        "username": "email+5@gmail.com",
+        "subscriptions": {
+            "Apple iTunes": true,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": true,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": true,
+            "Youtube": true
+        },
+        "watchHistory": [],
+        "createdDate": "2022-02-18T03:34:26.666Z",
+        "__v": 0
+      }
+    ]
+    ```
+
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `Data Improperly Formatted`
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/homepage/user/create",
+      dataType: "json",
+      data: {
+        username: 'email',
+        subscriptions: {
+            "Apple iTunes": 'true',
+            "Apple TV Plus": 'false',
+            "Amazon Prime Video": 'false',
+            "Disney Plus": 'false',
+            "Google Play Movies": 'false',
+            "HBO Max": 'false',
+            "Hulu": 'false',
+            "Netflix": 'false',
+            "Paramount Plus": 'false',
+            "Peacock": 'false',
+            "Youtube": 'false'
+        }
+      },
+      type : "POST",
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+</details>
+
+---
+
+<details>
+  <summary>POST /homepage/user/watched</summary>
+
+ **Post User**
+----
+ Update user with new watched show or movie
+
+* **URL**
+
+  /homepage/user/watched
+
+* **Method:**
+
+  `POST`
+
+*  **URL Params**
+
+   **Required:**
+
+   None
+
+* **Data Params**
+
+    ```
+    {
+      username: 'email',
+      watchedType: 'movies OR shows',
+      watchedId: id integer
+    }
+    ```
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:** 
+    ```
+    [
+      {
+        "_id": "620f13c27139767b49438b7d",
+        "username": "email+5@gmail.com",
+        "subscriptions": {
+            "Apple iTunes": true,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": true,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": true,
+            "Youtube": true
+        },
+        "watchHistory": {
+          shows: [],
+          movies: [123]  
+        },
+        "createdDate": "2022-02-18T03:34:26.666Z",
+        "__v": 0
+      }
+    ]
+    ```
+
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `Data Improperly Formatted`
+
+  * **Code:** 200 OK <br />
+    **Content:** `ID already added to ${watchType} watch list.`
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/homepage/user/create",
+      dataType: "json",
+      data: {
+        username: 'email',
+        watchedType: 'movies',
+        watchedId: 123
+      },
       type : "POST",
       success : function(r) {
         console.log(r);

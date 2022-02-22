@@ -58,7 +58,7 @@ module.exports = {
     // media = media.replace(/-/g, '');
     // let regex = new RegExp(media, 'i');
     // const mediaData = await Movie.find({ "title" : regex });
-    console.log(media, mediaType);
+    //console.log(media, mediaType);
 
     const mediaData = await Movie
       .find(
@@ -69,7 +69,7 @@ module.exports = {
       );
 
     if (mediaData.length > 1) {
-      console.log('found in DB');
+      //console.log('found in DB');
       return mediaData;
     }
 
@@ -101,9 +101,8 @@ module.exports = {
     return await User.find({username: username});
   },
 
-  postUser: async (username) => {
+  postNewUser: async (username) => {
     let checkCurrentUser = await User.find({username: username});
-    console.log(checkCurrentUser);
 
     if (checkCurrentUser.length !== 0) {
       return 'User Already Exists';
@@ -113,8 +112,8 @@ module.exports = {
     }
   },
 
-  updateUser: async (username, subscriptions) => {
-    User.bulkWrite([
+  updateUserSubscriptions: async (username, subscriptions) => {
+    await User.bulkWrite([
       {
         updateOne: {
           filter: { username: username },
@@ -128,6 +127,31 @@ module.exports = {
 
     return await User.find({username: username})
   },
+
+  updateUserWatched: async (username, watchedType, watchedId) => {
+    let pushObj = {};
+    pushObj['watchHistory' + `.${watchedType}`] = watchedId;
+
+    let user = await User.find({username: username})
+    let added = false;
+
+    user[0].watchHistory[watchedType].forEach((id) => {
+      if (id === watchedId) {
+        added = true;
+      }
+    })
+    
+    if (added) {
+      return 'ID already added to ' + watchedType + ' watch list.';
+    } else {
+      await User.updateOne(
+        { username: username }, 
+        { $push: pushObj }
+      );
+  
+      return await User.find({username: username})
+    }
+  }
 }
 
 // const deleteDB = async () => {

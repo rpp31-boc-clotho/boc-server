@@ -26,7 +26,10 @@ const UserSchema = new mongoose.Schema({
       'Peacock': false,
       'YouTube': false
   }},
-  watchHistory: Array,
+  watchHistory: { type: Object, default: {
+    shows: [],
+    movies: []
+  }},
   createdDate: { type: Date, default: Date.now }
 });
 
