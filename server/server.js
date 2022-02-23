@@ -15,7 +15,6 @@ app.use((req, res, next) => {
 
 app.use('/', router);
 
-
 const server = app.listen(port, () => {
   console.log(`server listening on port ${port}`)
 })
