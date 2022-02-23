@@ -1,7 +1,5 @@
-const moment = require('moment');
-moment().format();
-
-const { db, User, Review, Movie } = require('../db/connection');
+const cron = require('node-cron');
+const { db, User, Review, Movie, Providers } = require('../db/connection');
 const {
   getMediaAPI,
   getMovieProvidersAPI,
@@ -9,6 +7,11 @@ const {
   getPopularMoviesAPI,
   getGenresAPI
 } = require('./apiHelpers/movieHelpers');
+
+// sets the popular field to false everyday @ midnight
+cron.schedule("0 0 * * *", async () => {
+  await Movie.updateMany({ popular: true }, { popular: false });
+});
 
 const setMovieRecommendations = async (movie) => {
   const results = await getMovieRecommendationsAPI(movie.id);
@@ -31,22 +34,26 @@ module.exports = {
     // if movies are not in DB, retrieve from API & save to DB
     const movies = await getPopularMoviesAPI();
 
-    // reset the expiration time to the ttl index on createdAt
-    await db.db.command({
-      collMod: 'movies',
-      index: {keyPattern: {createdAt: 1}, expireAfterSeconds: moment().endOf('day').diff(moment(), 'seconds')}
-    });
-
     await Promise.all(movies.map(async (movie) => {
-      movie.popular = true;
-      movie.createdAt = new Date();
 
       await setMediaGenres(movie, 'movie');
 
-      let newMovie = new Movie(movie);
+      let filter = { 'id': movie.id };
+      let update = {
+        mediaType: movie.mediaType,
+        title: movie.title,
+        rating: movie.rating,
+        ratingCount: movie.ratingCount,
+        summary: movie.summary,
+        release_date: movie.release_date,
+        imgUrl: movie.imgUrl,
+        genres: movie.genres,
+        popular: true
+      };
+      let options = { new: true, upsert: true };
 
       try {
-        await newMovie.save();
+        await Movie.findOneAndUpdate(filter, update, options);
       } catch (error) {
         console.log(error);
       }
@@ -54,12 +61,8 @@ module.exports = {
 
     return movies;
   },
-  getMediaFromDB: async (media, mediaType) => {
-    // media = media.replace(/-/g, '');
-    // let regex = new RegExp(media, 'i');
-    // const mediaData = await Movie.find({ "title" : regex });
-    //console.log(media, mediaType);
 
+  getMediaFromDB: async (media, mediaType) => {
     const mediaData = await Movie
       .find(
         { $text: { $search: media } },
@@ -68,8 +71,7 @@ module.exports = {
         { score: { $meta: 'textScore' } }
       );
 
-    if (mediaData.length > 1) {
-      //console.log('found in DB');
+    if (mediaData.length > 5) {
       return mediaData;
     }
 
@@ -97,11 +99,46 @@ module.exports = {
     return mediaList;
   },
 
+  getMediaDetailsFromDB: async (mediaId, mediaType) => {
+    const mediaDetails = await Movie.find({ id: mediaId });
+    const providers = await Providers.find({ id: mediaId });
+
+    if (providers.length) {
+      return providers;
+    }
+
+    const { results } = await getMovieProvidersAPI(mediaId);
+
+    let mediaProviders = new Providers({ movieId: mediaId, results: results.US?.flatrate || [] })
+
+    try {
+      await mediaProviders.save()
+      console.log('saved');
+    } catch (error) {
+      console.log(error);
+    }
+
+    // let movieDetails = await Movie.aggregate([
+    //   {
+    //     '$match':  { 'id': mediaId }
+    //   },
+    //   {
+    //     '$lookup' : {
+    //       'from': 'providers',
+    //       'localField': 'id',
+    //       'foreignField': 'movieId',
+    //       'as': 'providers'
+    //     }
+    //   }
+    // ]);
+
+  },
+
   getUser: async (username) => {
     return await User.find({username: username});
   },
 
-  postNewUser: async (username) => {
+  postUser: async (username) => {
     let checkCurrentUser = await User.find({username: username});
 
     if (checkCurrentUser.length !== 0) {
@@ -140,15 +177,15 @@ module.exports = {
         added = true;
       }
     })
-    
+
     if (added) {
       return 'ID already added to ' + watchedType + ' watch list.';
     } else {
       await User.updateOne(
-        { username: username }, 
+        { username: username },
         { $push: pushObj }
       );
-  
+
       return await User.find({username: username})
     }
   }
@@ -160,4 +197,6 @@ module.exports = {
 
 // deleteDB();
 
-
+//634649 spiderman
+//632727 texas chain
+module.exports.getMediaDetailsFromDB(632727);

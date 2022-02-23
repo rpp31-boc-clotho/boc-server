@@ -4,7 +4,7 @@
   "description": "Backend for StreamFinder platform",
   "main": "server.js",
   "scripts": {
-    "test": "jest --coverage --forceExit --detectOpenHandles ",
+    "test": "jest --coverage --forceExit --maxWorkers=1",
     "dev-server": "nodemon ./server/server.js -w"
   },
   "repository": {
@@ -29,7 +29,12 @@
   "dependencies": {
     "@shelf/jest-mongodb": "^2.2.0",
     "axios": "^0.25.0",
+<<<<<<< HEAD
     "cors": "^2.8.5",
     "moment": "^2.29.1"
+=======
+    "moment": "^2.29.1",
+    "node-cron": "^3.0.0"
+>>>>>>> origin/master
   }
 }

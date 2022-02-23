@@ -43,7 +43,7 @@ module.exports = {
 
       let movieProviders = {
         movieId: data.id,
-        results: data.results.US
+        results: data.results
       };
 
       return movieProviders;

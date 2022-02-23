@@ -69,8 +69,8 @@ const MovieSchema = new mongoose.Schema({
   release_date: String,
   imgUrl: String,
   genres: Array,
-  popular: Boolean,
-  createdAt: { type: Date, expires: 30}
+  popular: { type: Boolean, default: false }
+  // createdAt: { type: Date, expires: 30}
 });
 
 
@@ -96,6 +96,6 @@ const ProvidersSchema = new mongoose.Schema({
 const Providers = mongoose.model('Providers', ProvidersSchema)
 
 module.exports = {
-  db, User, Review, Movie
+  db, User, Review, Movie, Providers
 };
 
