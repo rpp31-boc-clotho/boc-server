@@ -396,28 +396,26 @@ This service provides data for the front end of our service, below is a list of 
   * **Code:** 200 <br />
     **Content:** 
   ```
-  [
-    {
-        "_id": "620c6c024c1770d574948b43",
-        "username": "email@gmail.com",
-        "subscriptions": {
-            "Apple iTunes": false,
-            "Apple TV Plus": false,
-            "Amazon Prime Video": false,
-            "Disney Plus": false,
-            "Google Play Movies": false,
-            "HBO Max": false,
-            "Hulu": false,
-            "Netflix": false,
-            "Paramount Plus": false,
-            "Peacock": false,
-            "YouTube": false
-        },
-        "watchHistory": [],
-        "userId": 1,
-        "createdDate": "2022-02-21T17:33:51.036Z"
-    }
-  ]
+  {
+      "_id": "620c6c024c1770d574948b43",
+      "username": "email@gmail.com",
+      "subscriptions": {
+          "Apple iTunes": false,
+          "Apple TV Plus": false,
+          "Amazon Prime Video": false,
+          "Disney Plus": false,
+          "Google Play Movies": false,
+          "HBO Max": false,
+          "Hulu": false,
+          "Netflix": false,
+          "Paramount Plus": false,
+          "Peacock": false,
+          "YouTube": false
+      },
+      "watchHistory": [],
+      "userId": 1,
+      "createdDate": "2022-02-21T17:33:51.036Z"
+  }
   ```
 
 * **Error Response:**
@@ -500,6 +498,37 @@ This service provides data for the front end of our service, below is a list of 
       "__v": 0
     }
     ```
+  
+  * **Code:** 200 <br />
+    **Content:** 
+    ```
+    {
+    "status": "User Already Exists",
+    "userProfile": {
+        "_id": "6213dbec1052d1acdcc7fbf2",
+        "username": "email12345@gmail.com",
+        "subscriptions": {
+            "Apple iTunes": true,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": true,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": true,
+            "Youtube": true
+        },
+        "watchHistory": {
+            "shows": [],
+            "movies": []
+        },
+        "createdDate": "2022-02-21T18:37:32.168Z",
+        "__v": 0
+      }
+    }
+    ```
 
 * **Error Response:**
 
@@ -575,28 +604,26 @@ This service provides data for the front end of our service, below is a list of 
   * **Code:** 201 <br />
     **Content:** 
     ```
-    [
-      {
-        "_id": "620f13c27139767b49438b7d",
-        "username": "email+5@gmail.com",
-        "subscriptions": {
-            "Apple iTunes": true,
-            "Apple TV Plus": false,
-            "Amazon Prime Video": true,
-            "Disney Plus": false,
-            "Google Play Movies": false,
-            "HBO Max": false,
-            "Hulu": false,
-            "Netflix": false,
-            "Paramount Plus": false,
-            "Peacock": true,
-            "Youtube": true
-        },
-        "watchHistory": [],
-        "createdDate": "2022-02-18T03:34:26.666Z",
-        "__v": 0
-      }
-    ]
+    {
+      "_id": "620f13c27139767b49438b7d",
+      "username": "email+5@gmail.com",
+      "subscriptions": {
+          "Apple iTunes": true,
+          "Apple TV Plus": false,
+          "Amazon Prime Video": true,
+          "Disney Plus": false,
+          "Google Play Movies": false,
+          "HBO Max": false,
+          "Hulu": false,
+          "Netflix": false,
+          "Paramount Plus": false,
+          "Peacock": true,
+          "Youtube": true
+      },
+      "watchHistory": [],
+      "createdDate": "2022-02-18T03:34:26.666Z",
+      "__v": 0
+    }
     ```
 
 * **Error Response:**
@@ -672,31 +699,29 @@ This service provides data for the front end of our service, below is a list of 
   * **Code:** 201 <br />
     **Content:** 
     ```
-    [
-      {
-        "_id": "620f13c27139767b49438b7d",
-        "username": "email+5@gmail.com",
-        "subscriptions": {
-            "Apple iTunes": true,
-            "Apple TV Plus": false,
-            "Amazon Prime Video": true,
-            "Disney Plus": false,
-            "Google Play Movies": false,
-            "HBO Max": false,
-            "Hulu": false,
-            "Netflix": false,
-            "Paramount Plus": false,
-            "Peacock": true,
-            "Youtube": true
-        },
-        "watchHistory": {
-          shows: [],
-          movies: [123]  
-        },
-        "createdDate": "2022-02-18T03:34:26.666Z",
-        "__v": 0
-      }
-    ]
+    {
+      "_id": "620f13c27139767b49438b7d",
+      "username": "email+5@gmail.com",
+      "subscriptions": {
+          "Apple iTunes": true,
+          "Apple TV Plus": false,
+          "Amazon Prime Video": true,
+          "Disney Plus": false,
+          "Google Play Movies": false,
+          "HBO Max": false,
+          "Hulu": false,
+          "Netflix": false,
+          "Paramount Plus": false,
+          "Peacock": true,
+          "Youtube": true
+      },
+      "watchHistory": {
+        shows: [],
+        movies: [123]  
+      },
+      "createdDate": "2022-02-18T03:34:26.666Z",
+      "__v": 0
+    }
     ```
 
 * **Error Response:**
