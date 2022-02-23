@@ -26,7 +26,10 @@ const UserSchema = new mongoose.Schema({
       'Peacock': false,
       'YouTube': false
   }},
-  watchHistory: Array,
+  watchHistory: { type: Object, default: {
+    shows: [],
+    movies: []
+  }},
   createdDate: { type: Date, default: Date.now }
 });
 
@@ -93,6 +96,6 @@ const ProvidersSchema = new mongoose.Schema({
 const Providers = mongoose.model('Providers', ProvidersSchema)
 
 module.exports = {
-  db, User, Review, Movie
+  db, User, Review, Movie, Providers
 };
 

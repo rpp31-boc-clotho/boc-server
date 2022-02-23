@@ -1,8 +1,5 @@
-const moment = require('moment');
-moment().format();
-
 const cron = require('node-cron');
-const { db, User, Review, Movie } = require('../db/connection');
+const { db, User, Review, Movie, Providers } = require('../db/connection');
 const {
   getMediaAPI,
   getMovieProvidersAPI,
@@ -11,21 +8,10 @@ const {
   getGenresAPI
 } = require('./apiHelpers/movieHelpers');
 
-cron.schedule("0 0 * * * *", async () => {
-  const popularMovies = await Movie.find({ popular: true });
-
-  await Promise.all(popularMovies.map(async (movie) => {
-    let query = { 'id': movie.id };
-    let update = { 'popular': false };
-
-    try {
-      await Movie.findOneAndUpdate(query, update)
-    } catch (error) {
-      console.log(error);
-    }
-  }));
+// sets the popular field to false everyday @ midnight
+cron.schedule("0 0 * * *", async () => {
+  await Movie.updateMany({ popular: true }, { popular: false });
 });
-
 
 const setMovieRecommendations = async (movie) => {
   const results = await getMovieRecommendationsAPI(movie.id);
@@ -48,17 +34,7 @@ module.exports = {
     // if movies are not in DB, retrieve from API & save to DB
     const movies = await getPopularMoviesAPI();
 
-    // reset the expiration time to the ttl index on createdAt
-    /*
-    await db.db.command({
-      collMod: 'movies',
-      index: {keyPattern: {createdAt: 1}, expireAfterSeconds: moment().endOf('day').diff(moment(), 'seconds')}
-    });
-    */
-
     await Promise.all(movies.map(async (movie) => {
-      // movie.popular = true;
-      // movie.createdAt = new Date();
 
       await setMediaGenres(movie, 'movie');
 
@@ -76,8 +52,6 @@ module.exports = {
       };
       let options = { new: true, upsert: true };
 
-      // // let newMovie = new Movie(movie);
-
       try {
         await Movie.findOneAndUpdate(filter, update, options);
       } catch (error) {
@@ -89,11 +63,6 @@ module.exports = {
   },
 
   getMediaFromDB: async (media, mediaType) => {
-    // media = media.replace(/-/g, '');
-    // let regex = new RegExp(media, 'i');
-    // const mediaData = await Movie.find({ "title" : regex });
-    console.log(media, mediaType);
-
     const mediaData = await Movie
       .find(
         { $text: { $search: media } },
@@ -103,7 +72,6 @@ module.exports = {
       );
 
     if (mediaData.length > 5) {
-      console.log('found in DB');
       return mediaData;
     }
 
@@ -132,7 +100,37 @@ module.exports = {
   },
 
   getMediaDetailsFromDB: async (mediaId, mediaType) => {
-    const mediaDetais = await Movie.find({ id: mediaId });
+    const mediaDetails = await Movie.find({ id: mediaId });
+    const providers = await Providers.find({ id: mediaId });
+
+    if (providers.length) {
+      return providers;
+    }
+
+    const { results } = await getMovieProvidersAPI(mediaId);
+
+    let mediaProviders = new Providers({ movieId: mediaId, results: results.US?.flatrate || [] })
+
+    try {
+      await mediaProviders.save()
+      console.log('saved');
+    } catch (error) {
+      console.log(error);
+    }
+
+    // let movieDetails = await Movie.aggregate([
+    //   {
+    //     '$match':  { 'id': mediaId }
+    //   },
+    //   {
+    //     '$lookup' : {
+    //       'from': 'providers',
+    //       'localField': 'id',
+    //       'foreignField': 'movieId',
+    //       'as': 'providers'
+    //     }
+    //   }
+    // ]);
 
   },
 
@@ -142,13 +140,53 @@ module.exports = {
 
   postUser: async (username) => {
     let checkCurrentUser = await User.find({username: username});
-    console.log(checkCurrentUser);
 
     if (checkCurrentUser.length !== 0) {
       return 'User Already Exists';
     } else {
       let user = new User({username: username});
       return await user.save();
+    }
+  },
+
+  updateUserSubscriptions: async (username, subscriptions) => {
+    await User.bulkWrite([
+      {
+        updateOne: {
+          filter: { username: username },
+          // If you were using the MongoDB driver directly, you'd need to do
+          // `update: { $set: { title: ... } }` but mongoose adds $set for
+          // you.
+          update: { $set: { subscriptions: subscriptions } }
+        }
+      }
+    ])
+
+    return await User.find({username: username})
+  },
+
+  updateUserWatched: async (username, watchedType, watchedId) => {
+    let pushObj = {};
+    pushObj['watchHistory' + `.${watchedType}`] = watchedId;
+
+    let user = await User.find({username: username})
+    let added = false;
+
+    user[0].watchHistory[watchedType].forEach((id) => {
+      if (id === watchedId) {
+        added = true;
+      }
+    })
+
+    if (added) {
+      return 'ID already added to ' + watchedType + ' watch list.';
+    } else {
+      await User.updateOne(
+        { username: username },
+        { $push: pushObj }
+      );
+
+      return await User.find({username: username})
     }
   }
 }
@@ -159,4 +197,6 @@ module.exports = {
 
 // deleteDB();
 
-
+//634649 spiderman
+//632727 texas chain
+module.exports.getMediaDetailsFromDB(632727);

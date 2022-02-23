@@ -2,10 +2,11 @@
  * @jest-environment node
  */
 
- const request = require('supertest');
- const { app , server } = require('../../server/server');
- const { movie, user } = require('../testData/testData');
+const request = require('supertest');
+const { app , server } = require('../../server/server');
+const { movie, user, homepageResponse } = require('../testData/testData');
 
+const baseUrl = 'http://jsonplaceholder.com'
 
 describe("StreamFinder Routes", () => {
 
@@ -21,10 +22,8 @@ describe("StreamFinder Routes", () => {
     const res = await request(app).get('/homepage');
 
     expect(res.statusCode).toBe(200);
-
-    let { movies } = JSON.parse(res.text);
-    expect(movies).toHaveLength(20);
-    // expect(movies[0]).toContain('popular');
+    expect(res.body.movies[0]).toMatchObject({ popular: true });
+    expect(res.body.movies).toHaveLength(20);
   })
 
   test('responds to /homepage/search:mediaType with 200 status and a list of searched movies', async () => {
@@ -61,7 +60,10 @@ describe("StreamFinder Routes", () => {
             "Peacock": false,
             "YouTube": false
         },
-        "watchHistory": [],
+        "watchHistory": {
+            "shows": [],
+            "movies": []
+        },
         "_id": "620ddd4f026e8281fd8ab6b5",
         "createdDate": "2022-02-17T05:29:51.583Z",
         "__v": 0
@@ -78,8 +80,120 @@ describe("StreamFinder Routes", () => {
     })
   })
 
-  test('returns "User Already Exists" with 200 status', async () => {
+  test('Updates existing user\'s subscriptions', async () => {
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    let randomNumber = getRandomArbitrary(0, 999999999999)
+
+    let randomUser = {
+        "username": `test+${randomNumber}@gmail.com`,
+        "subscriptions": {
+            "Apple iTunes": false,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": false,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": false,
+            "YouTube": false
+        },
+        "watchHistory": {
+            "shows": [],
+            "movies": []
+        },
+        "_id": "620ddd4f026e8281fd8ab6b5",
+        "createdDate": "2022-02-17T05:29:51.583Z",
+        "__v": 0
+    }
+
+    let subscriptionUpdate = {
+        "Apple iTunes": false,
+        "Apple TV Plus": false,
+        "Amazon Prime Video": false,
+        "Disney Plus": false,
+        "Google Play Movies": false,
+        "HBO Max": true,
+        "Hulu": false,
+        "Netflix": false,
+        "Paramount Plus": false,
+        "Peacock": false,
+        "YouTube": false
+    }
+
+    let randomUserUpdated = {
+        "username": `test+${randomNumber}@gmail.com`,
+        "subscriptions": subscriptionUpdate,
+        "watchHistory": {
+            "shows": [],
+            "movies": []
+        },
+        "_id": "620ddd4f026e8281fd8ab6b5",
+        "createdDate": "2022-02-17T05:29:51.583Z",
+        "__v": 0
+    }
+
     request(app)
+    .post('/homepage/user/create/update')
+    .field('username', `test+${randomNumber}@gmail.com`)
+    .field('subscriptions', `${subscriptionUpdate}`)
+    .expect(response => {
+        expect(response.status).toBe(201)
+        expect(response.body).toEqual(randomUser)
+        done()
+    })
+  })
+
+  test('Sends error if data improper format', async () => {
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    let randomNumber = getRandomArbitrary(0, 999999999999)
+
+    let randomUser = {
+        "username": `test+${randomNumber}@gmail.com`,
+        "subscriptions": {
+            "Apple iTunes": false,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": false,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": false,
+            "YouTube": false
+        },
+        "watchHistory": {
+            "shows": [],
+            "movies": []
+        },
+        "_id": "620ddd4f026e8281fd8ab6b5",
+        "createdDate": "2022-02-17T05:29:51.583Z",
+        "__v": 0
+    }
+
+    let subscriptionUpdate = {}
+
+    request(app)
+    .post('/homepage/user/create/update')
+    .field('username', `test+${randomNumber}@gmail.com`)
+    .field('subscriptions', `${subscriptionUpdate}`)
+    .expect(response => {
+        expect(response.status).toBe(400)
+        expect(response.body).toEqual('Data Improperly Formatted')
+        done()
+    })
+  })
+
+  test('returns "User Already Exists" with 200 status', async () => {
+    request(baseUrl)
     .post('/homepage/user/create')
     .field('username', 'chris.lazzarini@gmail.com')
     .expect(response => {
@@ -90,7 +204,7 @@ describe("StreamFinder Routes", () => {
   })
 
   test('returns user when visiting a profile page with 200 status', async () => {
-    request(app)
+    request(baseUrl)
     .get('/homepage/user')
     .field('username', 'chris.lazzarini@gmail.com')
     .expect(response => {
@@ -99,6 +213,276 @@ describe("StreamFinder Routes", () => {
         done()
     })
   })
+
+  test('Updates user\'s watched movie array when watched movie posted', async () => {
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    let randomNumber = getRandomArbitrary(0, 999999999999)
+
+    let randomUser = {
+        "username": `test+${randomNumber}@gmail.com`,
+        "subscriptions": {
+            "Apple iTunes": false,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": false,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": false,
+            "YouTube": false
+        },
+        "watchHistory": {
+            "shows": [],
+            "movies": []
+        },
+        "_id": "620ddd4f026e8281fd8ab6b5",
+        "createdDate": "2022-02-17T05:29:51.583Z",
+        "__v": 0
+    }
+
+    let randomUserUpdated = {
+        "username": `test+${randomNumber}@gmail.com`,
+        "subscriptions": {
+            "Apple iTunes": false,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": false,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": false,
+            "YouTube": false
+        },
+        "watchHistory": {
+            "shows": [],
+            "movies": [123]
+        },
+        "_id": "620ddd4f026e8281fd8ab6b5",
+        "createdDate": "2022-02-17T05:29:51.583Z",
+        "__v": 0
+    }
+
+    request(app)
+    .post('/homepage/user/create/update')
+    .field('username', `test+${randomNumber}@gmail.com`)
+    .field('watchedType', 'movies')
+    .field('wathchedId', 123)
+    .expect(response => {
+        expect(response.status).toBe(201)
+        expect(response.body).toEqual(randomUser)
+        done()
+    })
+  })
+
+  test('Updates user\'s watched shows array when watched show posted', async () => {
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    let randomNumber = getRandomArbitrary(0, 999999999999)
+
+    let randomUser = {
+        "username": `test+${randomNumber}@gmail.com`,
+        "subscriptions": {
+            "Apple iTunes": false,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": false,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": false,
+            "YouTube": false
+        },
+        "watchHistory": {
+            "shows": [],
+            "movies": []
+        },
+        "_id": "620ddd4f026e8281fd8ab6b5",
+        "createdDate": "2022-02-17T05:29:51.583Z",
+        "__v": 0
+    }
+
+    let randomUserUpdated = {
+        "username": `test+${randomNumber}@gmail.com`,
+        "subscriptions": {
+            "Apple iTunes": false,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": false,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": false,
+            "YouTube": false
+        },
+        "watchHistory": {
+            "shows": [123],
+            "movies": []
+        },
+        "_id": "620ddd4f026e8281fd8ab6b5",
+        "createdDate": "2022-02-17T05:29:51.583Z",
+        "__v": 0
+    }
+
+    request(app)
+    .post('/homepage/user/create/update')
+    .field('username', `test+${randomNumber}@gmail.com`)
+    .field('watchedType', 'shows')
+    .field('wathchedId', 123)
+    .expect(response => {
+        expect(response.status).toBe(201)
+        expect(response.body).toEqual(randomUser)
+        done()
+    })
+  })
+
+  test('Updates user\'s watched show array fails when data improperly formatted', async () => {
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    let randomNumber = getRandomArbitrary(0, 999999999999)
+
+    let randomUser = {
+        "username": `test+${randomNumber}@gmail.com`,
+        "subscriptions": {
+            "Apple iTunes": false,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": false,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": false,
+            "YouTube": false
+        },
+        "watchHistory": {
+            "shows": [],
+            "movies": []
+        },
+        "_id": "620ddd4f026e8281fd8ab6b5",
+        "createdDate": "2022-02-17T05:29:51.583Z",
+        "__v": 0
+    }
+
+    let randomUserUpdated = {
+        "username": `test+${randomNumber}@gmail.com`,
+        "subscriptions": {
+            "Apple iTunes": false,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": false,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": false,
+            "YouTube": false
+        },
+        "watchHistory": {
+            "shows": [123],
+            "movies": []
+        },
+        "_id": "620ddd4f026e8281fd8ab6b5",
+        "createdDate": "2022-02-17T05:29:51.583Z",
+        "__v": 0
+    }
+
+    request(app)
+    .post('/homepage/user/create/update')
+    .field('username', `test+${randomNumber}@gmail.com`)
+    .field('watchedType', 'tvShows')
+    .field('wathchedId', 123)
+    .expect(response => {
+        expect(response.status).toBe(400)
+        expect(response.body).toEqual('Data Improperly Formatted')
+        done()
+    })
+  })
+
+  test('Sends back ID already present if the ID exists in the users watched history array', async () => {
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    let randomNumber = getRandomArbitrary(0, 999999999999)
+
+    let randomUser = {
+        "username": `test+${randomNumber}@gmail.com`,
+        "subscriptions": {
+            "Apple iTunes": false,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": false,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": false,
+            "YouTube": false
+        },
+        "watchHistory": {
+            "shows": [],
+            "movies": [123]
+        },
+        "_id": "620ddd4f026e8281fd8ab6b5",
+        "createdDate": "2022-02-17T05:29:51.583Z",
+        "__v": 0
+    }
+
+    let randomUserUpdated = {
+        "username": `test+${randomNumber}@gmail.com`,
+        "subscriptions": {
+            "Apple iTunes": false,
+            "Apple TV Plus": false,
+            "Amazon Prime Video": false,
+            "Disney Plus": false,
+            "Google Play Movies": false,
+            "HBO Max": false,
+            "Hulu": false,
+            "Netflix": false,
+            "Paramount Plus": false,
+            "Peacock": false,
+            "YouTube": false
+        },
+        "watchHistory": {
+            "shows": [],
+            "movies": [123]
+        },
+        "_id": "620ddd4f026e8281fd8ab6b5",
+        "createdDate": "2022-02-17T05:29:51.583Z",
+        "__v": 0
+    }
+
+    request(app)
+    .post('/homepage/user/create/update')
+    .field('username', `test+${randomNumber}@gmail.com`)
+    .field('watchedType', 'movies')
+    .field('wathchedId', 123)
+    .expect(response => {
+        expect(response.status).toBe(200)
+        expect(response.body).toEqual('ID already added to shows watch list.')
+        done()
+    })
+  })
+
+
 
 });
 
