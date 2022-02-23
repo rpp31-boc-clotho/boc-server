@@ -138,7 +138,7 @@ module.exports = {
     return await User.find({username: username});
   },
 
-  postUser: async (username) => {
+  postNewUser: async (username) => {
     let checkCurrentUser = await User.find({username: username});
 
     if (checkCurrentUser.length !== 0) {
