@@ -28,7 +28,7 @@ module.exports = {
 
     getUser(username)
     .then((data) => {
-      res.status(200).json(data);
+      res.status(200).json(data[0]);
     })
     .catch((err) => {console.log(err)})
   },
@@ -59,7 +59,7 @@ module.exports = {
 
     postNewUser(username)
     .then((data) => {
-      if (data === 'User Already Exists') {
+      if (data.status === 'User Already Exists') {
         res.status(200).json(data);
       } else {
         res.status(201).json(data);
@@ -71,36 +71,37 @@ module.exports = {
   updateUserSubscriptions: async (req, res) => {
     let username = req.body.username;
     let subscriptions = req.body.subscriptions;
-    if (subscriptions === undefined) {
+    if (subscriptions === undefined || Object.keys(subscriptions).length !== 11) {
       res.status(400).json('Data Improperly Formatted')
-    }
+    } else {
 
-    for (let subscription in subscriptions) {
-      if (subscriptions[subscription] === "true") {
-        subscriptions[subscription] = true;
-      } else {
-        subscriptions[subscription] = false;
+      for (let subscription in subscriptions) {
+        if (subscriptions[subscription] === "true" || subscriptions[subscription] === true) {
+          subscriptions[subscription] = true;
+        } else {
+          subscriptions[subscription] = false;
+        }
       }
+
+      updateUserSubscriptions(username, subscriptions)
+      .then((data) => {
+        if (data.length === 0) {
+          data[0] = 'User Not Found'
+        }
+
+        res.status(201).json(data[0]);
+      })
+      .catch((err) => {
+        console.log(err)
+        res.status(400).json('Data Improperly Formatted')
+      })
     }
-
-    updateUserSubscriptions(username, subscriptions)
-    .then((data) => {
-      res.status(201).json(data);
-    })
-    .catch((err) => {
-      console.log(err)
-      res.status(400).json('Data Improperly Formatted')
-    })
-
   },
 
   updateUserWatchedList: async (req, res) => {
     let username = req.body.username;
     let watchedType = req.body.watchedType;
-    let watchedId = parseInt(req.body.watchedId);
-
-    console.log('watchedType:', watchedType);
-    console.log('watchedId:', watchedId);
+    let watchedId = typeof req.body.watchedId === 'number' ? req.body.watchedId : parseInt(req.body.watchedId);
 
     if (watchedType === 'movies' || watchedType === 'shows') {
       updateUserWatched(username, watchedType, watchedId)
@@ -108,7 +109,7 @@ module.exports = {
         if (typeof data === 'string') {
           res.status(200).json(data);
         } else {
-          res.status(201).json(data);
+          res.status(201).json(data[0]);
         }
       })
       .catch((err) => {
