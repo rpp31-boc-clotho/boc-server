@@ -51,9 +51,12 @@ YouTube
 const User = mongoose.model('User', UserSchema);
 
 const ReviewSchema = new mongoose.Schema({
+  contentId: { type: Number, index: true },
+  contentType: String,
   username: { type: String, index: true },
-  rating: Number,
-  content: String,
+  recommend: { type: Boolean, default: false },
+  review: String,
+  reported: { type: Boolean, default: false },
   date: { type: Date, default: Date.now }
 });
 
