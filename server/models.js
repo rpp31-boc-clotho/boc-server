@@ -138,7 +138,7 @@ module.exports = {
     return await User.find({username: username});
   },
 
-  postUser: async (username) => {
+  postNewUser: async (username) => {
     let checkCurrentUser = await User.find({username: username});
 
     if (checkCurrentUser.length !== 0) {
@@ -188,7 +188,19 @@ module.exports = {
 
       return await User.find({username: username})
     }
+  },
+
+  postNewReview: async (contentId, contentType, review) => {
+    let checkCurrentUser = await User.find({username: username});
+
+    if (checkCurrentUser.length !== 0) {
+      return 'User Already Exists';
+    } else {
+      let user = new User({username: username});
+      return await user.save();
+    }
   }
+
 }
 
 // const deleteDB = async () => {
