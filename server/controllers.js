@@ -4,7 +4,8 @@ const {
   getUser,
   postNewUser,
   updateUserSubscriptions,
-  updateUserWatched
+  updateUserWatched,
+  postNewReview
 } = require('./models');
 
 module.exports = {
@@ -117,5 +118,21 @@ module.exports = {
     } else {
       res.status(400).json('Data Improperly Formatted');
     }
+  },
+
+  createReview: async (req, res) => {
+    let contentId = parseInt(req.body.review.contentId);
+    let contentType = req.body.review.contentType;
+    
+    console.log('contentId: ', contentId);
+
+    postNewReview(contentId, contentType, review)
+    .then((data) => {
+      res.status(201).json(data);
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(400).json('Data Improperly Formatted')
+    })
   }
 }
