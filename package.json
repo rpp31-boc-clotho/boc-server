@@ -4,7 +4,7 @@
   "description": "Backend for StreamFinder platform",
   "main": "server.js",
   "scripts": {
-    "test": "jest --coverage --forceExit --maxWorkers=1",
+    "test": "jest --coverage --forceExit --maxWorkers=1 --testTimeout=10000",
     "dev-server": "nodemon ./server/server.js -w"
   },
   "repository": {
