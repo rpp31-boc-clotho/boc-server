@@ -101,37 +101,26 @@ module.exports = {
 
   getMediaDetailsFromDB: async (mediaId, mediaType) => {
     const mediaDetails = await Movie.find({ id: mediaId });
-    const providers = await Providers.find({ id: mediaId });
+    const mediaProviders = await Providers.find({ id: mediaId });
 
-    if (providers.length) {
-      console.log('mediaDetails', mediaDetails);
-      // console.log('providers', providers.map(p => { p.results}));
+    if (mediaProviders.length) {
+      mediaDetails['providers'] = mediaProviders[0].results;
+      return mediaDetails;
     }
 
-    const { results } = await getMovieProvidersAPI(mediaId);å
+    const providers = await getMovieProvidersAPI(mediaId);
 
-    let mediaProviders = new Providers({ movieId: mediaId, results: results.US?.flatrate || [] })
+    let mediaProvidersData = new Providers({ movieId: mediaId, results: providers.results });
 
-    // try {
-    //   await mediaProviders.save()
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await mediaProvidersData.save()
+    } catch (error) {
+      console.log(error);
+    }
 
-    // let movieDetails = await Movie.aggregate([
-    //   {
-    //     '$match':  { 'id': mediaId }
-    //   },
-    //   {
-    //     '$lookup' : {
-    //       'from': 'providers',
-    //       'localField': 'id',
-    //       'foreignField': 'movieId',
-    //       'as': 'providers'
-    //     }
-    //   }
-    // ]);
-
+    mediaDetails['providers'] = providers.results;
+    console.log(mediaDetails);
+    return mediaDetails;
   },
 
   getUser: async (username) => {
@@ -211,4 +200,4 @@ module.exports = {
 
 //634649 spiderman
 //632727 texas chain
-// module.exports.getMediaDetailsFromDB(632727);
+module.exports.getMediaDetailsFromDB(632727);

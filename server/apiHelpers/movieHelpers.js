@@ -40,10 +40,21 @@ module.exports = {
 
     try {
       const { data } = await axios.get(URL);
+      let flatrateProviders = data.results.US?.flatrate;
+      let providers;
+
+      if (flatrateProviders) {
+        providers = flatrateProviders.map(p => {
+          return {
+            logo: `https://www.themoviedb.org/t/p/w1280${p.logo_path}`,
+            provider_name: p.provider_name
+          }
+        });
+      }
 
       let movieProviders = {
         movieId: data.id,
-        results: data.results
+        results: flatrateProviders ? providers :  []
       };
 
       return movieProviders;
@@ -92,3 +103,5 @@ module.exports = {
 };
 
 // module.exports.getGenresAPI(634649, 'movie');
+// texas 632727
+// module.exports.getMovieProvidersAPI(634649);
