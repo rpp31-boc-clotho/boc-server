@@ -22,6 +22,7 @@ describe("StreamFinder Routes", () => {
     const res = await request(app).get('/homepage');
 
     expect(res.statusCode).toBe(200);
+    expect(res.body.movies[0]).toMatchObject({ popular: true });
     expect(res.body.movies).toHaveLength(20);
   })
 
