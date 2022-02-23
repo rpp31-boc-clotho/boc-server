@@ -29,6 +29,7 @@
   "dependencies": {
     "@shelf/jest-mongodb": "^2.2.0",
     "axios": "^0.25.0",
+    "cors": "^2.8.5",
     "moment": "^2.29.1"
   }
 }
