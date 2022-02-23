@@ -104,19 +104,19 @@ module.exports = {
     const providers = await Providers.find({ id: mediaId });
 
     if (providers.length) {
-      return providers;
+      console.log('mediaDetails', mediaDetails);
+      // console.log('providers', providers.map(p => { p.results}));
     }
 
-    const { results } = await getMovieProvidersAPI(mediaId);
+    const { results } = await getMovieProvidersAPI(mediaId);å
 
     let mediaProviders = new Providers({ movieId: mediaId, results: results.US?.flatrate || [] })
 
-    try {
-      await mediaProviders.save()
-      console.log('saved');
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   await mediaProviders.save()
+    // } catch (error) {
+    //   console.log(error);
+    // }
 
     // let movieDetails = await Movie.aggregate([
     //   {
@@ -138,7 +138,7 @@ module.exports = {
     return await User.find({username: username});
   },
 
-  postUser: async (username) => {
+  postNewUser: async (username) => {
     let checkCurrentUser = await User.find({username: username});
 
     if (checkCurrentUser.length !== 0) {
@@ -199,4 +199,4 @@ module.exports = {
 
 //634649 spiderman
 //632727 texas chain
-module.exports.getMediaDetailsFromDB(632727);
+// module.exports.getMediaDetailsFromDB(632727);
