@@ -327,7 +327,7 @@ This service provides data for the front end of our service, below is a list of 
 
    **Required:**
 
-   `meadiaType=Movie/Tv/Both`
+   `mediaType=movie/tv`
 
 * **Data Params**
 
@@ -336,8 +336,101 @@ This service provides data for the front end of our service, below is a list of 
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `TBD`
-
+    **Content:**
+     ```JSON
+    [
+      {
+        id: 634649,
+        mediaType: 'movie',
+        title: 'Spider-Man: No Way Home',
+        rating: 8.3,
+        ratingCount: 8220,
+        summary: "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero. When he asks for help from Doctor Strange the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.",
+        release_date: '2021-12-15',
+        imgUrl: 'https://www.themoviedb.org/t/p/w1280/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg'
+      },
+      {
+        id: 557,
+        mediaType: 'movie',
+        title: 'Spider-Man',
+        rating: 7.2,
+        ratingCount: 15265,
+        summary: "After being bitten by a genetically altered spider at Oscorp, nerdy but endearing high school student Peter Parker is endowed with amazing powers to become the superhero known as Spider-Man.",
+        release_date: '2002-05-01',
+        imgUrl: 'https://www.themoviedb.org/t/p/w1280/gh4cZbhZxyTbgxQPxD0dOudNPTn.jpg'
+      },
+      {
+        id: 315635,
+        mediaType: 'movie',
+        title: 'Spider-Man: Homecoming',
+        rating: 7.4,
+        ratingCount: 18086,
+        summary: "Following the events of Captain America: Civil War, Peter Parker, with the help of his mentor Tony Stark, tries to balance his life as an ordinary high school student in Queens, New York City, with fighting crime as his superhero alter ego Spider-Man as a new threat, the Vulture, emerges.",
+        release_date: '2017-07-05',
+        imgUrl: 'https://www.themoviedb.org/t/p/w1280/c24sv2weTHPsmDa7jEMN0m2P3RT.jpg'
+      },
+      {
+        id: 559,
+        mediaType: 'movie',
+        title: 'Spider-Man 3',
+        rating: 6.3,
+        ratingCount: 11275,
+        summary: "The seemingly invincible Spider-Man goes up against an all-new crop of villains—including the shape-shifting Sandman. While Spider-Man’s superpowers are altered by an alien organism, his alter ego, Peter Parker, deals with nemesis Eddie Brock and also gets caught up in a love triangle.",
+        release_date: '2007-05-01',
+        imgUrl: 'https://www.themoviedb.org/t/p/w1280/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg'
+      },
+      {
+        id: 1930,
+        mediaType: 'movie',
+        title: 'The Amazing Spider-Man',
+        rating: 6.7,
+        ratingCount: 14494,
+        summary: "Peter Parker is an outcast high schooler abandoned by his parents as a boy, leaving him to be raised by his Uncle Ben and Aunt May. Like most teenagers, Peter is trying to figure out who he is and how he got to be the person he is today. As Peter discovers a mysterious briefcase that belonged to his father, he begins a quest to understand his parents' disappearance – leading him directly to Oscorp and the lab of Dr. Curt Connors, his father's former partner. As Spider-Man is set on a collision course with Connors' alter ego, The Lizard, Peter will make life-altering choices to use his powers and shape his destiny to become a hero.",
+        release_date: '2012-06-23',
+        imgUrl: 'https://www.themoviedb.org/t/p/w1280/fSbqPbqXa7ePo8bcnZYN9AHv6zA.jpg'
+      },
+      {
+        id: 225914,
+        mediaType: 'movie',
+        title: 'Spider-Man',
+        rating: 5.5,
+        ratingCount: 77,
+        summary: "When an extortionist threatens to force a multi-suicide unless a huge ransom is paid, only Peter Parker can stop him with his new powers as Spider-Man.",
+        release_date: '1977-09-14',
+        imgUrl: 'https://www.themoviedb.org/t/p/w1280/nyXfGIkJQgKhugxMVql15URobtt.jpg'
+      },
+      {
+        id: 558,
+        mediaType: 'movie',
+        title: 'Spider-Man 2',
+        rating: 7.2,
+        ratingCount: 12259,
+        summary: "Peter Parker is going through a major identity crisis. Burned out from being Spider-Man, he decides to shelve his superhero alter ego, which leaves the city suffering in the wake of carnage left by the evil Doc Ock. In the meantime, Parker still can't act on his feelings for Mary Jane Watson, a girl he's loved since childhood. A certain anger begins to brew in his best friend Harry Osborn as well...",
+        release_date: '2004-06-25',
+        imgUrl: 'https://www.themoviedb.org/t/p/w1280/olxpyq9kJAZ2NU1siLshhhXEPR7.jpg'
+      },
+      {
+        id: 102382,
+        mediaType: 'movie',
+        title: 'The Amazing Spider-Man 2',
+        rating: 6.5,
+        ratingCount: 10702,
+        summary: "For Peter Parker, life is busy. Between taking out the bad guys as Spider-Man and spending time with the person he loves, Gwen Stacy, high school graduation cannot come quickly enough. Peter has not forgotten about the promise he made to Gwen’s father to protect her by staying away, but that is a promise he cannot keep. Things will change for Peter when a new villain, Electro, emerges, an old friend, Harry Osborn, returns, and Peter uncovers new clues about his past.',
+        release_date: '2014-04-16",
+        imgUrl: 'https://www.themoviedb.org/t/p/w1280/c3e9e18SSlvFd1cQaGmUj5tqL5P.jpg'
+      },
+      {
+        id: 429617,
+        mediaType: 'movie',
+        title: 'Spider-Man: Far From Home',
+        rating: 7.5,
+        ratingCount: 12084,
+        summary: "Peter Parker and his friends go on a summer trip to Europe. However, they will hardly be able to rest - Peter will have to agree to help Nick Fury uncover the mystery of creatures that cause natural disasters and destruction throughout the continent.",
+        release_date: '2019-06-28',
+        imgUrl: 'https://www.themoviedb.org/t/p/w1280/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg'
+      }
+    ]
+    ```
 * **Error Response:**
 
   * **Code:** 404 NOT FOUND <br />
@@ -351,14 +444,13 @@ This service provides data for the front end of our service, below is a list of 
 * **Sample Call:**
 
   ```javascript
-    $.ajax({
-      url: "/users/1",
-      dataType: "json",
-      type : "GET",
-      success : function(r) {
-        console.log(r);
-      }
-    });
+    axios.get('/homepage/search/movie?media=jurassic')
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      })
   ```
 </details>
 
@@ -394,7 +486,7 @@ This service provides data for the front end of our service, below is a list of 
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** 
+    **Content:**
   ```
   {
       "_id": "620c6c024c1770d574948b43",
@@ -475,7 +567,7 @@ This service provides data for the front end of our service, below is a list of 
 * **Success Response:**
 
   * **Code:** 201 <br />
-    **Content:** 
+    **Content:**
     ```
     {
       "username": "email12345@gmail.com",
@@ -498,9 +590,9 @@ This service provides data for the front end of our service, below is a list of 
       "__v": 0
     }
     ```
-  
+
   * **Code:** 200 <br />
-    **Content:** 
+    **Content:**
     ```
     {
     "status": "User Already Exists",
@@ -602,7 +694,7 @@ This service provides data for the front end of our service, below is a list of 
 * **Success Response:**
 
   * **Code:** 201 <br />
-    **Content:** 
+    **Content:**
     ```
     {
       "_id": "620f13c27139767b49438b7d",
@@ -697,7 +789,7 @@ This service provides data for the front end of our service, below is a list of 
 * **Success Response:**
 
   * **Code:** 201 <br />
-    **Content:** 
+    **Content:**
     ```
     {
       "_id": "620f13c27139767b49438b7d",
@@ -717,7 +809,7 @@ This service provides data for the front end of our service, below is a list of 
       },
       "watchHistory": {
         shows: [],
-        movies: [123]  
+        movies: [123]
       },
       "createdDate": "2022-02-18T03:34:26.666Z",
       "__v": 0
