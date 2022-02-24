@@ -17,7 +17,7 @@ router.get('/homepage/loggedIn', controllers.getLoggedInInfo);
 router.get('/homepage/:mediaType/:id', controllers.getMovieDetails);
 
 // tv page
-router.get('/homepage/tv/:id', controllers.getTVShowDetails);
+// router.get('/homepage/tv/:id', controllers.getTVShowDetails);
 
 //user page
 router.get('/homepage/user', controllers.getUserDetails);

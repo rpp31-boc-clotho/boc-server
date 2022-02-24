@@ -309,7 +309,7 @@ This service provides data for the front end of our service, below is a list of 
 
 ---
 <details>
-  <summary>GET /homepage/search/:mediaType</summary>
+  <summary>GET /homepage/search</summary>
 
  **Get Media**
 ----
@@ -317,8 +317,7 @@ This service provides data for the front end of our service, below is a list of 
 
 * **URL**
 
-  /homepage/search/:mediaType
-
+  /homepage/search
 * **Method:**
 
   `GET`
@@ -327,7 +326,8 @@ This service provides data for the front end of our service, below is a list of 
 
    **Required:**
 
-   `mediaType=movie/tv`
+   `mediaType=movie/tv, `
+   `media={mediaName}`
 
 * **Data Params**
 
@@ -444,7 +444,7 @@ This service provides data for the front end of our service, below is a list of 
 * **Sample Call:**
 
   ```javascript
-    axios.get('/homepage/search/movie?media=jurassic')
+    axios.get('/homepage/search?mediaType=movie&media=jurassic')
       .then(response => {
         console.log(response.data);
       })
