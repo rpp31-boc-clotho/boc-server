@@ -4,7 +4,7 @@
 
 const request = require('supertest');
 const { app , server } = require('../../server/server');
-const { movie, user, homepageResponse } = require('../testData/testData');
+const { movie, user, homepageResponse, mediaDetailsResponse } = require('../testData/testData');
 
 const baseUrl = 'http://boc-backend-ALB-1007494829.us-east-2.elb.amazonaws.com'
 
@@ -32,10 +32,17 @@ describe("StreamFinder Routes", () => {
       search: 'jurrasic park'
     };
 
-    let res = await request(app).get(`/homepage/search/${searchInfo.mediaType}?media=${searchInfo.search}`);
+    let res = await request(app).get(`/homepage/search?mediaType=${searchInfo.mediaType}&media=${searchInfo.search}`);
 
     expect(res.statusCode).toBe(200);
     // console.log('JURASSIC PARK MOVIES!!', JSON.parse(res.text));
+  })
+
+  test('response to /homepage/:mediaType/:id with movie details and providers', async () => {
+    let res = await request(app).get('/homepage/movie/8489');
+
+    expect(res.statusCode).toBe(200);
+    expect(JSON.parse(res.text)).toMatchObject(mediaDetailsResponse);
   })
 
   test('posts new user', async () => {
@@ -53,14 +60,14 @@ describe("StreamFinder Routes", () => {
       .send({
         username: `test+${randomNumber}@gmail.com`
       })
-    
+
     expect(res.status).toBe(201)
     expect(res.body).toHaveProperty('username')
     expect(res.body).toHaveProperty('subscriptions')
     expect(res.body).toHaveProperty('watchHistory')
     expect(res.body).toHaveProperty('createdDate')
     expect(res.body.username).toEqual(`test+${randomNumber}@gmail.com`)
-        
+
   })
 
   test('returns "User Already Exists" with 200 status', async () => {
@@ -121,7 +128,7 @@ describe("StreamFinder Routes", () => {
         username: 'chris.lazzarini+5@gmail.com',
         subscriptions: subscriptionUpdate
       })
-    
+
     expect(res.status).toBe(201)
     expect(res.body).toHaveProperty('username')
     expect(res.body).toHaveProperty('subscriptions')
@@ -129,7 +136,7 @@ describe("StreamFinder Routes", () => {
     expect(res.body).toHaveProperty('createdDate')
     expect(res.body.subscriptions['HBO Max']).toEqual(true)
     expect(res.body.subscriptions['Apple iTunes']).toEqual(false)
-    
+
   })
 
   test('Sends error if subscriptions object is empty', async () => {
@@ -143,10 +150,10 @@ describe("StreamFinder Routes", () => {
         subscriptions: subscriptionUpdate
       })
 
-    
+
     expect(res.status).toBe(400)
     expect(res.body).toEqual('Data Improperly Formatted')
-    
+
   })
 
   test('Sends error if subscriptions object is not proper length', async () => {
@@ -171,10 +178,10 @@ describe("StreamFinder Routes", () => {
         subscriptions: subscriptionUpdate
       })
 
-    
+
     expect(res.status).toBe(400)
     expect(res.body).toEqual('Data Improperly Formatted')
-    
+
   })
 
   test('returns user profile with 200 status when visiting a user page', async () => {
@@ -264,7 +271,7 @@ describe("StreamFinder Routes", () => {
         watchedId: 123
       })
 
-    
+
     expect(res.status).toBe(200)
     expect(res.body).toEqual('ID already added to shows watch list.')
   })
