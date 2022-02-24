@@ -40,24 +40,20 @@ module.exports = {
 
     try {
       const { data } = await axios.get(URL);
-      let flatrateProviders = data.results.US?.flatrate;
-      let providers;
 
-      if (flatrateProviders) {
-        providers = flatrateProviders.map(p => {
-          return {
-            logo: `https://www.themoviedb.org/t/p/w1280${p.logo_path}`,
-            provider_name: p.provider_name
-          }
-        });
-      }
+      let results = data.results.US
+      if (!results) return {};
 
-      let movieProviders = {
-        movieId: data.id,
-        results: flatrateProviders ? providers :  []
+      let { ads, buy, rent, flatrate, free } = results;
+      let providers = {
+        ads,
+        buy,
+        rent,
+        flatrate,
+        free
       };
 
-      return movieProviders;
+      return providers;
 
     } catch (error) {
       console.log(error);

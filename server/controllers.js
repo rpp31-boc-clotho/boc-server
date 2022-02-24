@@ -1,6 +1,7 @@
 const {
   getPopularMoviesFromDB,
   getMediaFromDB,
+  getMediaDetailsFromDB,
   getUser,
   postNewUser,
   updateUserSubscriptions,
@@ -34,7 +35,14 @@ module.exports = {
   },
 
   getMovieDetails: async (req, res) => {
+    const { mediaType, id } = req.params;
 
+    try {
+      const data = await getMediaDetailsFromDB(id, mediaType);
+      res.status(200).send(data);
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   getTVShowDetails: (req, res) => {
@@ -42,8 +50,7 @@ module.exports = {
   },
 
   getSearchedMedia: async (req, res) => {
-    const { media } = req.query;
-    const { mediaType } = req.params;
+    const { mediaType, media } = req.query;
 
     try {
       const data = await getMediaFromDB(media, mediaType);
@@ -124,7 +131,7 @@ module.exports = {
   createReview: async (req, res) => {
     let contentId = parseInt(req.body.review.contentId);
     let contentType = req.body.review.contentType;
-    
+
     console.log('contentId: ', contentId);
 
     postNewReview(contentId, contentType, review)

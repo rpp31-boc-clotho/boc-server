@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const { db, User, Review, Movie, Providers } = require('../db/connection');
+const { db, User, Review, Movie, TVShow, Providers } = require('../db/connection');
 const {
   getMediaAPI,
   getMovieProvidersAPI,
@@ -100,17 +100,18 @@ module.exports = {
   },
 
   getMediaDetailsFromDB: async (mediaId, mediaType) => {
-    const mediaDetails = await Movie.find({ id: mediaId });
-    const mediaProviders = await Providers.find({ id: mediaId });
+    let collection = mediaType === 'movie' ? Movie : TVShow;
+
+    const mediaDetails = await collection.find({ id: mediaId });
+    const mediaProviders = await Providers.find({ movieId: mediaId });
 
     if (mediaProviders.length) {
-      mediaDetails['providers'] = mediaProviders[0].results;
-      return mediaDetails;
+      return { mediaDetails: mediaDetails[0], providers: mediaProviders[0].results || {} };
     }
 
     const providers = await getMovieProvidersAPI(mediaId);
 
-    let mediaProvidersData = new Providers({ movieId: mediaId, results: providers.results });
+    let mediaProvidersData = new Providers({ movieId: mediaId, results: providers });
 
     try {
       await mediaProvidersData.save()
@@ -118,9 +119,7 @@ module.exports = {
       console.log(error);
     }
 
-    mediaDetails['providers'] = providers.results;
-    console.log(mediaDetails);
-    return mediaDetails;
+    return { mediaDetails: mediaDetails[0], providers: providers };
   },
 
   getUser: async (username) => {
@@ -200,7 +199,3 @@ module.exports = {
 // }
 
 // deleteDB();
-
-//634649 spiderman
-//632727 texas chain
-module.exports.getMediaDetailsFromDB(632727);

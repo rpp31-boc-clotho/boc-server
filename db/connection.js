@@ -93,12 +93,12 @@ const TVShow = mongoose.model('TVShow', TvShowSchema);
 
 const ProvidersSchema = new mongoose.Schema({
   movieId: { type: Number, index: true },
-  results: Array
+  results: Object
 })
 
 const Providers = mongoose.model('Providers', ProvidersSchema)
 
 module.exports = {
-  db, User, Review, Movie, Providers
+  db, User, Review, Movie, TVShow, Providers
 };
 
