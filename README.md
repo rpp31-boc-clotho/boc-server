@@ -584,7 +584,14 @@ This service provides data for the front end of our service, below is a list of 
           "Peacock": false,
           "YouTube": false
       },
-      "watchHistory": [],
+      "watchHistory": {
+        shows: [],
+        movies: [123]
+      },
+      "watchList": {
+        shows: [],
+        movies: [123]
+      },
       "_id": "6213cd71ea39e2718ce3a6e5",
       "createdDate": "2022-02-21T17:35:45.159Z",
       "__v": 0
@@ -613,8 +620,12 @@ This service provides data for the front end of our service, below is a list of 
             "Youtube": true
         },
         "watchHistory": {
-            "shows": [],
-            "movies": []
+          shows: [],
+          movies: [123]
+        },
+        "watchList": {
+          shows: [],
+          movies: [123]
         },
         "createdDate": "2022-02-21T18:37:32.168Z",
         "__v": 0
@@ -712,7 +723,14 @@ This service provides data for the front end of our service, below is a list of 
           "Peacock": true,
           "Youtube": true
       },
-      "watchHistory": [],
+      "watchHistory": {
+          shows: [],
+          movies: [123]
+        },
+      "watchList": {
+        shows: [],
+        movies: [123]
+      },
       "createdDate": "2022-02-18T03:34:26.666Z",
       "__v": 0
     }
@@ -727,7 +745,7 @@ This service provides data for the front end of our service, below is a list of 
 
   ```javascript
     $.ajax({
-      url: "/homepage/user/create",
+      url: "/homepage/user/update",
       dataType: "json",
       data: {
         username: 'email',
@@ -808,6 +826,10 @@ This service provides data for the front end of our service, below is a list of 
           "Youtube": true
       },
       "watchHistory": {
+          shows: [],
+          movies: [123]
+      },
+      "watchList": {
         shows: [],
         movies: [123]
       },
@@ -828,12 +850,185 @@ This service provides data for the front end of our service, below is a list of 
 
   ```javascript
     $.ajax({
-      url: "/homepage/user/create",
+      url: "/homepage/user/watched",
       dataType: "json",
       data: {
         username: 'email',
         watchedType: 'movies',
         watchedId: 123
+      },
+      type : "POST",
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+</details>
+
+---
+
+<details>
+  <summary>POST /homepage/user/watchlist</summary>
+
+ **Post User**
+----
+ Update user with desired show or movie to watch later
+
+* **URL**
+
+  /homepage/user/watchlist
+
+* **Method:**
+
+  `POST`
+
+*  **URL Params**
+
+   **Required:**
+
+   None
+
+* **Data Params**
+
+    ```
+    {
+      username: 'email',
+      watchType: 'movies OR shows',
+      watchId: id integer
+    }
+    ```
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:**
+    ```
+    {
+      "_id": "620f13c27139767b49438b7d",
+      "username": "email+5@gmail.com",
+      "subscriptions": {
+          "Apple iTunes": true,
+          "Apple TV Plus": false,
+          "Amazon Prime Video": true,
+          "Disney Plus": false,
+          "Google Play Movies": false,
+          "HBO Max": false,
+          "Hulu": false,
+          "Netflix": false,
+          "Paramount Plus": false,
+          "Peacock": true,
+          "Youtube": true
+      },
+      "watchHistory": {
+        shows: [],
+        movies: [123]
+      },
+      "watchList": {
+        shows: [],
+        movies: [123]
+      },
+      "createdDate": "2022-02-18T03:34:26.666Z",
+      "__v": 0
+    }
+    ```
+
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `Data Improperly Formatted`
+
+  * **Code:** 200 OK <br />
+    **Content:** `ID already added to ${watchType} watch list.`
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/homepage/user/watchlist",
+      dataType: "json",
+      data: {
+        username: 'email',
+        watchType: 'movies',
+        watchId: 123
+      },
+      type : "POST",
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+</details>
+
+---
+
+<details>
+  <summary>POST /homepage/review/create</summary>
+
+ **Post User**
+----
+ Post a new review about a movie or show
+
+* **URL**
+
+  /homepage/review/create
+
+* **Method:**
+
+  `POST`
+
+*  **URL Params**
+
+   **Required:**
+
+   None
+
+* **Data Params**
+
+    ```
+    {
+      username: 'email',
+      contentType: 'movies OR shows',
+      contentId: id integer,
+      recommend: boolean,
+      reviewContent: 'string'
+    }
+    ```
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:**
+    ```
+    {
+      "contentId": 999999999,
+      "contentType": "shows",
+      "username": "test@gmail.com",
+      "recommend": true,
+      "reviewContent": "This movie rocked!",
+      "reported": false,
+      "_id": "6218699b61eab23c59cbd61b",
+      "date": "2022-02-25T05:31:07.051Z",
+      "__v": 0
+    }
+    ```
+
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `Data Improperly Formatted`
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/homepage/review/create",
+      dataType: "json",
+      data: {
+        username: 'test@gmail.com',
+        contentType: 'shows',
+        contentId: 999999999,
+        recommend: true,
+        reviewContent: 'This movie rocked!'
       },
       type : "POST",
       success : function(r) {

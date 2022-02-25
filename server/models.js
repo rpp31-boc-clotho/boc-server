@@ -158,7 +158,7 @@ module.exports = {
     return await User.find({username: username})
   },
 
-  updateUserWatched: async (username, watchedType, watchedId) => {
+  updateUserWatchHistory: async (username, watchedType, watchedId) => {
     let pushObj = {};
     pushObj['watchHistory' + `.${watchedType}`] = watchedId;
 
@@ -172,7 +172,7 @@ module.exports = {
     })
 
     if (added) {
-      return 'ID already added to ' + watchedType + ' watch list.';
+      return 'ID already added to ' + watchedType + ' watch history.';
     } else {
       await User.updateOne(
         { username: username },
@@ -183,15 +183,37 @@ module.exports = {
     }
   },
 
-  postNewReview: async (contentId, contentType, review) => {
-    let checkCurrentUser = await User.find({username: username});
+  updateUserWatchList: async (username, watchType, watchId) => {
+    let pushObj = {};
+    pushObj['watchList' + `.${watchType}`] = watchId;
 
-    if (checkCurrentUser.length !== 0) {
-      return 'User Already Exists';
+    let user = await User.find({username: username})
+    let added = false;
+
+    user[0].watchList[watchType].forEach((id) => {
+      if (id === watchId) {
+        added = true;
+      }
+    })
+
+    if (added) {
+      return 'ID already added to ' + watchType + ' watch list.';
     } else {
-      let user = new User({username: username});
-      return await user.save();
+      await User.updateOne(
+        { username: username },
+        { $push: pushObj }
+      );
+
+      return await User.find({username: username})
     }
+  },
+
+  postNewReview: async (review) => {
+    
+    let newReview = new Review(review);
+    
+    return await newReview.save();
+
   }
 
 }
