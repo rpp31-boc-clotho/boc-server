@@ -216,6 +216,7 @@ describe("StreamFinder Routes", () => {
       describe("Updating User Profile Watch History Arrays", () => {
 
         test('Updates user\'s watch history movies\' array when movie watched', async () => {
+
           function getRandomInt(min, max) {
               min = Math.ceil(min);
               max = Math.floor(max);
@@ -236,7 +237,9 @@ describe("StreamFinder Routes", () => {
           expect(res.body.watchHistory.movies.pop()).toEqual(randomNumber);
         })
       
+
         test('Updates user\'s watch history shows\' array when show watched', async () => {
+
           function getRandomInt(min, max) {
               min = Math.ceil(min);
               max = Math.floor(max);
@@ -257,7 +260,9 @@ describe("StreamFinder Routes", () => {
           expect(res.body.watchHistory.shows.pop()).toEqual(randomNumber);
         })
       
+
         test('Updates user\'s watch history shows\' array fails when data improperly formatted', async () => {
+          
           function getRandomInt(min, max) {
               min = Math.ceil(min);
               max = Math.floor(max);
@@ -279,6 +284,7 @@ describe("StreamFinder Routes", () => {
         })
       
         test('Responds with ID already present if the ID exists in the user\'s watch history array', async () => {
+
           let res = await request(app)
             .post('/homepage/user/watched')
             .send({
@@ -287,9 +293,9 @@ describe("StreamFinder Routes", () => {
               watchedId: 123
             })
       
-          
           expect(res.status).toBe(200)
           expect(res.body).toEqual('ID already added to shows watch history.')
+          
         })
       })
 
@@ -414,6 +420,7 @@ describe("StreamFinder Routes", () => {
       
       expect(res.status).toBe(400);
       expect(res.body).toEqual('Data Improperly Formatted');
+
     })
   })
 
