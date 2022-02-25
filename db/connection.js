@@ -73,7 +73,6 @@ const MovieSchema = new mongoose.Schema({
   imgUrl: String,
   genres: Array,
   popular: { type: Boolean, default: false }
-  // createdAt: { type: Date, expires: 30}
 });
 
 
@@ -81,24 +80,27 @@ const Movie = mongoose.model('Movie', MovieSchema);
 
 const TvShowSchema = new mongoose.Schema({
   id: { type: Number, index: true },
-  title: String,
   mediaType: String,
-  recommended: Array,
-  summary: String,
+  title: { type: String, text: true },
+  rating: Number,
+  ratingCount: Number,
+  summary: { type: String, text: true },
+  release_date: String,
   imgUrl: String,
-  popular: Boolean
+  genres: Array,
+  popular: { type: Boolean, default: false }
 });
 
 const TVShow = mongoose.model('TVShow', TvShowSchema);
 
 const ProvidersSchema = new mongoose.Schema({
   movieId: { type: Number, index: true },
-  results: Array
+  results: Object
 })
 
 const Providers = mongoose.model('Providers', ProvidersSchema)
 
 module.exports = {
-  db, User, Review, Movie, Providers
+  db, User, Review, Movie, TVShow, Providers
 };
 

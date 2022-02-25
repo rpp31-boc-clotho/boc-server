@@ -1,10 +1,10 @@
 const cron = require('node-cron');
-const { db, User, Review, Movie, Providers } = require('../db/connection');
+const { db, User, Review, Movie, TVShow, Providers } = require('../db/connection');
 const {
   getMediaAPI,
-  getMovieProvidersAPI,
+  getMediaProvidersAPI,
   getMovieRecommendationsAPI,
-  getPopularMoviesAPI,
+  getPopularMediaAPI,
   getGenresAPI
 } = require('./apiHelpers/movieHelpers');
 
@@ -24,42 +24,44 @@ const setMediaGenres = async (media, mediaType) => {
 }
 
 module.exports = {
-  getPopularMoviesFromDB: async () => {
-    const popularMovies = await Movie.find({ popular: true });
+  getPopularMediaFromDB: async (mediaType) => {
+    let collection = mediaType === 'movie' ? Movie : TVShow;
 
-    if (popularMovies.length) {
-      return popularMovies;
+    const popularMediaList = await collection.find({ popular: true });
+
+    if (popularMediaList.length) {
+      return popularMediaList;
     }
 
     // if movies are not in DB, retrieve from API & save to DB
-    const movies = await getPopularMoviesAPI();
+    const popularMedia = await getPopularMediaAPI(mediaType);
 
-    await Promise.all(movies.map(async (movie) => {
+    await Promise.all(popularMedia.map(async (media) => {
 
-      await setMediaGenres(movie, 'movie');
+      await setMediaGenres(media, mediaType);
 
-      let filter = { 'id': movie.id };
+      let filter = { 'id': media.id };
       let update = {
-        mediaType: movie.mediaType,
-        title: movie.title,
-        rating: movie.rating,
-        ratingCount: movie.ratingCount,
-        summary: movie.summary,
-        release_date: movie.release_date,
-        imgUrl: movie.imgUrl,
-        genres: movie.genres,
+        mediaType: media.mediaType,
+        title: media.title,
+        rating: media.rating,
+        ratingCount: media.ratingCount,
+        summary: media.summary,
+        release_date: media.release_date,
+        imgUrl: media.imgUrl,
+        genres: media.genres,
         popular: true
       };
       let options = { new: true, upsert: true };
 
       try {
-        await Movie.findOneAndUpdate(filter, update, options);
+        await collection.findOneAndUpdate(filter, update, options);
       } catch (error) {
         console.log(error);
       }
     }));
 
-    return movies;
+    return popularMedia;
   },
 
   getMediaFromDB: async (media, mediaType) => {
@@ -100,38 +102,26 @@ module.exports = {
   },
 
   getMediaDetailsFromDB: async (mediaId, mediaType) => {
-    const mediaDetails = await Movie.find({ id: mediaId });
-    const providers = await Providers.find({ id: mediaId });
+    let collection = mediaType === 'movie' ? Movie : TVShow;
 
-    if (providers.length) {
-      return providers;
+    const mediaDetails = await collection.find({ id: mediaId });
+    const mediaProviders = await Providers.find({ movieId: mediaId });
+
+    if (mediaProviders.length) {
+      return { mediaDetails: mediaDetails[0], providers: mediaProviders[0].results || {} };
     }
 
-    const { results } = await getMovieProvidersAPI(mediaId);
+    const providers = await getMediaProvidersAPI(mediaType, mediaId);
 
-    let mediaProviders = new Providers({ movieId: mediaId, results: results.US?.flatrate || [] })
+    let mediaProvidersData = new Providers({ movieId: mediaId, results: providers });
 
     try {
-      await mediaProviders.save()
-      console.log('saved');
+      await mediaProvidersData.save()
     } catch (error) {
       console.log(error);
     }
 
-    // let movieDetails = await Movie.aggregate([
-    //   {
-    //     '$match':  { 'id': mediaId }
-    //   },
-    //   {
-    //     '$lookup' : {
-    //       'from': 'providers',
-    //       'localField': 'id',
-    //       'foreignField': 'movieId',
-    //       'as': 'providers'
-    //     }
-    //   }
-    // ]);
-
+    return { mediaDetails: mediaDetails[0], providers: providers };
   },
 
   getUser: async (username) => {
@@ -212,6 +202,4 @@ module.exports = {
 
 // deleteDB();
 
-//634649 spiderman
-//632727 texas chain
-module.exports.getMediaDetailsFromDB(632727);
+module.exports.getPopularMediaFromDB('tv');
