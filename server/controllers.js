@@ -27,11 +27,16 @@ module.exports = {
   },
 
   getUserDetails: (req, res) => {
-    let username = req.body.username;
+    let username = req.query.username.replace(' ', '+');
 
     getUser(username)
     .then((data) => {
-      res.status(200).json(data[0]);
+      if (data.length !== 0) {
+        res.status(200).json(data[0]);
+      } else {
+        res.status(200).json('No User Found');
+      }
+      
     })
     .catch((err) => {console.log(err)})
   },
