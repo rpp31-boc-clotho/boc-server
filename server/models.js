@@ -2,9 +2,9 @@ const cron = require('node-cron');
 const { db, User, Review, Movie, TVShow, Providers } = require('../db/connection');
 const {
   getMediaAPI,
-  getMovieProvidersAPI,
+  getMediaProvidersAPI,
   getMovieRecommendationsAPI,
-  getPopularMoviesAPI,
+  getPopularMediaAPI,
   getGenresAPI
 } = require('./apiHelpers/movieHelpers');
 
@@ -24,42 +24,44 @@ const setMediaGenres = async (media, mediaType) => {
 }
 
 module.exports = {
-  getPopularMoviesFromDB: async () => {
-    const popularMovies = await Movie.find({ popular: true });
+  getPopularMediaFromDB: async (mediaType) => {
+    let collection = mediaType === 'movie' ? Movie : TVShow;
 
-    if (popularMovies.length) {
-      return popularMovies;
+    const popularMediaList = await collection.find({ popular: true });
+
+    if (popularMediaList.length) {
+      return popularMediaList;
     }
 
     // if movies are not in DB, retrieve from API & save to DB
-    const movies = await getPopularMoviesAPI();
+    const popularMedia = await getPopularMediaAPI(mediaType);
 
-    await Promise.all(movies.map(async (movie) => {
+    await Promise.all(popularMedia.map(async (media) => {
 
-      await setMediaGenres(movie, 'movie');
+      await setMediaGenres(media, mediaType);
 
-      let filter = { 'id': movie.id };
+      let filter = { 'id': media.id };
       let update = {
-        mediaType: movie.mediaType,
-        title: movie.title,
-        rating: movie.rating,
-        ratingCount: movie.ratingCount,
-        summary: movie.summary,
-        release_date: movie.release_date,
-        imgUrl: movie.imgUrl,
-        genres: movie.genres,
+        mediaType: media.mediaType,
+        title: media.title,
+        rating: media.rating,
+        ratingCount: media.ratingCount,
+        summary: media.summary,
+        release_date: media.release_date,
+        imgUrl: media.imgUrl,
+        genres: media.genres,
         popular: true
       };
       let options = { new: true, upsert: true };
 
       try {
-        await Movie.findOneAndUpdate(filter, update, options);
+        await collection.findOneAndUpdate(filter, update, options);
       } catch (error) {
         console.log(error);
       }
     }));
 
-    return movies;
+    return popularMedia;
   },
 
   getMediaFromDB: async (media, mediaType) => {
@@ -109,7 +111,7 @@ module.exports = {
       return { mediaDetails: mediaDetails[0], providers: mediaProviders[0].results || {} };
     }
 
-    const providers = await getMovieProvidersAPI(mediaId);
+    const providers = await getMediaProvidersAPI(mediaType, mediaId);
 
     let mediaProvidersData = new Providers({ movieId: mediaId, results: providers });
 
@@ -199,3 +201,5 @@ module.exports = {
 // }
 
 // deleteDB();
+
+module.exports.getPopularMediaFromDB('tv');

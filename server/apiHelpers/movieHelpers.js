@@ -2,7 +2,7 @@ require('dotenv').config({ path:__dirname+'/./../../.env' })
 
 const axios = require('axios');
 
-const transformMovieList = (mediaList, mediaType) => {
+const transformMediaList = (mediaList, mediaType) => {
   let list = mediaList
       .map((media, i) => {
         if (i < 20) {
@@ -35,8 +35,8 @@ module.exports = {
       console.log(error);
     }
   },
-  getMovieProvidersAPI: async (movieId) => {
-    const URL = `https://api.themoviedb.org/3/movie/${movieId}/watch/providers?api_key=${process.env.apikey}`;
+  getMediaProvidersAPI: async (mediaType, movieId) => {
+    const URL = `https://api.themoviedb.org/3/${mediaType}/${movieId}/watch/providers?api_key=${process.env.apikey}`;
 
     try {
       const { data } = await axios.get(URL);
@@ -72,14 +72,14 @@ module.exports = {
       console.log(error);
     }
   },
-  getPopularMoviesAPI: async () => {
-    const URL = `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.apikey}&language=en-US&page=1`;
+  getPopularMediaAPI: async (mediaType) => {
+    const URL = `https://api.themoviedb.org/3/${mediaType}/popular?api_key=${process.env.apikey}&language=en-US&page=1`;
 
     try {
       const { data } = await axios.get(URL);
 
-      let topTenMovies = transformMovieList(data.results, 'movie');
-      return topTenMovies;
+      let topTenMedia = transformMediaList(data.results, mediaType);
+      return topTenMedia;
 
     } catch (error) {
       console.log(error);
@@ -101,3 +101,4 @@ module.exports = {
 // module.exports.getGenresAPI(634649, 'movie');
 // texas 632727
 // module.exports.getMovieProvidersAPI(634649);
+module.exports.getPopularMediaAPI('tv');

@@ -1,5 +1,5 @@
 const {
-  getPopularMoviesFromDB,
+  getPopularMediaFromDB,
   getMediaFromDB,
   getMediaDetailsFromDB,
   getUser,
@@ -13,8 +13,10 @@ module.exports = {
 
   getHomePageInfo: async (req, res) => {
     try {
-      const data = await getPopularMoviesFromDB();
-      res.status(200).send({ movies: data, tvShows: [] });
+      const movies = await getPopularMediaFromDB('movies');
+      const shows = await getPopularMediaFromDB('tv');
+
+      res.status(200).send({ movies, shows });
     } catch (error) {
       console.log(error);
     }
@@ -34,7 +36,7 @@ module.exports = {
     .catch((err) => {console.log(err)})
   },
 
-  getMovieDetails: async (req, res) => {
+  getMediaDetails: async (req, res) => {
     const { mediaType, id } = req.params;
 
     try {
@@ -50,7 +52,8 @@ module.exports = {
   },
 
   getSearchedMedia: async (req, res) => {
-    const { mediaType, media } = req.query;
+    const { media } = req.query;
+    const { mediaType } = req.params;
 
     try {
       const data = await getMediaFromDB(media, mediaType);

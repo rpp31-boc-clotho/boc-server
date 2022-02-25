@@ -14,7 +14,7 @@ router.get('/homepage', controllers.getHomePageInfo);
 router.get('/homepage/loggedIn', controllers.getLoggedInInfo);
 
 // movie page
-router.get('/homepage/:mediaType/:id', controllers.getMovieDetails);
+router.get('/homepage/media/:mediaType/:id', controllers.getMediaDetails);
 
 // tv page
 // router.get('/homepage/tv/:id', controllers.getTVShowDetails);
@@ -22,7 +22,7 @@ router.get('/homepage/:mediaType/:id', controllers.getMovieDetails);
 //user page
 router.get('/homepage/user', controllers.getUserDetails);
 
-router.get('/homepage/search', controllers.getSearchedMedia);
+router.get('/homepage/search/:mediaType', controllers.getSearchedMedia);
 
 //create user
 router.post('/homepage/user/create', controllers.postNewUserProfile);
