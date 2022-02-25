@@ -39,6 +39,9 @@ router.post('/homepage/user/watchlist', controllers.postUserWatchList);
 //post review
 router.post('/homepage/review/create', controllers.postReview);
 
+//get review
+router.get('/homepage/review', controllers.getReviews);
+
 
 
 module.exports = router;
