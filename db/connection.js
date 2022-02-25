@@ -33,21 +33,6 @@ const UserSchema = new mongoose.Schema({
   createdDate: { type: Date, default: Date.now }
 });
 
-/*
-Netflix
-Amazon Prime Video
-Disney Plus
-Google Play Movies
-Apple iTunes
-Hulu
-Paramount Plus
-HBO Max
-Peacock
-Apple TV Plus
-YouTube
-*/
-
-
 const User = mongoose.model('User', UserSchema);
 
 const ReviewSchema = new mongoose.Schema({
@@ -55,7 +40,7 @@ const ReviewSchema = new mongoose.Schema({
   contentType: String,
   username: { type: String, index: true },
   recommend: { type: Boolean, default: false },
-  review: String,
+  reviewContent: String,
   reported: { type: Boolean, default: false },
   date: { type: Date, default: Date.now }
 });

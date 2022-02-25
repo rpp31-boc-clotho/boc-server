@@ -18,257 +18,282 @@ describe("StreamFinder Routes", () => {
     server.close();
   });
 
-  test('responds to /homepage with a status code of 200 and correct data shape', async () => {
-    let res = await request(app).get('/homepage');
-
-    expect(res.statusCode).toBe(200);
-    expect(res.body.movies[0]).toMatchObject({ popular: true });
-    expect(res.body.movies).toHaveLength(20);
+  describe("Homepage Endpoints", () => {
+    
+    test('responds to /homepage with a status code of 200 and correct data shape', async () => {
+      let res = await request(app).get('/homepage');
+  
+      expect(res.statusCode).toBe(200);
+      expect(res.body.movies[0]).toMatchObject({ popular: true });
+      expect(res.body.movies).toHaveLength(20);
+    })
+  
+    test('responds to /homepage/search:mediaType with 200 status and a list of searched movies', async () => {
+      let searchInfo = {
+        mediaType: 'movie',
+        search: 'jurrasic park'
+      };
+  
+      let res = await request(app).get(`/homepage/search/${searchInfo.mediaType}?media=${searchInfo.search}`);
+  
+      expect(res.statusCode).toBe(200);
+      // console.log('JURASSIC PARK MOVIES!!', JSON.parse(res.text));
+    })
   })
 
-  test('responds to /homepage/search:mediaType with 200 status and a list of searched movies', async () => {
-    let searchInfo = {
-      mediaType: 'movie',
-      search: 'jurrasic park'
-    };
+  describe("User Endpoints", () => {
 
-    let res = await request(app).get(`/homepage/search/${searchInfo.mediaType}?media=${searchInfo.search}`);
-
-    expect(res.statusCode).toBe(200);
-    // console.log('JURASSIC PARK MOVIES!!', JSON.parse(res.text));
-  })
-
-  test('posts new user', async () => {
-    function getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    let randomNumber = getRandomInt(0, 9999999)
-
-
-    let res = await request(app)
-      .post('/homepage/user/create')
-      .send({
-        username: `test+${randomNumber}@gmail.com`
+    describe("User Get Endpoints", () => {
+      
+      test('Returns user profile with 200 status when visiting a user page', async () => {
+        let res = await request(app)
+          .get('/homepage/user?username=chris.lazzarini+5@gmail.com')
+    
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveProperty('username');
+        expect(res.body).toHaveProperty('subscriptions');
+        expect(res.body).toHaveProperty('watchHistory');
+        expect(res.body).toHaveProperty('createdDate');
+        expect(res.body.username).toEqual('chris.lazzarini+5@gmail.com');
       })
     
-    expect(res.status).toBe(201)
-    expect(res.body).toHaveProperty('username')
-    expect(res.body).toHaveProperty('subscriptions')
-    expect(res.body).toHaveProperty('watchHistory')
-    expect(res.body).toHaveProperty('createdDate')
-    expect(res.body.username).toEqual(`test+${randomNumber}@gmail.com`)
-        
-  })
-
-  test('returns "User Already Exists" with 200 status', async () => {
-    let res = await request(app)
-      .post('/homepage/user/create')
-      .send({
-        username: 'chris.lazzarini+5@gmail.com'
+      test('Returns No User Found if user not in db', async () => {
+        let res = await request(app)
+          .get('/homepage/user?username=chris.lazzarini+5')
+    
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual('No User Found');
       })
 
-    expect(res.status).toBe(200);
-    expect(res.body.status).toEqual('User Already Exists');
-    expect(res.body.userProfile).toHaveProperty('username')
-    expect(res.body.userProfile).toHaveProperty('subscriptions')
-    expect(res.body.userProfile).toHaveProperty('watchHistory')
-    expect(res.body.userProfile).toHaveProperty('createdDate')
-    expect(res.body.userProfile.username).toEqual('chris.lazzarini+5@gmail.com');
-  })
+    })
+    
+    describe("User Post Endpoints", () => {
+      describe("Posting A User", () => {
+    
+        test('Posts A New User', async () => {
+          function getRandomInt(min, max) {
+              min = Math.ceil(min);
+              max = Math.floor(max);
+              return Math.floor(Math.random() * (max - min + 1)) + min;
+          }
+      
+          let randomNumber = getRandomInt(0, 9999999)
+      
+      
+          let res = await request(app)
+            .post('/homepage/user/create')
+            .send({
+              username: `test+${randomNumber}@gmail.com`
+            })
+          
+          expect(res.status).toBe(201)
+          expect(res.body).toHaveProperty('username')
+          expect(res.body).toHaveProperty('subscriptions')
+          expect(res.body).toHaveProperty('watchHistory')
+          expect(res.body).toHaveProperty('createdDate')
+          expect(res.body.username).toEqual(`test+${randomNumber}@gmail.com`)
+              
+        })
 
-  test('Updates existing user\'s subscriptions', async () => {
-    let subscriptionReset = {
-        "Apple iTunes": false,
-        "Apple TV Plus": false,
-        "Amazon Prime Video": false,
-        "Disney Plus": false,
-        "Google Play Movies": false,
-        "HBO Max": false,
-        "Hulu": false,
-        "Netflix": false,
-        "Paramount Plus": false,
-        "Peacock": false,
-        "YouTube": false
-    }
+        test('returns "User Already Exists" with 200 status', async () => {
+          let res = await request(app)
+            .post('/homepage/user/create')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com'
+            })
+      
+          expect(res.status).toBe(200);
+          expect(res.body.status).toEqual('User Already Exists');
+          expect(res.body.userProfile).toHaveProperty('username')
+          expect(res.body.userProfile).toHaveProperty('subscriptions')
+          expect(res.body.userProfile).toHaveProperty('watchHistory')
+          expect(res.body.userProfile).toHaveProperty('createdDate')
+          expect(res.body.userProfile.username).toEqual('chris.lazzarini+5@gmail.com');
+        })
+      })
 
-    let subscriptionUpdate = {
-        "Apple iTunes": false,
-        "Apple TV Plus": false,
-        "Amazon Prime Video": false,
-        "Disney Plus": false,
-        "Google Play Movies": false,
-        "HBO Max": true,
-        "Hulu": false,
-        "Netflix": false,
-        "Paramount Plus": false,
-        "Peacock": false,
-        "YouTube": false
-    }
+      describe("Updating User Profile Subscriptions", () => {
 
-    await request(app)
-      .post('/homepage/user/update')
-      .send({
-        username: 'chris.lazzarini+5@gmail.com',
-        subscriptions: subscriptionReset
+        test('Updates existing user\'s subscriptions', async () => {
+          let subscriptionReset = {
+              "Apple iTunes": false,
+              "Apple TV Plus": false,
+              "Amazon Prime Video": false,
+              "Disney Plus": false,
+              "Google Play Movies": false,
+              "HBO Max": false,
+              "Hulu": false,
+              "Netflix": false,
+              "Paramount Plus": false,
+              "Peacock": false,
+              "YouTube": false
+          }
+      
+          let subscriptionUpdate = {
+              "Apple iTunes": false,
+              "Apple TV Plus": false,
+              "Amazon Prime Video": false,
+              "Disney Plus": false,
+              "Google Play Movies": false,
+              "HBO Max": true,
+              "Hulu": false,
+              "Netflix": false,
+              "Paramount Plus": false,
+              "Peacock": false,
+              "YouTube": false
+          }
+      
+          await request(app)
+            .post('/homepage/user/update')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              subscriptions: subscriptionReset
+          })
+      
+          let res = await request(app)
+            .post('/homepage/user/update')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              subscriptions: subscriptionUpdate
+            })
+          
+          expect(res.status).toBe(201)
+          expect(res.body).toHaveProperty('username')
+          expect(res.body).toHaveProperty('subscriptions')
+          expect(res.body).toHaveProperty('watchHistory')
+          expect(res.body).toHaveProperty('createdDate')
+          expect(res.body.subscriptions['HBO Max']).toEqual(true)
+          expect(res.body.subscriptions['Apple iTunes']).toEqual(false)
+          
+        })
+      
+        test('Sends error if subscriptions object is empty', async () => {
+      
+          let subscriptionUpdate = {}
+      
+          let res = await request(app)
+            .post('/homepage/user/update')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              subscriptions: subscriptionUpdate
+            })
+      
+          
+          expect(res.status).toBe(400)
+          expect(res.body).toEqual('Data Improperly Formatted')
+          
+        })
+      
+        test('Sends error if subscriptions object is not proper length', async () => {
+      
+          let subscriptionUpdate = {
+              "Apple iTunes": false,
+              "Apple TV Plus": false,
+              "Amazon Prime Video": false,
+              "Disney Plus": false,
+              "Google Play Movies": false,
+              "HBO Max": true,
+              "Hulu": false,
+              "Netflix": false,
+              "Paramount Plus": false,
+              "Peacock": false
+          }
+      
+          let res = await request(app)
+            .post('/homepage/user/update')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              subscriptions: subscriptionUpdate
+            })
+      
+          
+          expect(res.status).toBe(400)
+          expect(res.body).toEqual('Data Improperly Formatted')
+          
+        })
+      })
+      
+      describe("Updating User Profile Watched Content Arrays", () => {
+
+        test('Updates user\'s watched movie array when watched movie posted', async () => {
+          function getRandomInt(min, max) {
+              min = Math.ceil(min);
+              max = Math.floor(max);
+              return Math.floor(Math.random() * (max - min + 1)) + min;
+          }
+      
+          let randomNumber = getRandomInt(0, 99999999)
+      
+          let res = await request(app)
+            .post('/homepage/user/watched')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              watchedType: 'movies',
+              watchedId: randomNumber
+            })
+      
+          expect(res.status).toBe(201);
+          expect(res.body.watchHistory.movies.pop()).toEqual(randomNumber);
+        })
+      
+        test('Updates user\'s watched shows array when watched show posted', async () => {
+          function getRandomInt(min, max) {
+              min = Math.ceil(min);
+              max = Math.floor(max);
+              return Math.floor(Math.random() * (max - min + 1)) + min;
+          }
+      
+          let randomNumber = getRandomInt(0, 99999999)
+      
+          let res = await request(app)
+            .post('/homepage/user/watched')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              watchedType: 'shows',
+              watchedId: randomNumber
+            })
+      
+          expect(res.status).toBe(201);
+          expect(res.body.watchHistory.shows.pop()).toEqual(randomNumber);
+        })
+      
+        test('Updates user\'s watched show array fails when data improperly formatted', async () => {
+          function getRandomInt(min, max) {
+              min = Math.ceil(min);
+              max = Math.floor(max);
+              return Math.floor(Math.random() * (max - min + 1)) + min;
+          }
+      
+          let randomNumber = getRandomInt(0, 99999999)
+      
+          let res = await request(app)
+            .post('/homepage/user/watched')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              watchedType: 'tvShows',
+              watchedId: randomNumber
+            })
+      
+          expect(res.status).toBe(400)
+          expect(res.body).toEqual('Data Improperly Formatted')
+        })
+      
+        test('Sends back ID already present if the ID exists in the users watched history array', async () => {
+          let res = await request(app)
+            .post('/homepage/user/watched')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              watchedType: 'shows',
+              watchedId: 123
+            })
+      
+          
+          expect(res.status).toBe(200)
+          expect(res.body).toEqual('ID already added to shows watch list.')
+        })
+      })
     })
 
-    let res = await request(app)
-      .post('/homepage/user/update')
-      .send({
-        username: 'chris.lazzarini+5@gmail.com',
-        subscriptions: subscriptionUpdate
-      })
-    
-    expect(res.status).toBe(201)
-    expect(res.body).toHaveProperty('username')
-    expect(res.body).toHaveProperty('subscriptions')
-    expect(res.body).toHaveProperty('watchHistory')
-    expect(res.body).toHaveProperty('createdDate')
-    expect(res.body.subscriptions['HBO Max']).toEqual(true)
-    expect(res.body.subscriptions['Apple iTunes']).toEqual(false)
-    
   })
-
-  test('Sends error if subscriptions object is empty', async () => {
-
-    let subscriptionUpdate = {}
-
-    let res = await request(app)
-      .post('/homepage/user/update')
-      .send({
-        username: 'chris.lazzarini+5@gmail.com',
-        subscriptions: subscriptionUpdate
-      })
-
-    
-    expect(res.status).toBe(400)
-    expect(res.body).toEqual('Data Improperly Formatted')
-    
-  })
-
-  test('Sends error if subscriptions object is not proper length', async () => {
-
-    let subscriptionUpdate = {
-        "Apple iTunes": false,
-        "Apple TV Plus": false,
-        "Amazon Prime Video": false,
-        "Disney Plus": false,
-        "Google Play Movies": false,
-        "HBO Max": true,
-        "Hulu": false,
-        "Netflix": false,
-        "Paramount Plus": false,
-        "Peacock": false
-    }
-
-    let res = await request(app)
-      .post('/homepage/user/update')
-      .send({
-        username: 'chris.lazzarini+5@gmail.com',
-        subscriptions: subscriptionUpdate
-      })
-
-    
-    expect(res.status).toBe(400)
-    expect(res.body).toEqual('Data Improperly Formatted')
-    
-  })
-
-  test('returns user profile with 200 status when visiting a user page', async () => {
-    let res = await request(app)
-      .get('/homepage/user')
-      .send({
-        username: 'chris.lazzarini+5@gmail.com'
-      })
-
-    expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('username');
-    expect(res.body).toHaveProperty('subscriptions');
-    expect(res.body).toHaveProperty('watchHistory');
-    expect(res.body).toHaveProperty('createdDate');
-    expect(res.body.username).toEqual('chris.lazzarini+5@gmail.com');
-  })
-
-  test('Updates user\'s watched movie array when watched movie posted', async () => {
-    function getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    let randomNumber = getRandomInt(0, 99999999)
-
-    let res = await request(app)
-      .post('/homepage/user/watched')
-      .send({
-        username: 'chris.lazzarini+5@gmail.com',
-        watchedType: 'movies',
-        watchedId: randomNumber
-      })
-
-    expect(res.status).toBe(201);
-    expect(res.body.watchHistory.movies.pop()).toEqual(randomNumber);
-  })
-
-  test('Updates user\'s watched shows array when watched show posted', async () => {
-    function getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    let randomNumber = getRandomInt(0, 99999999)
-
-    let res = await request(app)
-      .post('/homepage/user/watched')
-      .send({
-        username: 'chris.lazzarini+5@gmail.com',
-        watchedType: 'shows',
-        watchedId: randomNumber
-      })
-
-    expect(res.status).toBe(201);
-    expect(res.body.watchHistory.shows.pop()).toEqual(randomNumber);
-  })
-
-  test('Updates user\'s watched show array fails when data improperly formatted', async () => {
-    function getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    let randomNumber = getRandomInt(0, 99999999)
-
-    let res = await request(app)
-      .post('/homepage/user/watched')
-      .send({
-        username: 'chris.lazzarini+5@gmail.com',
-        watchedType: 'tvShows',
-        watchedId: randomNumber
-      })
-
-    expect(res.status).toBe(400)
-    expect(res.body).toEqual('Data Improperly Formatted')
-  })
-
-  test('Sends back ID already present if the ID exists in the users watched history array', async () => {
-    let res = await request(app)
-      .post('/homepage/user/watched')
-      .send({
-        username: 'chris.lazzarini+5@gmail.com',
-        watchedType: 'shows',
-        watchedId: 123
-      })
-
-    
-    expect(res.status).toBe(200)
-    expect(res.body).toEqual('ID already added to shows watch list.')
-  })
-
-
 
 });
