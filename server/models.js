@@ -197,9 +197,10 @@ module.exports = {
 }
 
 // const deleteDB = async () => {
-//   await Movie.deleteMany();
+//   await Movie.deleteMany({ popular: true });
+//   await TVShow.deleteMany({ popular: true });
 // }
 
 // deleteDB();
 
-module.exports.getPopularMediaFromDB('tv');
+// module.exports.getPopularMediaFromDB('tv');

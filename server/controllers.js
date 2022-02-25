@@ -13,7 +13,7 @@ module.exports = {
 
   getHomePageInfo: async (req, res) => {
     try {
-      const movies = await getPopularMediaFromDB('movies');
+      const movies = await getPopularMediaFromDB('movie');
       const shows = await getPopularMediaFromDB('tv');
 
       res.status(200).send({ movies, shows });
@@ -36,7 +36,7 @@ module.exports = {
       } else {
         res.status(200).json('No User Found');
       }
-      
+
     })
     .catch((err) => {console.log(err)})
   },

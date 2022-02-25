@@ -13,7 +13,7 @@ const transformMediaList = (mediaList, mediaType) => {
             rating: media.vote_average,
             ratingCount: media.vote_count,
             summary: media.overview,
-            release_date: media.release_date,
+            release_date: media.release_date || media.first_air_date,
             imgUrl: `https://www.themoviedb.org/t/p/w1280${media.poster_path}`
           }
         }
@@ -101,4 +101,4 @@ module.exports = {
 // module.exports.getGenresAPI(634649, 'movie');
 // texas 632727
 // module.exports.getMovieProvidersAPI(634649);
-module.exports.getPopularMediaAPI('tv');
+// module.exports.getPopularMediaAPI('tv');
