@@ -28,13 +28,15 @@ module.exports = {
 
     try {
       const { data } = await axios.get(URL);
-      let movies = transformMovieList(data.results, mediaType);
+      console.log('RECIEVED FROM DB',data)
+      let movies = transformMediaList(data.results, mediaType);
       return movies;
 
     } catch (error) {
       console.log(error);
     }
   },
+
   getMediaProvidersAPI: async (mediaType, movieId) => {
     const URL = `https://api.themoviedb.org/3/${mediaType}/${movieId}/watch/providers?api_key=${process.env.apikey}`;
 
