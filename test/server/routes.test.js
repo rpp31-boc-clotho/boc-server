@@ -4,7 +4,7 @@
 
 const request = require('supertest');
 const { app , server } = require('../../server/server');
-const { movie, user, homepageResponse } = require('../testData/testData');
+const { movie, user, homepageResponse, mediaDetailsResponse } = require('../testData/testData');
 
 const baseUrl = 'http://boc-backend-ALB-1007494829.us-east-2.elb.amazonaws.com'
 
@@ -293,7 +293,6 @@ describe("StreamFinder Routes", () => {
         })
       })
     })
-
   })
 
 });

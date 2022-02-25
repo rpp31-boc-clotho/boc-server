@@ -429,8 +429,199 @@ const homepageResponse = {
     "tvShows": []
 }
 
+const mediaDetailsResponse = {
+    "mediaDetails": {
+    "_id": "62167e2bbe912270726c974b",
+    "id": 8489,
+    "mediaType": "movie",
+    "title": "Ali",
+    "rating": 6.8,
+    "ratingCount": 1321,
+    "summary": "In 1964, a brash, new pro boxer, fresh from his Olympic gold medal victory, explodes onto the scene: Cassius Clay. Bold and outspoken, he cuts an entirely new image for African Americans in sport with his proud public self-confidence and his unapologetic belief that he is the greatest boxer of all time. Yet at the top of his game, both Ali's personal and professional lives face the ultimate test.",
+    "release_date": "2001-12-10",
+    "imgUrl": "https://www.themoviedb.org/t/p/w1280/egzfj0JpgrVfpMXF4tfHpzEYM70.jpg",
+    "genres": [
+    "Drama"
+    ],
+    "popular": false,
+    "__v": 0
+    },
+    "providers": {
+    "ads": [
+    {
+    "display_priority": 9,
+    "logo_path": "/8VCV78prwd9QzZnEm0ReO6bERDa.jpg",
+    "provider_id": 386,
+    "provider_name": "Peacock"
+    },
+    {
+    "display_priority": 10,
+    "logo_path": "/xTHltMrZPAJFLQ6qyCBjAnXSmZt.jpg",
+    "provider_id": 387,
+    "provider_name": "Peacock Premium"
+    }
+    ],
+    "buy": [
+    {
+    "display_priority": 2,
+    "logo_path": "/peURlLlr8jggOwK53fJ5wdQl05y.jpg",
+    "provider_id": 2,
+    "provider_name": "Apple iTunes"
+    },
+    {
+    "display_priority": 3,
+    "logo_path": "/tbEdFQDwx5LEVr8WpSeXQSIirVq.jpg",
+    "provider_id": 3,
+    "provider_name": "Google Play Movies"
+    },
+    {
+    "display_priority": 11,
+    "logo_path": "/5NyLm42TmCqCMOZFvH4fcoSNKEW.jpg",
+    "provider_id": 10,
+    "provider_name": "Amazon Video"
+    },
+    {
+    "display_priority": 13,
+    "logo_path": "/oIkQkEkwfmcG7IGpRR1NB8frZZM.jpg",
+    "provider_id": 192,
+    "provider_name": "YouTube"
+    },
+    {
+    "display_priority": 36,
+    "logo_path": "/21dEscfO8n1tL35k4DANixhffsR.jpg",
+    "provider_id": 7,
+    "provider_name": "Vudu"
+    },
+    {
+    "display_priority": 47,
+    "logo_path": "/shq88b09gTBYC4hA7K7MUL8Q4zP.jpg",
+    "provider_id": 68,
+    "provider_name": "Microsoft Store"
+    },
+    {
+    "display_priority": 49,
+    "logo_path": "/gbyLHzl4eYP0oP9oJZ2oKbpkhND.jpg",
+    "provider_id": 279,
+    "provider_name": "Redbox"
+    },
+    {
+    "display_priority": 53,
+    "logo_path": "/xL9SUR63qrEjFZAhtsipskeAMR7.jpg",
+    "provider_id": 358,
+    "provider_name": "DIRECTV"
+    },
+    {
+    "display_priority": 133,
+    "logo_path": "/kJlVJLgbNPvKDYC0YMp3yA2OKq2.jpg",
+    "provider_id": 352,
+    "provider_name": "AMC on Demand"
+    }
+    ],
+    "rent": [
+    {
+    "display_priority": 2,
+    "logo_path": "/peURlLlr8jggOwK53fJ5wdQl05y.jpg",
+    "provider_id": 2,
+    "provider_name": "Apple iTunes"
+    },
+    {
+    "display_priority": 3,
+    "logo_path": "/tbEdFQDwx5LEVr8WpSeXQSIirVq.jpg",
+    "provider_id": 3,
+    "provider_name": "Google Play Movies"
+    },
+    {
+    "display_priority": 11,
+    "logo_path": "/5NyLm42TmCqCMOZFvH4fcoSNKEW.jpg",
+    "provider_id": 10,
+    "provider_name": "Amazon Video"
+    },
+    {
+    "display_priority": 13,
+    "logo_path": "/oIkQkEkwfmcG7IGpRR1NB8frZZM.jpg",
+    "provider_id": 192,
+    "provider_name": "YouTube"
+    },
+    {
+    "display_priority": 36,
+    "logo_path": "/21dEscfO8n1tL35k4DANixhffsR.jpg",
+    "provider_id": 7,
+    "provider_name": "Vudu"
+    },
+    {
+    "display_priority": 47,
+    "logo_path": "/shq88b09gTBYC4hA7K7MUL8Q4zP.jpg",
+    "provider_id": 68,
+    "provider_name": "Microsoft Store"
+    },
+    {
+    "display_priority": 49,
+    "logo_path": "/gbyLHzl4eYP0oP9oJZ2oKbpkhND.jpg",
+    "provider_id": 279,
+    "provider_name": "Redbox"
+    },
+    {
+    "display_priority": 53,
+    "logo_path": "/xL9SUR63qrEjFZAhtsipskeAMR7.jpg",
+    "provider_id": 358,
+    "provider_name": "DIRECTV"
+    },
+    {
+    "display_priority": 133,
+    "logo_path": "/kJlVJLgbNPvKDYC0YMp3yA2OKq2.jpg",
+    "provider_id": 352,
+    "provider_name": "AMC on Demand"
+    }
+    ],
+    "flatrate": [
+    {
+    "display_priority": 0,
+    "logo_path": "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
+    "provider_id": 8,
+    "provider_name": "Netflix"
+    },
+    {
+    "display_priority": 5,
+    "logo_path": "/jPXksae158ukMLFhhlNvzsvaEyt.jpg",
+    "provider_id": 257,
+    "provider_name": "fuboTV"
+    },
+    {
+    "display_priority": 6,
+    "logo_path": "/zxrVdFjIjLqkfnwyghnfywTn3Lh.jpg",
+    "provider_id": 15,
+    "provider_name": "Hulu"
+    },
+    {
+    "display_priority": 53,
+    "logo_path": "/xL9SUR63qrEjFZAhtsipskeAMR7.jpg",
+    "provider_id": 358,
+    "provider_name": "DIRECTV"
+    },
+    {
+    "display_priority": 103,
+    "logo_path": "/aLQ8rZhO7vgPFy1tae5vxvb81Wl.jpg",
+    "provider_id": 299,
+    "provider_name": "Sling TV"
+    },
+    {
+    "display_priority": 128,
+    "logo_path": "/ldU2RCgdvkcSEBWWbttCpVO450z.jpg",
+    "provider_id": 322,
+    "provider_name": "USA Network"
+    },
+    {
+    "display_priority": 167,
+    "logo_path": "/79mRAYq40lcYiXkQm6N7YErSSHd.jpg",
+    "provider_id": 486,
+    "provider_name": "Spectrum On Demand"
+    }
+    ]}
+}
+
 module.exports = {
   movie,
   user,
-  homepageResponse
+  homepageResponse,
+  mediaDetailsResponse
 }
