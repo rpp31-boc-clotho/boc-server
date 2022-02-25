@@ -30,6 +30,10 @@ const UserSchema = new mongoose.Schema({
     shows: [],
     movies: []
   }},
+  watchList: { type: Object, default: {
+    shows: [],
+    movies: []
+  }},
   createdDate: { type: Date, default: Date.now }
 });
 

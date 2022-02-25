@@ -24,7 +24,11 @@ module.exports = {
   },
 
   getUserDetails: (req, res) => {
-    let username = req.body.username;
+    let username = req.query.username;
+    // let username2 = req.args.username;
+    //console.log('username :', username);
+    //console.log('username query :', req.query.username);
+    
 
     getUser(username)
     .then((data) => {
