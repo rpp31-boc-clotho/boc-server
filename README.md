@@ -1039,3 +1039,111 @@ This service provides data for the front end of our service, below is a list of 
 </details>
 
 ---
+
+<details>
+  <summary>Get /homepage/review</summary>
+
+ **Post User**
+----
+ Get reviews for a movie or show
+
+* **URL**
+
+  /homepage/review
+
+* **Method:**
+
+  `GET`
+
+*  **URL Params**
+
+   **Required:**
+
+   None
+
+* **Data Params**
+
+    ```
+    {
+      contentType: 'movies OR shows',
+      contentId: id integer
+    }
+    ```
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:**
+    ```
+    [
+      {
+          "_id": "62187a2bac61510ce869810e",
+          "contentId": 999999999,
+          "contentType": "movies",
+          "username": "chris.lazzarini+5@gmail.com",
+          "recommend": true,
+          "reviewContent": "This movie rocked!",
+          "reported": false,
+          "createdDate": "2022-02-25T06:41:47.709Z",
+          "__v": 0
+      },
+      {
+          "_id": "62187a45a8119f609ba572c7",
+          "contentId": 999999999,
+          "contentType": "movies",
+          "username": "chris.lazzarini+5@gmail.com",
+          "recommend": true,
+          "reviewContent": "This movie rocked!",
+          "reported": false,
+          "createdDate": "2022-02-25T06:42:13.785Z",
+          "__v": 0
+      },
+      {
+          "_id": "62187ac4a94e18007647e797",
+          "contentId": 999999999,
+          "contentType": "movies",
+          "username": "chris.lazzarini+5@gmail.com",
+          "recommend": true,
+          "reviewContent": "This movie rocked!",
+          "reported": false,
+          "createdDate": "2022-02-25T06:44:20.378Z",
+          "__v": 0
+      },
+      {
+          "_id": "62187acdd66d514c05d8d957",
+          "contentId": 999999999,
+          "contentType": "movies",
+          "username": "chris.lazzarini+5@gmail.com",
+          "recommend": true,
+          "reviewContent": "This movie rocked!",
+          "reported": false,
+          "createdDate": "2022-02-25T06:44:29.455Z",
+          "__v": 0
+      }
+    ]
+    ```
+
+* **Error Response:**
+
+  * **Code:** 400 BAD REQUEST <br />
+    **Content:** `Data Improperly Formatted`
+
+* **Sample Call:**
+
+  ```javascript
+    $.ajax({
+      url: "/homepage/review",
+      dataType: "json",
+      data: {
+        contentType: 'shows',
+        contentId: 999999999
+      },
+      type : "GET",
+      success : function(r) {
+        console.log(r);
+      }
+    });
+  ```
+</details>
+
+---

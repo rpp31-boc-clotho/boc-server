@@ -208,12 +208,17 @@ module.exports = {
     }
   },
 
-  postNewReview: async (review) => {
-    
+  postNewReview: async (review) => {    
     let newReview = new Review(review);
     
     return await newReview.save();
+  },
 
+  getContentReviews: async (contentId, contentType) => {
+    return await Review.find({
+      contentId: contentId,
+      contentType: contentType
+    });
   }
 
 }
