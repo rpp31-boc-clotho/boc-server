@@ -32,14 +32,14 @@ describe("StreamFinder Routes", () => {
       search: 'jurrasic park'
     };
 
-    let res = await request(app).get(`/homepage/search?mediaType=${searchInfo.mediaType}&media=${searchInfo.search}`);
+    let res = await request(app).get(`/homepage/search/${searchInfo.mediaType}?media=${searchInfo.search}`);
 
     expect(res.statusCode).toBe(200);
     // console.log('JURASSIC PARK MOVIES!!', JSON.parse(res.text));
   })
 
-  test('response to /homepage/:mediaType/:id with movie details and providers', async () => {
-    let res = await request(app).get('/homepage/movie/8489');
+  test('response to /homepage/media/:mediaType/:id with movie details and providers', async () => {
+    let res = await request(app).get('/homepage/media/movie/8489');
 
     expect(res.statusCode).toBe(200);
     expect(JSON.parse(res.text)).toMatchObject(mediaDetailsResponse);
