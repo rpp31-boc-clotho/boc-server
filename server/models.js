@@ -208,15 +208,12 @@ module.exports = {
     }
   },
 
-  postNewReview: async (contentId, contentType, review) => {
-    let checkCurrentUser = await User.find({username: username});
+  postNewReview: async (review) => {
+    
+    let newReview = new Review(review);
+    
+    return await newReview.save();
 
-    if (checkCurrentUser.length !== 0) {
-      return 'User Already Exists';
-    } else {
-      let user = new User({username: username});
-      return await user.save();
-    }
   }
 
 }

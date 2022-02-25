@@ -160,19 +160,25 @@ module.exports = {
     }
   },
 
-  createReview: async (req, res) => {
-    let contentId = parseInt(req.body.review.contentId);
-    let contentType = req.body.review.contentType;
+  postReview: async (req, res) => {
+    let review = req.body
+    console.log('review: ', req.body);
 
-    console.log('contentId: ', contentId);
+    if (typeof review.contentId !== 'number') {
+      review.contentId = parseInt(review.contentId)
+    }
 
-    postNewReview(contentId, contentType, review)
-    .then((data) => {
-      res.status(201).json(data);
-    })
-    .catch((err) => {
-      console.log(err)
+    if (review.contentId && review.contentType && review.username && review.recommend && review.reviewContent) {
+      postNewReview(review)
+        .then((data) => {
+          res.status(201).json(data);
+      })
+      .catch((err) => {
+        console.log(err)
+        res.status(400).json('Data Improperly Formatted')
+      })
+    } else {
       res.status(400).json('Data Improperly Formatted')
-    })
+    }
   }
 }

@@ -376,4 +376,45 @@ describe("StreamFinder Routes", () => {
     })
   })
 
+  describe("Review Endpoints", () => {
+
+    test('Responds with Data Improperly Formatted if object not in the correct shape', async () => {
+      let review = {
+        username: 'chris.lazzarini+5@gmail.com',
+        contentType: 'shows',
+        contentId: 999999999,
+        recommend: true,
+        reviewContent: 'This movie rocked!'
+      }
+
+      let res = await request(app)
+        .post('/homepage/review/create')
+        .send(review)
+  
+        expect(res.status).toBe(201);
+        expect(res.body).toHaveProperty('username');
+        expect(res.body).toHaveProperty('contentType');
+        expect(res.body).toHaveProperty('contentId');
+        expect(res.body).toHaveProperty('recommend');
+        expect(res.body).toHaveProperty('reviewContent');
+        expect(res.body).toHaveProperty('reported');
+        expect(res.body).toHaveProperty('createdDate');
+        expect(res.body.reviewContent).toEqual('This movie rocked!');
+    })
+    
+    test('Responds with Data Improperly Formatted if object not in the correct shape', async () => {
+      let res = await request(app)
+        .post('/homepage/review/create')
+        .send({
+          username: 'test@gmail.com',
+          contentType: 'shows',
+          contentId: 123
+        })
+  
+      
+      expect(res.status).toBe(400);
+      expect(res.body).toEqual('Data Improperly Formatted');
+    })
+  })
+
 });

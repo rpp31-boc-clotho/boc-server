@@ -37,7 +37,7 @@ router.post('/homepage/user/watched', controllers.postUserWatchHistory);
 router.post('/homepage/user/watchlist', controllers.postUserWatchList);
 
 //post review
-router.post('/homepage/review/create', controllers.createReview);
+router.post('/homepage/review/create', controllers.postReview);
 
 
 

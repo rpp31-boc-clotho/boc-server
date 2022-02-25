@@ -41,12 +41,12 @@ const User = mongoose.model('User', UserSchema);
 
 const ReviewSchema = new mongoose.Schema({
   contentId: { type: Number, index: true },
-  contentType: String,
+  contentType: {type: String, index: true},
   username: { type: String, index: true },
   recommend: { type: Boolean, default: false },
   reviewContent: String,
   reported: { type: Boolean, default: false },
-  date: { type: Date, default: Date.now }
+  createdDate: { type: Date, default: Date.now }
 });
 
 const Review = mongoose.model('Review', ReviewSchema);
