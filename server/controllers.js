@@ -59,9 +59,10 @@ module.exports = {
   getSearchedMedia: async (req, res) => {
     const { media } = req.query;
     const { mediaType } = req.params;
-
+    console.log('SEARCHING', media, mediaType);
     try {
       const data = await getMediaFromDB(media, mediaType);
+      console.log('MADE IT OUT FROM ')
 
       res.status(200).send(data);
     } catch (error) {
