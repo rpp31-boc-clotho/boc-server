@@ -213,9 +213,9 @@ describe("StreamFinder Routes", () => {
         })
       })
       
-      describe("Updating User Profile Watched Content Arrays", () => {
+      describe("Updating User Profile Watch History Arrays", () => {
 
-        test('Updates user\'s watched movie array when watched movie posted', async () => {
+        test('Updates user\'s watch history movies\' array when movie watched', async () => {
           function getRandomInt(min, max) {
               min = Math.ceil(min);
               max = Math.floor(max);
@@ -236,7 +236,7 @@ describe("StreamFinder Routes", () => {
           expect(res.body.watchHistory.movies.pop()).toEqual(randomNumber);
         })
       
-        test('Updates user\'s watched shows array when watched show posted', async () => {
+        test('Updates user\'s watch history shows\' array when show watched', async () => {
           function getRandomInt(min, max) {
               min = Math.ceil(min);
               max = Math.floor(max);
@@ -257,7 +257,7 @@ describe("StreamFinder Routes", () => {
           expect(res.body.watchHistory.shows.pop()).toEqual(randomNumber);
         })
       
-        test('Updates user\'s watched show array fails when data improperly formatted', async () => {
+        test('Updates user\'s watch history shows\' array fails when data improperly formatted', async () => {
           function getRandomInt(min, max) {
               min = Math.ceil(min);
               max = Math.floor(max);
@@ -278,7 +278,7 @@ describe("StreamFinder Routes", () => {
           expect(res.body).toEqual('Data Improperly Formatted')
         })
       
-        test('Sends back ID already present if the ID exists in the users watched history array', async () => {
+        test('Responds with ID already present if the ID exists in the user\'s watch history array', async () => {
           let res = await request(app)
             .post('/homepage/user/watched')
             .send({
@@ -289,14 +289,88 @@ describe("StreamFinder Routes", () => {
       
           
           expect(res.status).toBe(200)
-          expect(res.body).toEqual('ID already added to shows watch list.')
+          expect(res.body).toEqual('ID already added to shows watch history.')
         })
       })
 
-      describe("User watchList Endpoint", () => {
-        //should post to user's watchlist
+      describe("Updating user profile watchList endpoint", () => {
 
-        //should retrieve user's watchlist
+        test('Updates user\'s watch list movies\' array when movie added to watch list', async () => {
+          function getRandomInt(min, max) {
+              min = Math.ceil(min);
+              max = Math.floor(max);
+              return Math.floor(Math.random() * (max - min + 1)) + min;
+          }
+      
+          let randomNumber = getRandomInt(0, 99999999)
+      
+          let res = await request(app)
+            .post('/homepage/user/watchlist')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              watchType: 'movies',
+              watchId: randomNumber
+            })
+      
+          expect(res.status).toBe(201);
+          expect(res.body.watchList.movies.pop()).toEqual(randomNumber);
+        })
+      
+        test('Updates user\'s watch list shows\' array when show added to watch list', async () => {
+          function getRandomInt(min, max) {
+              min = Math.ceil(min);
+              max = Math.floor(max);
+              return Math.floor(Math.random() * (max - min + 1)) + min;
+          }
+      
+          let randomNumber = getRandomInt(0, 99999999)
+      
+          let res = await request(app)
+            .post('/homepage/user/watchlist')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              watchType: 'shows',
+              watchId: randomNumber
+            })
+      
+          expect(res.status).toBe(201);
+          expect(res.body.watchList.shows.pop()).toEqual(randomNumber);
+        })
+      
+        test('Updates user\'s watch list shows\' array fails when data improperly formatted', async () => {
+          function getRandomInt(min, max) {
+              min = Math.ceil(min);
+              max = Math.floor(max);
+              return Math.floor(Math.random() * (max - min + 1)) + min;
+          }
+      
+          let randomNumber = getRandomInt(0, 99999999)
+      
+          let res = await request(app)
+            .post('/homepage/user/watchlist')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              watchType: 'tvShows',
+              watchId: randomNumber
+            })
+      
+          expect(res.status).toBe(400)
+          expect(res.body).toEqual('Data Improperly Formatted')
+        })
+      
+        test('Responds with ID already present if the ID exists in the user\'s watch list array', async () => {
+          let res = await request(app)
+            .post('/homepage/user/watchlist')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              watchType: 'shows',
+              watchId: 123
+            })
+      
+          
+          expect(res.status).toBe(200)
+          expect(res.body).toEqual('ID already added to shows watch list.')
+        })
       })
 
     })

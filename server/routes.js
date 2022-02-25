@@ -30,8 +30,11 @@ router.post('/homepage/user/create', controllers.postNewUserProfile);
 //update user profile subscriptions
 router.post('/homepage/user/update', controllers.updateUserSubscriptions);
 
-//update user profile subscriptions
+//update user profile watch history
 router.post('/homepage/user/watched', controllers.postUserWatchHistory);
+
+//update user profile watch list
+router.post('/homepage/user/watchlist', controllers.postUserWatchList);
 
 //post review
 router.post('/homepage/review/create', controllers.createReview);

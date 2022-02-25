@@ -6,6 +6,7 @@ const {
   postNewUser,
   updateUserSubscriptions,
   updateUserWatchHistory,
+  updateUserWatchList,
   postNewReview
 } = require('./models');
 
@@ -120,6 +121,29 @@ module.exports = {
 
     if (watchedType === 'movies' || watchedType === 'shows') {
       updateUserWatchHistory(username, watchedType, watchedId)
+      .then((data) => {
+        if (typeof data === 'string') {
+          res.status(200).json(data);
+        } else {
+          res.status(201).json(data[0]);
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+        res.status(400).json('Data Improperly Formatted')
+      })
+    } else {
+      res.status(400).json('Data Improperly Formatted');
+    }
+  },
+
+  postUserWatchList: async (req, res) => {
+    let username = req.body.username;
+    let watchType = req.body.watchType;
+    let watchId = typeof req.body.watchId === 'number' ? req.body.watchId : parseInt(req.body.watchId);
+
+    if (watchType === 'movies' || watchType === 'shows') {
+      updateUserWatchList(username, watchType, watchId)
       .then((data) => {
         if (typeof data === 'string') {
           res.status(200).json(data);

@@ -172,7 +172,32 @@ module.exports = {
     })
 
     if (added) {
-      return 'ID already added to ' + watchedType + ' watch list.';
+      return 'ID already added to ' + watchedType + ' watch history.';
+    } else {
+      await User.updateOne(
+        { username: username },
+        { $push: pushObj }
+      );
+
+      return await User.find({username: username})
+    }
+  },
+
+  updateUserWatchList: async (username, watchType, watchId) => {
+    let pushObj = {};
+    pushObj['watchList' + `.${watchType}`] = watchId;
+
+    let user = await User.find({username: username})
+    let added = false;
+
+    user[0].watchList[watchType].forEach((id) => {
+      if (id === watchId) {
+        added = true;
+      }
+    })
+
+    if (added) {
+      return 'ID already added to ' + watchType + ' watch list.';
     } else {
       await User.updateOne(
         { username: username },
