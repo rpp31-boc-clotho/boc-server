@@ -1,6 +1,7 @@
 const {
-  getPopularMoviesFromDB,
+  getPopularMediaFromDB,
   getMediaFromDB,
+  getMediaDetailsFromDB,
   getUser,
   postNewUser,
   updateUserSubscriptions,
@@ -12,8 +13,10 @@ module.exports = {
 
   getHomePageInfo: async (req, res) => {
     try {
-      const data = await getPopularMoviesFromDB();
-      res.status(200).send({ movies: data, tvShows: [] });
+      const movies = await getPopularMediaFromDB('movies');
+      const shows = await getPopularMediaFromDB('tv');
+
+      res.status(200).send({ movies, shows });
     } catch (error) {
       console.log(error);
     }
@@ -24,21 +27,29 @@ module.exports = {
   },
 
   getUserDetails: (req, res) => {
-    let username = req.query.username;
-    // let username2 = req.args.username;
-    //console.log('username :', username);
-    //console.log('username query :', req.query.username);
-    
+    let username = req.query.username.replace(' ', '+');
 
     getUser(username)
     .then((data) => {
-      res.status(200).json(data[0]);
+      if (data.length !== 0) {
+        res.status(200).json(data[0]);
+      } else {
+        res.status(200).json('No User Found');
+      }
+      
     })
     .catch((err) => {console.log(err)})
   },
 
-  getMovieDetails: async (req, res) => {
+  getMediaDetails: async (req, res) => {
+    const { mediaType, id } = req.params;
 
+    try {
+      const data = await getMediaDetailsFromDB(id, mediaType);
+      res.status(200).send(data);
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   getTVShowDetails: (req, res) => {
@@ -128,7 +139,7 @@ module.exports = {
   createReview: async (req, res) => {
     let contentId = parseInt(req.body.review.contentId);
     let contentType = req.body.review.contentType;
-    
+
     console.log('contentId: ', contentId);
 
     postNewReview(contentId, contentType, review)

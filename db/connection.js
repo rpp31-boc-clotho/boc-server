@@ -37,21 +37,6 @@ const UserSchema = new mongoose.Schema({
   createdDate: { type: Date, default: Date.now }
 });
 
-/*
-Netflix
-Amazon Prime Video
-Disney Plus
-Google Play Movies
-Apple iTunes
-Hulu
-Paramount Plus
-HBO Max
-Peacock
-Apple TV Plus
-YouTube
-*/
-
-
 const User = mongoose.model('User', UserSchema);
 
 const ReviewSchema = new mongoose.Schema({
@@ -59,7 +44,7 @@ const ReviewSchema = new mongoose.Schema({
   contentType: String,
   username: { type: String, index: true },
   recommend: { type: Boolean, default: false },
-  review: String,
+  reviewContent: String,
   reported: { type: Boolean, default: false },
   date: { type: Date, default: Date.now }
 });
@@ -77,7 +62,6 @@ const MovieSchema = new mongoose.Schema({
   imgUrl: String,
   genres: Array,
   popular: { type: Boolean, default: false }
-  // createdAt: { type: Date, expires: 30}
 });
 
 
@@ -85,24 +69,27 @@ const Movie = mongoose.model('Movie', MovieSchema);
 
 const TvShowSchema = new mongoose.Schema({
   id: { type: Number, index: true },
-  title: String,
   mediaType: String,
-  recommended: Array,
-  summary: String,
+  title: { type: String, text: true },
+  rating: Number,
+  ratingCount: Number,
+  summary: { type: String, text: true },
+  release_date: String,
   imgUrl: String,
-  popular: Boolean
+  genres: Array,
+  popular: { type: Boolean, default: false }
 });
 
 const TVShow = mongoose.model('TVShow', TvShowSchema);
 
 const ProvidersSchema = new mongoose.Schema({
   movieId: { type: Number, index: true },
-  results: Array
+  results: Object
 })
 
 const Providers = mongoose.model('Providers', ProvidersSchema)
 
 module.exports = {
-  db, User, Review, Movie, Providers
+  db, User, Review, Movie, TVShow, Providers
 };
 
