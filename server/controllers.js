@@ -5,7 +5,7 @@ const {
   getUser,
   postNewUser,
   updateUserSubscriptions,
-  updateUserWatched,
+  updateUserWatchHistory,
   postNewReview
 } = require('./models');
 
@@ -113,13 +113,13 @@ module.exports = {
     }
   },
 
-  updateUserWatchedList: async (req, res) => {
+  postUserWatchHistory: async (req, res) => {
     let username = req.body.username;
     let watchedType = req.body.watchedType;
     let watchedId = typeof req.body.watchedId === 'number' ? req.body.watchedId : parseInt(req.body.watchedId);
 
     if (watchedType === 'movies' || watchedType === 'shows') {
-      updateUserWatched(username, watchedType, watchedId)
+      updateUserWatchHistory(username, watchedType, watchedId)
       .then((data) => {
         if (typeof data === 'string') {
           res.status(200).json(data);

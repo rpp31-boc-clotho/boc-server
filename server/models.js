@@ -158,7 +158,7 @@ module.exports = {
     return await User.find({username: username})
   },
 
-  updateUserWatched: async (username, watchedType, watchedId) => {
+  updateUserWatchHistory: async (username, watchedType, watchedId) => {
     let pushObj = {};
     pushObj['watchHistory' + `.${watchedType}`] = watchedId;
 

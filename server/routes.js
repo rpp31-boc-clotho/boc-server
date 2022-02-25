@@ -31,7 +31,7 @@ router.post('/homepage/user/create', controllers.postNewUserProfile);
 router.post('/homepage/user/update', controllers.updateUserSubscriptions);
 
 //update user profile subscriptions
-router.post('/homepage/user/watched', controllers.updateUserWatchedList);
+router.post('/homepage/user/watched', controllers.postUserWatchHistory);
 
 //post review
 router.post('/homepage/review/create', controllers.createReview);

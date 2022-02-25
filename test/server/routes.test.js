@@ -292,6 +292,13 @@ describe("StreamFinder Routes", () => {
           expect(res.body).toEqual('ID already added to shows watch list.')
         })
       })
+
+      describe("User watchList Endpoint", () => {
+        //should post to user's watchlist
+
+        //should retrieve user's watchlist
+      })
+
     })
   })
 
