@@ -5,8 +5,10 @@ const {
   getUser,
   postNewUser,
   updateUserSubscriptions,
-  updateUserWatched,
-  postNewReview
+  updateUserWatchHistory,
+  updateUserWatchList,
+  postNewReview,
+  getContentReviews
 } = require('./models');
 
 module.exports = {
@@ -114,13 +116,13 @@ module.exports = {
     }
   },
 
-  updateUserWatchedList: async (req, res) => {
+  postUserWatchHistory: async (req, res) => {
     let username = req.body.username;
     let watchedType = req.body.watchedType;
     let watchedId = typeof req.body.watchedId === 'number' ? req.body.watchedId : parseInt(req.body.watchedId);
 
     if (watchedType === 'movies' || watchedType === 'shows') {
-      updateUserWatched(username, watchedType, watchedId)
+      updateUserWatchHistory(username, watchedType, watchedId)
       .then((data) => {
         if (typeof data === 'string') {
           res.status(200).json(data);
@@ -137,19 +139,62 @@ module.exports = {
     }
   },
 
-  createReview: async (req, res) => {
-    let contentId = parseInt(req.body.review.contentId);
-    let contentType = req.body.review.contentType;
+  postUserWatchList: async (req, res) => {
+    let username = req.body.username;
+    let watchType = req.body.watchType;
+    let watchId = typeof req.body.watchId === 'number' ? req.body.watchId : parseInt(req.body.watchId);
 
-    console.log('contentId: ', contentId);
+    if (watchType === 'movies' || watchType === 'shows') {
+      updateUserWatchList(username, watchType, watchId)
+      .then((data) => {
+        if (typeof data === 'string') {
+          res.status(200).json(data);
+        } else {
+          res.status(201).json(data[0]);
+        }
+      })
+      .catch((err) => {
+        res.status(400).json('Data Improperly Formatted')
+      })
+    } else {
+      res.status(400).json('Data Improperly Formatted');
+    }
+  },
 
-    postNewReview(contentId, contentType, review)
-    .then((data) => {
-      res.status(201).json(data);
-    })
-    .catch((err) => {
-      console.log(err)
+  postReview: async (req, res) => {
+    let review = req.body
+
+    if (typeof review.contentId !== 'number') {
+      review.contentId = parseInt(review.contentId)
+    }
+
+    if (review.contentId && review.contentType && review.username && review.recommend && review.reviewContent) {
+      postNewReview(review)
+        .then((data) => {
+          res.status(201).json(data);
+      })
+      .catch((err) => {
+        console.log(err)
+        res.status(400).json('Data Improperly Formatted')
+      })
+    } else {
       res.status(400).json('Data Improperly Formatted')
-    })
+    }
+  },
+
+  getReviews: (req, res) => {
+    let contentId = req.query.contentId;
+    let contentType = req.query.contentType;
+
+    if (contentId && contentType) {
+      getContentReviews(contentId, contentType)
+      .then((data) => {
+        res.status(200).json(data);
+      })
+      .catch((err) => {console.log(err)})
+    } else {
+      res.status(400).json('Data Improperly Formatted')
+    }
   }
+
 }

@@ -213,9 +213,10 @@ describe("StreamFinder Routes", () => {
         })
       })
       
-      describe("Updating User Profile Watched Content Arrays", () => {
+      describe("Updating User Profile Watch History Arrays", () => {
 
-        test('Updates user\'s watched movie array when watched movie posted', async () => {
+        test('Updates user\'s watch history movies\' array when movie watched', async () => {
+
           function getRandomInt(min, max) {
               min = Math.ceil(min);
               max = Math.floor(max);
@@ -236,7 +237,9 @@ describe("StreamFinder Routes", () => {
           expect(res.body.watchHistory.movies.pop()).toEqual(randomNumber);
         })
       
-        test('Updates user\'s watched shows array when watched show posted', async () => {
+
+        test('Updates user\'s watch history shows\' array when show watched', async () => {
+
           function getRandomInt(min, max) {
               min = Math.ceil(min);
               max = Math.floor(max);
@@ -257,7 +260,9 @@ describe("StreamFinder Routes", () => {
           expect(res.body.watchHistory.shows.pop()).toEqual(randomNumber);
         })
       
-        test('Updates user\'s watched show array fails when data improperly formatted', async () => {
+
+        test('Updates user\'s watch history shows\' array fails when data improperly formatted', async () => {
+          
           function getRandomInt(min, max) {
               min = Math.ceil(min);
               max = Math.floor(max);
@@ -278,7 +283,8 @@ describe("StreamFinder Routes", () => {
           expect(res.body).toEqual('Data Improperly Formatted')
         })
       
-        test('Sends back ID already present if the ID exists in the users watched history array', async () => {
+        test('Responds with ID already present if the ID exists in the user\'s watch history array', async () => {
+
           let res = await request(app)
             .post('/homepage/user/watched')
             .send({
@@ -287,11 +293,213 @@ describe("StreamFinder Routes", () => {
               watchedId: 123
             })
       
+          expect(res.status).toBe(200)
+          expect(res.body).toEqual('ID already added to shows watch history.')
+          
+        })
+      })
+
+      describe("Updating user profile watchList endpoint", () => {
+
+        test('Updates user\'s watch list movies\' array when movie added to watch list', async () => {
+          function getRandomInt(min, max) {
+              min = Math.ceil(min);
+              max = Math.floor(max);
+              return Math.floor(Math.random() * (max - min + 1)) + min;
+          }
+      
+          let randomNumber = getRandomInt(0, 99999999)
+      
+          let res = await request(app)
+            .post('/homepage/user/watchlist')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              watchType: 'movies',
+              watchId: randomNumber
+            })
+      
+          expect(res.status).toBe(201);
+          expect(res.body.watchList.movies.pop()).toEqual(randomNumber);
+        })
+      
+        test('Updates user\'s watch list shows\' array when show added to watch list', async () => {
+          function getRandomInt(min, max) {
+              min = Math.ceil(min);
+              max = Math.floor(max);
+              return Math.floor(Math.random() * (max - min + 1)) + min;
+          }
+      
+          let randomNumber = getRandomInt(0, 99999999)
+      
+          let res = await request(app)
+            .post('/homepage/user/watchlist')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              watchType: 'shows',
+              watchId: randomNumber
+            })
+      
+          expect(res.status).toBe(201);
+          expect(res.body.watchList.shows.pop()).toEqual(randomNumber);
+        })
+      
+        test('Updates user\'s watch list shows\' array fails when data improperly formatted', async () => {
+          function getRandomInt(min, max) {
+              min = Math.ceil(min);
+              max = Math.floor(max);
+              return Math.floor(Math.random() * (max - min + 1)) + min;
+          }
+      
+          let randomNumber = getRandomInt(0, 99999999)
+      
+          let res = await request(app)
+            .post('/homepage/user/watchlist')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              watchType: 'tvShows',
+              watchId: randomNumber
+            })
+      
+          expect(res.status).toBe(400)
+          expect(res.body).toEqual('Data Improperly Formatted')
+        })
+      
+        test('Responds with ID already present if the ID exists in the user\'s watch list array', async () => {
+          let res = await request(app)
+            .post('/homepage/user/watchlist')
+            .send({
+              username: 'chris.lazzarini+5@gmail.com',
+              watchType: 'shows',
+              watchId: 123
+            })
+      
           
           expect(res.status).toBe(200)
           expect(res.body).toEqual('ID already added to shows watch list.')
         })
       })
+
+    })
+  })
+
+  describe("Review Endpoints", () => {
+    
+    describe("Posting a new review", () => {
+
+      test('Creates a new show review and responds with the review if properly posted', async () => {
+        let review = {
+          username: 'chris.lazzarini+5@gmail.com',
+          contentType: 'shows',
+          contentId: 999999999,
+          recommend: true,
+          reviewContent: 'This show rocked!'
+        }
+
+        let res = await request(app)
+          .post('/homepage/review/create')
+          .send(review)
+    
+          expect(res.status).toBe(201);
+          expect(res.body).toHaveProperty('username');
+          expect(res.body).toHaveProperty('contentType');
+          expect(res.body).toHaveProperty('contentId');
+          expect(res.body).toHaveProperty('recommend');
+          expect(res.body).toHaveProperty('reviewContent');
+          expect(res.body).toHaveProperty('reported');
+          expect(res.body).toHaveProperty('createdDate');
+          expect(res.body.reviewContent).toEqual('This show rocked!');
+      })
+
+      test('Creates a new movie review and responds with the review if properly posted', async () => {
+        let review = {
+          username: 'chris.lazzarini+5@gmail.com',
+          contentType: 'movies',
+          contentId: 999999999,
+          recommend: true,
+          reviewContent: 'This movie rocked!'
+        }
+
+        let res = await request(app)
+          .post('/homepage/review/create')
+          .send(review)
+    
+          expect(res.status).toBe(201);
+          expect(res.body).toHaveProperty('username');
+          expect(res.body).toHaveProperty('contentType');
+          expect(res.body).toHaveProperty('contentId');
+          expect(res.body).toHaveProperty('recommend');
+          expect(res.body).toHaveProperty('reviewContent');
+          expect(res.body).toHaveProperty('reported');
+          expect(res.body).toHaveProperty('createdDate');
+          expect(res.body.reviewContent).toEqual('This movie rocked!');
+      })
+      
+      test('Responds with Data Improperly Formatted if object not in the correct shape', async () => {
+        let res = await request(app)
+          .post('/homepage/review/create')
+          .send({
+            username: 'test@gmail.com',
+            contentType: 'shows',
+            contentId: 123
+          })
+    
+        
+        expect(res.status).toBe(400);
+        expect(res.body).toEqual('Data Improperly Formatted');
+      })
+    })
+
+    describe("Get reviews for a movie or show", () => {
+      
+      test('Responds with array of reviews for a given movie id', async () => {
+        let res = await request(app)
+          .get('/homepage/review?contentId=999999999&contentType=movies');
+        
+        expect(res.status).toBe(200);
+        expect(res.body.length).toBeGreaterThanOrEqual(0)
+        expect(res.body[0]).toHaveProperty('username');
+        expect(res.body[0]).toHaveProperty('contentType');
+        expect(res.body[0]).toHaveProperty('contentId');
+        expect(res.body[0]).toHaveProperty('recommend');
+        expect(res.body[0]).toHaveProperty('reviewContent');
+        expect(res.body[0]).toHaveProperty('reported');
+        expect(res.body[0]).toHaveProperty('createdDate');
+        expect(res.body[0].reviewContent).toEqual('This movie rocked!');
+      })
+
+      test('Responds with array of reviews for a given show id', async () => {
+        let res = await request(app)
+          .get('/homepage/review?contentId=999999999&contentType=shows');
+        
+        expect(res.status).toBe(200);
+        expect(res.body.length).toBeGreaterThanOrEqual(0)
+        expect(res.body[0]).toHaveProperty('username');
+        expect(res.body[0]).toHaveProperty('contentType');
+        expect(res.body[0]).toHaveProperty('contentId');
+        expect(res.body[0]).toHaveProperty('recommend');
+        expect(res.body[0]).toHaveProperty('reviewContent');
+        expect(res.body[0]).toHaveProperty('reported');
+        expect(res.body[0]).toHaveProperty('createdDate');
+        expect(res.body[0].reviewContent).toEqual('This show rocked!');
+      })
+
+      test('Responds with an empty array if no reviews', async () => {
+        let res = await request(app)
+          .get('/homepage/review?contentId=999999999999&contentType=shows');
+        
+        expect(res.status).toBe(200);
+        expect(res.body.length).toEqual(0);
+      })
+
+      test('Responds with Data Improperly Formatted if object not in the correct shape', async () => {
+        let res = await request(app)
+          .get('/homepage/review?contentId=999999999999');
+        
+        expect(res.status).toBe(400);
+        expect(res.body).toEqual('Data Improperly Formatted');
+      })
+    
+    
     })
   })
 
