@@ -208,9 +208,9 @@ module.exports = {
     }
   },
 
-  postNewReview: async (review) => {    
+  postNewReview: async (review) => {
     let newReview = new Review(review);
-    
+
     return await newReview.save();
   },
 
@@ -228,6 +228,6 @@ module.exports = {
 //   await TVShow.deleteMany({ popular: true });
 // }
 
-// deleteDB();
+// deleteDB();/
 
 // module.exports.getPopularMediaFromDB('tv');
