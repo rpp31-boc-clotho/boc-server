@@ -54,10 +54,6 @@ module.exports = {
     }
   },
 
-  getTVShowDetails: (req, res) => {
-
-  },
-
   getSearchedMedia: async (req, res) => {
     const { media } = req.query;
     const { mediaType } = req.params;
@@ -168,10 +164,10 @@ module.exports = {
       review.contentId = parseInt(review.contentId)
     }
 
-    if (review.contentId !== undefined 
-        && review.contentType !== undefined 
+    if (review.contentId !== undefined
+        && review.contentType !== undefined
         && review.username !== undefined
-        && review.recommend !== undefined 
+        && review.recommend !== undefined
         && review.reviewContent !== undefined) {
       postNewReview(review)
         .then((data) => {
