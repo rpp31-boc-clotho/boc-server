@@ -37,8 +37,8 @@ module.exports = {
     }
   },
 
-  getMediaProvidersAPI: async (mediaType, movieId) => {
-    const URL = `https://api.themoviedb.org/3/${mediaType}/${movieId}/watch/providers?api_key=${process.env.apikey}`;
+  getMediaProvidersAPI: async (mediaType, mediaId) => {
+    const URL = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/watch/providers?api_key=${process.env.apikey}`;
 
     try {
       const { data } = await axios.get(URL);
@@ -61,19 +61,21 @@ module.exports = {
       console.log(error);
     }
   },
-  getMovieRecommendationsAPI: async(movieId) => {
-    const URL = `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${process.env.apikey}&language=en-US&page=1`;
+
+  getMediaRecommendationsAPI: async(mediaId, mediaType) => {
+    const URL = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/recommendations?api_key=${process.env.apikey}&language=en-US&page=1`;
 
     try {
       const { data } = await axios.get(URL);
 
-      let recommendations = transformMovieList(data.results, 'movie');
+      let recommendations = transformMediaList(data.results, mediaType);
       return recommendations;
 
     } catch (error) {
       console.log(error);
     }
   },
+
   getPopularMediaAPI: async (mediaType) => {
     const URL = `https://api.themoviedb.org/3/${mediaType}/popular?api_key=${process.env.apikey}&language=en-US&page=1`;
 
@@ -87,8 +89,9 @@ module.exports = {
       console.log(error);
     }
   },
-  getGenresAPI: async (movieId, mediaType) => {
-    const URL = `https://api.themoviedb.org/3/${mediaType}/${movieId}?api_key=${process.env.apikey}&language=en-US`;
+
+  getGenresAPI: async (mediaId, mediaType) => {
+    const URL = `https://api.themoviedb.org/3/${mediaType}/${mediaId}?api_key=${process.env.apikey}&language=en-US`;
 
     try {
       const { data } = await axios.get(URL);
@@ -100,4 +103,4 @@ module.exports = {
   }
 };
 
-// module.exports.getMediaProviderImagesAPI();
+// module.exports.getMediaRecommendationsAPI();

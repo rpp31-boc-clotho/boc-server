@@ -1,9 +1,9 @@
 const cron = require('node-cron');
-const { db, User, Review, Movie, TVShow, Providers } = require('../db/connection');
+const { db, User, Review, Movie, TVShow, Providers, Recommendations } = require('../db/connection');
 const {
   getMediaAPI,
   getMediaProvidersAPI,
-  getMovieRecommendationsAPI,
+  getMediaRecommendationsAPI,
   getPopularMediaAPI,
   getGenresAPI
 } = require('./apiHelpers/movieHelpers');
@@ -13,9 +13,25 @@ cron.schedule("0 0 * * *", async () => {
   await Movie.updateMany({ popular: true }, { popular: false });
 });
 
-const setMovieRecommendations = async (movie) => {
-  const results = await getMovieRecommendationsAPI(movie.id);
-  movie.recommended = results;
+const getMediaRecommendations = async (mediaId, mediaType) => {
+  const mediaRecommendations = await Recommendations.find({ mediaId, mediaType });
+
+  if (mediaRecommendations.length) {
+    const { recommendations } = mediaRecommendations[0];
+    return recommendations;
+  }
+
+  const results = await getMediaRecommendationsAPI(mediaId, mediaType);
+  const recommendList = new Recommendations({ mediaId , mediaType, recommendations: results });
+
+  try {
+    await recommendList.save();
+  } catch (error) {
+    console.log(error);
+  }
+
+  const { recommendations } = recommendList;
+  return recommendations;
 };
 
 const setMediaGenres = async (media, mediaType) => {
