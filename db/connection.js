@@ -87,7 +87,7 @@ const ProvidersSchema = new mongoose.Schema({
   results: Object
 })
 
-const Providers = mongoose.model('Providers', ProvidersSchema)
+const Providers = mongoose.model('Providers', ProvidersSchema);
 
 module.exports = {
   db, User, Review, Movie, TVShow, Providers
