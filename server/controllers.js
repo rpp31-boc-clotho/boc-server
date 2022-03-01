@@ -54,10 +54,6 @@ module.exports = {
     }
   },
 
-  getTVShowDetails: (req, res) => {
-
-  },
-
   getSearchedMedia: async (req, res) => {
     const { media } = req.query;
     const { mediaType } = req.params;

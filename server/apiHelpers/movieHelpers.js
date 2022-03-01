@@ -100,7 +100,4 @@ module.exports = {
   }
 };
 
-// module.exports.getGenresAPI(634649, 'movie');
-// texas 632727
-// module.exports.getMovieProvidersAPI(634649);
-// module.exports.getPopularMediaAPI('tv');
+// module.exports.getMediaProviderImagesAPI();
