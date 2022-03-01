@@ -27,7 +27,7 @@ module.exports = {
   getPopularMediaFromDB: async (mediaType) => {
     let collection = mediaType === 'movie' ? Movie : TVShow;
 
-    const popularMediaList = await collection.find({ popular: true });
+    const popularMediaList = await collection.find({ popular: true }).sort({ rating: -1});
 
     if (popularMediaList.length) {
       return popularMediaList;
@@ -228,6 +228,6 @@ module.exports = {
 //   await TVShow.deleteMany({ popular: true });
 // }
 
-// deleteDB();/
+// deleteDB();
 
 // module.exports.getPopularMediaFromDB('tv');
