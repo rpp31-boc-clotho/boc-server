@@ -16,12 +16,21 @@ cron.schedule("0 0 * * *", async () => {
 const setMovieRecommendations = async (movie) => {
   const results = await getMovieRecommendationsAPI(movie.id);
   movie.recommended = results;
-}
+};
 
 const setMediaGenres = async (media, mediaType) => {
   const genres = await getGenresAPI(media.id, mediaType);
   media.genres = genres;
-}
+};
+
+const setMediaWatchList = async (mediaIdList, mediaType) => {
+  const collection = mediaType === 'movie' ? Movie : TVShow;
+
+  const filter = { $match: { id: { $in: mediaIdList }}};
+  const watchList = await collection.aggregate([filter]);
+
+  return watchList;
+};
 
 module.exports = {
   getPopularMediaFromDB: async (mediaType) => {
