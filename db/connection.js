@@ -47,7 +47,7 @@ const ReviewSchema = new mongoose.Schema({
   contentId: { type: Number, index: true },
   contentType: {type: String, index: true},
   username: { type: String, index: true },
-  userProfilePhoto: String,
+  userProfilePhoto: { type: String, default: null },
   recommend: { type: Boolean, default: false },
   reviewContent: String,
   reported: { type: Boolean, default: false },
