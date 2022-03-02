@@ -44,9 +44,13 @@ const setMediaWatchList = async (mediaIdList, mediaType) => {
 
   const filter = { $match: { id: { $in: mediaIdList }}};
   const watchList = await collection.aggregate([filter]);
-
+  console.log(watchList.length);
+  console.log(watchList);
   return watchList;
 };
+
+setMediaWatchList([135397, 351286, 417984, 551372, 424139], 'movie');
+// setMediaWatchList([60574, 934111, 85552, 2051, 132712], 'tv');
 
 module.exports = {
   getPopularMediaFromDB: async (mediaType) => {
