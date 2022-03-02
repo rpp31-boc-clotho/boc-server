@@ -31,6 +31,8 @@ const getMediaRecommendations = async (mediaId, mediaType) => {
   }
 
   const { recommendations } = recommendList;
+
+  console.log(recommendList);
   return recommendations;
 };
 
@@ -49,8 +51,28 @@ const setMediaWatchList = async (mediaIdList, mediaType) => {
   return watchList;
 };
 
-setMediaWatchList([135397, 351286, 417984, 551372, 424139], 'movie');
-// setMediaWatchList([60574, 934111, 85552, 2051, 132712], 'tv');
+const getMassRecommendations = async (mediaIdList, mediaType) => {
+  const filter = [
+    {
+      '$match': {
+        'mediaId': {
+          '$in': mediaIdList
+        }
+      }
+    }, {
+      '$project': {
+        'recommendations': {
+          '$first': '$recommendations'
+        }
+      }
+    }
+  ];
+
+  const recommendList = await Recommendations.aggregate(filter);
+  // console.log(recommendList.length);
+  // console.log(recommendList);
+  return recommendList;
+}
 
 module.exports = {
   getPopularMediaFromDB: async (mediaType) => {
@@ -156,7 +178,18 @@ module.exports = {
   },
 
   populateMediaListAndRecommendations: async (movieIdList, tvIdList, recommendations = false) => {
-
+    let retObj = {
+      content: {}
+    };
+    if(recommendations === true) {
+      retObj.recommendations = {};
+      retObj.recommendations.movies = await getMassRecommendations(movieIdList, 'movie')
+      retObj.recommendations.shows = await getMassRecommendations(movieIdList, 'tv')
+    }
+    retObj.content.movies = await setMediaWatchList(movieIdList, 'movie');
+    retObj.content.shows = await setMediaWatchList(tvIdList, 'tv');
+    console.log(retObj);
+    return retObj;
   },
 
   getUser: async (username) => {
@@ -258,6 +291,7 @@ module.exports = {
 
 }
 
+// module.exports.populateMediaListAndRecommendations([135397, 351286, 417984, 551372, 424139], [60574, 934111, 85552, 2051, 132712], true);
 // const deleteDB = async () => {
 //   await Movie.deleteMany({ popular: true });
 //   await TVShow.deleteMany({ popular: true });
