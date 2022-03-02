@@ -34,6 +34,10 @@ const UserSchema = new mongoose.Schema({
     shows: [],
     movies: []
   }},
+  recommendations: { type: Object, default: {
+    shows: [],
+    movies: []
+  }},
   createdDate: { type: Date, default: Date.now }
 });
 
@@ -43,6 +47,7 @@ const ReviewSchema = new mongoose.Schema({
   contentId: { type: Number, index: true },
   contentType: {type: String, index: true},
   username: { type: String, index: true },
+  userProfilePhoto: String,
   recommend: { type: Boolean, default: false },
   reviewContent: String,
   reported: { type: Boolean, default: false },
