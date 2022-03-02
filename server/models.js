@@ -46,8 +46,8 @@ const setMediaWatchList = async (mediaIdList, mediaType) => {
 
   const filter = { $match: { id: { $in: mediaIdList }}};
   const watchList = await collection.aggregate([filter]);
-  console.log(watchList.length);
-  console.log(watchList);
+  // console.log(watchList.length);
+  // console.log(watchList);
   return watchList;
 };
 
@@ -61,6 +61,7 @@ const getMassRecommendations = async (mediaIdList, mediaType) => {
       }
     }, {
       '$project': {
+        '_id': 0,
         'recommendations': {
           '$first': '$recommendations'
         }
@@ -183,8 +184,30 @@ module.exports = {
     };
     if(recommendations === true) {
       retObj.recommendations = {};
-      retObj.recommendations.movies = await getMassRecommendations(movieIdList, 'movie')
-      retObj.recommendations.shows = await getMassRecommendations(movieIdList, 'tv')
+      let movieRecommend = await getMassRecommendations(movieIdList, 'movie');
+      retObj.recommendations.movies = movieRecommend.filter(function(media) {
+        // console.log('from filter: ', media);
+        if(media.recommendations) {
+          return true
+        }
+        return false;
+      }).map((media) => {
+        if(media.recommendations) {
+          return media.recommendations;
+        }
+      });
+      let tvRecommend = await getMassRecommendations(tvIdList, 'movie');
+      retObj.recommendations.shows = tvRecommend.filter(function(media) {
+        // console.log('from filter: ', media);
+        if(media.recommendations) {
+          return true
+        }
+        return false;
+      }).map((media) => {
+        if(media.recommendations) {
+          return media.recommendations;
+        }
+      });
     }
     retObj.content.movies = await setMediaWatchList(movieIdList, 'movie');
     retObj.content.shows = await setMediaWatchList(tvIdList, 'tv');
@@ -290,6 +313,13 @@ module.exports = {
   }
 
 }
+
+// getMediaRecommendations(60574 , 'tv');
+// getMediaRecommendations(934111 , 'tv');
+// getMediaRecommendations(85552 , 'tv');
+// getMediaRecommendations(2051 , 'tv');
+// getMediaRecommendations(132712 , 'tv');
+
 
 // module.exports.populateMediaListAndRecommendations([135397, 351286, 417984, 551372, 424139], [60574, 934111, 85552, 2051, 132712], true);
 // const deleteDB = async () => {
