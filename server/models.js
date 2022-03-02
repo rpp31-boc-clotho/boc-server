@@ -6,7 +6,7 @@ const {
   getMediaRecommendationsAPI,
   getPopularMediaAPI,
   getGenresAPI
-} = require('./apiHelpers/movieHelpers');
+} = require('./apiHelpers/mediaHelpers');
 
 // sets the popular field to false everyday @ midnight
 cron.schedule("0 0 * * *", async () => {
@@ -90,7 +90,9 @@ module.exports = {
   },
 
   getMediaFromDB: async (media, mediaType) => {
-    const mediaData = await Movie
+    let collection = mediaType === 'movie' ? Movie : TVShow;
+
+    const mediaData = await collection
       .find(
         { $text: { $search: media } },
         { score: { $meta: 'textScore' } }
@@ -107,12 +109,12 @@ module.exports = {
 
     await Promise.all(mediaList.map(async (media) => {
       // check if movie is already in DB, before saving
-      let movieFound = await Movie.find({ id: media.id });
+      let movieFound = await collection.find({ id: media.id });
 
       if (!movieFound.length) {
         await setMediaGenres(media, mediaType);
 
-        let newMedia = new Movie(media);
+        let newMedia = new collection(media);
 
         try {
           await newMedia.save();
