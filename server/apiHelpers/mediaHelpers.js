@@ -61,16 +61,14 @@ module.exports = {
       console.log(error);
     }
   },
-
-  getMediaRecommendationsAPI: async(mediaId, mediaType) => {
-    const URL = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/recommendations?api_key=${process.env.apikey}&language=en-US&page=1`;
+  getMediaRecommendationsAPI: async(mediaType, movieId) => {
+    const URL = `https://api.themoviedb.org/3/${mediaType}/${movieId}/recommendations?api_key=${process.env.apikey}&language=en-US&page=1`;
 
     try {
       const { data } = await axios.get(URL);
 
       let recommendations = transformMediaList(data.results, mediaType);
       return recommendations;
-
     } catch (error) {
       console.log(error);
     }

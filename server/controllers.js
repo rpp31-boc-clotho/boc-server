@@ -164,7 +164,11 @@ module.exports = {
       review.contentId = parseInt(review.contentId)
     }
 
-    if (review.contentId && review.contentType && review.username && review.recommend && review.reviewContent) {
+    if (review.contentId !== undefined
+        && review.contentType !== undefined
+        && review.username !== undefined
+        && review.recommend !== undefined
+        && review.reviewContent !== undefined) {
       postNewReview(review)
         .then((data) => {
           res.status(201).json(data);

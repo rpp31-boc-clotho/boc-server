@@ -149,6 +149,10 @@ module.exports = {
     return { mediaDetails: mediaDetails[0], providers: providers };
   },
 
+  populateMediaListAndRecommendations: async (movieIdList, tvIdList, recommendations = false) => {
+
+  },
+
   getUser: async (username) => {
     return await User.find({username: username});
   },
