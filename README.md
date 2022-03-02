@@ -504,7 +504,18 @@ This service provides data for the front end of our service, below is a list of 
           "Peacock": false,
           "YouTube": false
       },
-      "watchHistory": [],
+      "watchHistory": {
+        movies: [],
+        shows: [] 
+      },
+      "watchList": {
+        movies: [],
+        shows: [] 
+      },
+      "recommendations": {
+        movies: [],
+        shows: [] 
+      },
       "userId": 1,
       "createdDate": "2022-02-21T17:33:51.036Z"
   }
@@ -987,6 +998,7 @@ This service provides data for the front end of our service, below is a list of 
     ```
     {
       username: 'email',
+      userProfilePhoto: 'photoURL',
       contentType: 'movies OR shows',
       contentId: id integer,
       recommend: boolean,
@@ -1003,6 +1015,7 @@ This service provides data for the front end of our service, below is a list of 
       "contentId": 999999999,
       "contentType": "shows",
       "username": "test@gmail.com",
+      "userProfilePhoto": 'www.photoURL.com',
       "recommend": true,
       "reviewContent": "This movie rocked!",
       "reported": false,
