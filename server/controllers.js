@@ -11,6 +11,8 @@ const {
   getContentReviews
 } = require('./models');
 
+const { userProfileObjects } = require('../test/testData/testData')
+
 module.exports = {
 
   getHomePageInfo: async (req, res) => {
@@ -34,7 +36,29 @@ module.exports = {
     getUser(username)
     .then((data) => {
       if (data.length !== 0) {
-        res.status(200).json(data[0]);
+        data = data[0];
+        //Get watchHistory Objects With Recommendations
+
+        //Populate watchHistory
+        
+        data.watchHistory.movies = userProfileObjects.movies
+        data.watchHistory.shows = userProfileObjects.shows
+
+        //Populate recommendations
+        data.recommendations = {
+          movies: null,
+          shows: null
+        }
+        data.recommendations.movies = userProfileObjects.movies
+        data.recommendations.shows = userProfileObjects.shows
+
+        //Get watchList Objects
+
+        //Populate watchList
+        data.watchList.movies = userProfileObjects.movies
+        data.watchList.shows = userProfileObjects.shows
+
+        res.status(200).json(data);
       } else {
         res.status(200).json('No User Found');
       }

@@ -53,6 +53,7 @@ describe("StreamFinder Routes", () => {
         expect(res.body).toHaveProperty('username');
         expect(res.body).toHaveProperty('subscriptions');
         expect(res.body).toHaveProperty('watchHistory');
+        expect(res.body).toHaveProperty('recommendations');
         expect(res.body).toHaveProperty('createdDate');
         expect(res.body.username).toEqual('chris.lazzarini+5@gmail.com');
       })
