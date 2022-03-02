@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const { db, User, Review, Movie, TVShow, Providers } = require('../db/connection');
+const { db, User, Review, Movie, TVShow, Providers, Recommendations } = require('../db/connection');
 const {
   getMediaAPI,
   getMediaProvidersAPI,
@@ -11,24 +11,52 @@ const {
 // sets the popular field to false everyday @ midnight
 cron.schedule("0 0 * * *", async () => {
   await Movie.updateMany({ popular: true }, { popular: false });
-  await TVShow.updateMany({ popular: true }, { popular: false });
 });
 
-const setMediaRecommendations = async (mediaType, media) => {
-  const results = await getMediaRecommendationsAPI(mediaType, media.id);
-  media.recommended = results;
-}
+const getMediaRecommendations = async (mediaId, mediaType) => {
+  const mediaRecommendations = await Recommendations.find({ mediaId, mediaType });
+
+  if (mediaRecommendations.length) {
+    const { recommendations } = mediaRecommendations[0];
+    return recommendations;
+  }
+
+  const results = await getMediaRecommendationsAPI(mediaId, mediaType);
+  const recommendList = new Recommendations({ mediaId , mediaType, recommendations: results });
+
+  try {
+    await recommendList.save();
+  } catch (error) {
+    console.log(error);
+  }
+
+  const { recommendations } = recommendList;
+  return recommendations;
+};
 
 const setMediaGenres = async (media, mediaType) => {
   const genres = await getGenresAPI(media.id, mediaType);
   media.genres = genres;
-}
+};
+
+const setMediaWatchList = async (mediaIdList, mediaType) => {
+  const collection = mediaType === 'movie' ? Movie : TVShow;
+
+  const filter = { $match: { id: { $in: mediaIdList }}};
+  const watchList = await collection.aggregate([filter]);
+  console.log(watchList.length);
+  console.log(watchList);
+  return watchList;
+};
+
+setMediaWatchList([135397, 351286, 417984, 551372, 424139], 'movie');
+// setMediaWatchList([60574, 934111, 85552, 2051, 132712], 'tv');
 
 module.exports = {
   getPopularMediaFromDB: async (mediaType) => {
     let collection = mediaType === 'movie' ? Movie : TVShow;
 
-    const popularMediaList = await collection.find({ popular: true });
+    const popularMediaList = await collection.find({ popular: true }).sort({ rating: -1});
 
     if (popularMediaList.length) {
       return popularMediaList;
@@ -125,6 +153,10 @@ module.exports = {
     }
 
     return { mediaDetails: mediaDetails[0], providers: providers };
+  },
+
+  populateMediaListAndRecommendations: async (movieIdList, tvIdList, recommendations = false) => {
+
   },
 
   getUser: async (username) => {
@@ -231,6 +263,6 @@ module.exports = {
 //   await TVShow.deleteMany({ popular: true });
 // }
 
-// deleteDB();/
+// deleteDB();
 
 // module.exports.getPopularMediaFromDB('tv');

@@ -61,18 +61,19 @@ module.exports = {
       console.log(error);
     }
   },
-  getMediaRecommendationsAPI: async(mediaType, movieId) => {
+  getMediaRecommendationsAPI: async(movieId, mediaType) => {
     const URL = `https://api.themoviedb.org/3/${mediaType}/${movieId}/recommendations?api_key=${process.env.apikey}&language=en-US&page=1`;
 
     try {
       const { data } = await axios.get(URL);
 
-      let recommendations = transformMediaList(data.results, 'movie');
+      let recommendations = transformMediaList(data.results, mediaType);
       return recommendations;
     } catch (error) {
       console.log(error);
     }
   },
+
   getPopularMediaAPI: async (mediaType) => {
     const URL = `https://api.themoviedb.org/3/${mediaType}/popular?api_key=${process.env.apikey}&language=en-US&page=1`;
 
@@ -86,8 +87,9 @@ module.exports = {
       console.log(error);
     }
   },
-  getGenresAPI: async (movieId, mediaType) => {
-    const URL = `https://api.themoviedb.org/3/${mediaType}/${movieId}?api_key=${process.env.apikey}&language=en-US`;
+
+  getGenresAPI: async (mediaId, mediaType) => {
+    const URL = `https://api.themoviedb.org/3/${mediaType}/${mediaId}?api_key=${process.env.apikey}&language=en-US`;
 
     try {
       const { data } = await axios.get(URL);
@@ -99,7 +101,4 @@ module.exports = {
   }
 };
 
-// module.exports.getGenresAPI(634649, 'movie');
-// texas 632727
-// module.exports.getMovieProvidersAPI(634649);
-// module.exports.getPopularMediaAPI('tv');
+// module.exports.getMediaRecommendationsAPI();

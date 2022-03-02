@@ -85,11 +85,19 @@ const TVShow = mongoose.model('TVShow', TvShowSchema);
 const ProvidersSchema = new mongoose.Schema({
   movieId: { type: Number, index: true },
   results: Object
-})
+});
 
-const Providers = mongoose.model('Providers', ProvidersSchema)
+const Providers = mongoose.model('Providers', ProvidersSchema);
+
+const RecommendationsSchema = new mongoose.Schema({
+  mediaId: { type: Number, index: true },
+  mediaType: String,
+  recommendations: Array
+});
+
+const Recommendations = mongoose.model('Recommendations', RecommendationsSchema);
 
 module.exports = {
-  db, User, Review, Movie, TVShow, Providers
+  db, User, Review, Movie, TVShow, Providers, Recommendations
 };
 

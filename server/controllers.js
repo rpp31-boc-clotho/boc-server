@@ -59,6 +59,16 @@ module.exports = {
     const { mediaType } = req.params;
     console.log('SEARCHING', media, mediaType);
     try {
+      if (mediaType === 'both') {
+        let searchedData = {
+          movies: await getMediaFromDB(media, 'movie'),
+          shows: await getMediaFromDB(media, 'tv')
+        };
+
+        res.status(200).send(searchedData);
+        return;
+      }
+
       const data = await getMediaFromDB(media, mediaType);
       console.log('MADE IT OUT FROM ')
 
