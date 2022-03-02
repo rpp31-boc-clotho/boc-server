@@ -61,7 +61,7 @@ module.exports = {
       console.log(error);
     }
   },
-  getMediaRecommendationsAPI: async(mediaType, movieId) => {
+  getMediaRecommendationsAPI: async(movieId, mediaType) => {
     const URL = `https://api.themoviedb.org/3/${mediaType}/${movieId}/recommendations?api_key=${process.env.apikey}&language=en-US&page=1`;
 
     try {
