@@ -217,7 +217,7 @@ describe("StreamFinder Routes", () => {
       describe("Updating User Profile Watch History Arrays", () => {
 
         test('Updates user\'s watch history movies\' array when movie watched', async () => {
-
+          
           function getRandomInt(min, max) {
               min = Math.ceil(min);
               max = Math.floor(max);
