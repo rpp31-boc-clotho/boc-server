@@ -57,7 +57,8 @@ const getMassRecommendations = async (mediaIdList, mediaType) => {
       '$match': {
         'mediaId': {
           '$in': mediaIdList
-        }
+        },
+        'mediaType': mediaType
       }
     }, {
       '$project': {
@@ -196,7 +197,7 @@ module.exports = {
           return media.recommendations;
         }
       });
-      let tvRecommend = await getMassRecommendations(tvIdList, 'movie');
+      let tvRecommend = await getMassRecommendations(tvIdList, 'tv');
       retObj.recommendations.shows = tvRecommend.filter(function(media) {
         // console.log('from filter: ', media);
         if(media.recommendations) {
@@ -211,7 +212,7 @@ module.exports = {
     }
     retObj.content.movies = await setMediaWatchList(movieIdList, 'movie');
     retObj.content.shows = await setMediaWatchList(tvIdList, 'tv');
-    console.log(retObj);
+    //console.log(retObj);
     return retObj;
   },
 
