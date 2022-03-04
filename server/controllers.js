@@ -36,6 +36,8 @@ module.exports = {
     let recommendationRequired = req.query.recommendation === 'true' ? true : false;
     //console.log('recommendationRequired', recommendationRequired)
 
+    console.log('username', username)
+
     getUser(username)
     .then(async (data) => {
       if (data.length !== 0) {
@@ -118,6 +120,7 @@ module.exports = {
 
   postNewUserProfile: async (req, res) => {
     let username = req.body.username;
+    console.log('post username', username)
 
     postNewUser(username)
     .then((data) => {
