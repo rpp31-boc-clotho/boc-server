@@ -23,6 +23,37 @@ const getMediaRecommendations = async (mediaId, mediaType) => {
 
   const results = await getMediaRecommendationsAPI(mediaId, mediaType);
   const recommendList = new Recommendations({ mediaId , mediaType, recommendations: results });
+  const collection = mediaType === 'movie' ? Movie : TVShow;
+
+  await Promise.all(results.map(async (media) => {
+
+    await setMediaGenres(media, mediaType);
+    let mediaPop = await collection.find({id: media.id})
+    
+    if (mediaPop.length > 0) {
+      media.popular = mediaPop[0].popular;
+    }
+
+    let filter = { 'id': media.id };
+    let update = {
+      mediaType: media.mediaType,
+      title: media.title,
+      rating: media.rating,
+      ratingCount: media.ratingCount,
+      summary: media.summary,
+      release_date: media.release_date,
+      imgUrl: media.imgUrl,
+      genres: media.genres,
+      popular: media.popular ? media.popular : false
+    };
+    let options = { new: true, upsert: true };
+
+    try {
+      await collection.findOneAndUpdate(filter, update, options);
+    } catch (error) {
+      console.log(error);
+    }
+  }))
 
   try {
     await recommendList.save();
@@ -161,6 +192,11 @@ module.exports = {
 
     const mediaDetails = await collection.find({ id: mediaId });
     const mediaProviders = await Providers.find({ movieId: mediaId });
+    const mediaRecommendations = await Recommendations.find({ mediaId: mediaId });
+
+    if (mediaRecommendations.length === 0) {
+      getMediaRecommendations(mediaId, mediaType);
+    }
 
     if (mediaProviders.length) {
       return { mediaDetails: mediaDetails[0], providers: mediaProviders[0].results || {} };
