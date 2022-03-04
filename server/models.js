@@ -23,6 +23,58 @@ const getMediaRecommendations = async (mediaId, mediaType) => {
 
   const results = await getMediaRecommendationsAPI(mediaId, mediaType);
   const recommendList = new Recommendations({ mediaId , mediaType, recommendations: results });
+  const collection = mediaType === 'movie' ? Movie : TVShow;
+
+  await Promise.all(results.map(async (media) => {
+
+    await setMediaGenres(media, mediaType);
+
+    let filter = { 'id': media.id };
+    let update = {
+      mediaType: media.mediaType,
+      title: media.title,
+      rating: media.rating,
+      ratingCount: media.ratingCount,
+      summary: media.summary,
+      release_date: media.release_date,
+      imgUrl: media.imgUrl,
+      genres: media.genres,
+      popular: false
+    };
+    let options = { new: true, upsert: true };
+
+    try {
+      await collection.findOneAndUpdate(filter, update, options);
+    } catch (error) {
+      console.log(error);
+    }
+  }))
+
+
+
+  // results.forEach(async recommendation => {
+
+  //   await setMediaGenres(recommendation, recommendation.mediaType);
+
+  //   let filter = { 'id': recommendation.id };
+  //   let update = {
+  //     id: recommendation.id,
+  //     mediaType: recommendation.mediaType,
+  //     title: recommendation.title,
+  //     rating: recommendation.rating,
+  //     ratingCount: recommendation.ratingCount,
+  //     summary: recommendation.summary,
+  //     release_date: recommendation.release_date,
+  //     imgUrl: recommendation.imgUrl,
+  //     genres: recommendation.genres,
+  //     popular: false
+  //   };
+  //   let options = { new: true, upsert: true };
+
+  //   update = new collection(update);
+
+  //   collection.findOneAndUpdate(filter, update, options);
+  // })
 
   try {
     await recommendList.save();
@@ -161,6 +213,13 @@ module.exports = {
 
     const mediaDetails = await collection.find({ id: mediaId });
     const mediaProviders = await Providers.find({ movieId: mediaId });
+    const mediaRecommendations = await Recommendations.find({ mediaId: mediaId });
+
+    console.log('mediaRecommendations', mediaRecommendations)
+
+    if (mediaRecommendations.length === 0) {
+      getMediaRecommendations(mediaId, mediaType);
+    }
 
     if (mediaProviders.length) {
       return { mediaDetails: mediaDetails[0], providers: mediaProviders[0].results || {} };
