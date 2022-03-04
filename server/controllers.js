@@ -47,8 +47,8 @@ module.exports = {
         //Populate watchHistory
         
         //TO BE CHANGED
-        data.watchHistory.movies = userProfileObjects.movies //WatchHistoryAndRecommendationsObjects.content.movies;
-        data.watchHistory.shows = userProfileObjects.shows // WatchHistoryAndRecommendationsObjects.content.shows;
+        data.watchHistory.movies = WatchHistoryAndRecommendationsObjects.content.movies;
+        data.watchHistory.shows = WatchHistoryAndRecommendationsObjects.content.shows;
 
         //Populate recommendations
         data.recommendations = {
@@ -57,20 +57,20 @@ module.exports = {
         }
 
         //TO BE REMOVED
-        data.recommendations.movies = userProfileObjects.movies;
-        data.recommendations.shows = userProfileObjects.shows;
+        // data.recommendations.movies = userProfileObjects.movies;
+        // data.recommendations.shows = userProfileObjects.shows;
 
-        // if (recommendationRequired) {
-        //   data.recommendations.movies = WatchHistoryAndRecommendationsObjects.recommendations.movies.slice(0, 19);
-        //   data.recommendations.shows = WatchHistoryAndRecommendationsObjects.recommendations.shows.slice(0, 19);
-        // }
+        if (recommendationRequired) {
+          data.recommendations.movies = WatchHistoryAndRecommendationsObjects.recommendations.movies.slice(0, 19);
+          data.recommendations.shows = WatchHistoryAndRecommendationsObjects.recommendations.shows.slice(0, 19);
+        }
 
         //Get watchList Objects
 
         let WatchListObjects = await populateMediaListAndRecommendations(data.watchList.movies, data.watchList.shows)
         //Populate watchList
-        data.watchList.movies = userProfileObjects.movies; //WatchListObjects.content.movies
-        data.watchList.shows = userProfileObjects.shows; //WatchListObjects.content.shows
+        data.watchList.movies = WatchListObjects.content.movies;  //userProfileObjects.movies; 
+        data.watchList.shows = WatchListObjects.content.shows; //userProfileObjects.shows;
 
         res.status(200).json(data);
       } else {
